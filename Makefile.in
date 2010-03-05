@@ -1,0 +1,49 @@
+prefix  = @ac_prefix@
+qmake   = @ac_qmake@
+
+name    = qmidinet
+
+target  = src/$(name)
+
+headers = src/config.h \
+	src/qmidinet.h \
+	src/qmidinetAbout.h \
+	src/qmidinetUdpDevice.h \
+	src/qmidinetMidiDevice.h \
+	src/qmidinetOptions.h \
+	src/qmidinetOptionsForm.h
+
+sources = \
+	src/qmidinet.cpp \
+	src/qmidinetUdpDevice.cpp \
+	src/qmidinetMidiDevice.cpp \
+	src/qmidinetOptions.cpp \
+	src/qmidinetOptionsForm.cpp
+
+forms = \
+	src/qmidinetOptionsForm.ui
+
+resources = \
+	src/qmidinet.qrc
+
+
+all:	$(target)
+
+
+$(target):	$(name).mak $(resources) ${forms} $(sources) $(headers)
+	@make -f $(name).mak
+
+$(name).mak:	$(name).pro
+	@$(qmake) -o $(name).mak $(name).pro
+
+
+install:	$(target)
+	@make -f $(name).mak install
+
+uninstall:	$(DESTDIR)$(prefix)/bin/$(name)
+	@make -f $(name).mak uninstall
+
+clean:	$(name).mak
+	@make -f $(name).mak clean
+	@rm -f $(target) $(target).mak $(name).mak
+	@rm -rf *.cache *.log *.status

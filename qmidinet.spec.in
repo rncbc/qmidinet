@@ -1,0 +1,51 @@
+%define name    @PACKAGE_TARNAME@
+%define version @PACKAGE_VERSION@
+%define release 1
+%define prefix  @ac_prefix@
+
+Summary:	A MIDI Network Gateway via IP/UDP Multicast
+Name:		%{name}
+Version:	%{version}
+Release:	%{release}
+Prefix:		%{prefix}
+License:	GPL
+Group:		Productivity/Multimedia/Sound/Midi
+Source0:	%{name}-%{version}.tar.gz
+URL:		http://qmidinet.sourceforge.net/
+Packager:	rncbc.org
+
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+
+BuildRequires:	libqt4-devel >= 4.4
+BuildRequires:	alsa-devel
+
+%description
+QmidiNet is a MIDI network gateway application that sends and receives
+MIDI data (ALSA Sequencer) over the network, using UDP/IP multicast.
+Inspired by multimidicast (http://llg.cubic.org/tools) and designed
+to be compatible with ipMIDI for Windows (http://nerds.de).
+
+%prep
+%setup
+[ -f Makefile.cvs ] && %__make -f Makefile.cvs
+
+%build
+%configure
+%__make
+
+%install
+%makeinstall
+
+%clean
+[ -d %{buildroot} -a "%{buildroot}" != "" ] && %__rm -rf  %{buildroot}
+
+%files
+%defattr(-,root,root)
+%doc AUTHORS COPYING ChangeLog README TODO
+%{_bindir}/%{name}
+%{_datadir}/applications/%{name}.desktop
+%{_datadir}/pixmaps/%{name}.png
+
+%changelog
+* Fri Mar  5 2010 Rui Nuno Capela <rncbc@users.sourceforge.net> 0.0.1-1
+- Created initial qmidinet.spec

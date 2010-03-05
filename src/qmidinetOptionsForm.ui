@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>rncbc aka Rui Nuno Capela</author>
+ <comment>QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
+
+   Copyright (C) 2010, rncbc aka Rui Nuno Capela. All rights reserved.
+
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License along
+   with this program; if not, write to the Free Software Foundation, Inc.,
+   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+ </comment>
+ <class>qmidinetOptionsForm</class>
+ <widget class="QDialog" name="qmidinetOptionsForm">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>320</width>
+    <height>240</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>QmidiNet - Options</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="qmidinet.qrc">
+    <normaloff>:/images/qmidinet.png</normaloff>:/images/qmidinet.png</iconset>
+  </property>
+  <layout class="QVBoxLayout">
+   <item>
+    <widget class="QGroupBox" name="GeneralGroupBox">
+     <property name="title">
+      <string>General</string>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+     <layout class="QFormLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="NumPortsTextLabel">
+        <property name="text">
+         <string>&amp;Number of Ports:</string>
+        </property>
+        <property name="buddy">
+         <cstring>NumPortsSpinBox</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QSpinBox" name="NumPortsSpinBox">
+        <property name="accelerated">
+         <bool>true</bool>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>32</number>
+        </property>
+        <property name="value">
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="NetworkGroupBox">
+     <property name="title">
+      <string>Network</string>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+     <layout class="QFormLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="InterfaceTextLabel">
+        <property name="text">
+         <string>&amp;Interface:</string>
+        </property>
+        <property name="buddy">
+         <cstring>InterfaceComboBox</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="InterfaceComboBox">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+	   <widget class="QLabel" name="UdpPortTextLabel">
+        <property name="text">
+		 <string>UDP &amp;Port:</string>
+        </property>
+        <property name="buddy">
+		 <cstring>UdpPortSpinBox</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+	   <widget class="QSpinBox" name="UdpPortSpinBox">
+        <property name="accelerated">
+         <bool>true</bool>
+        </property>
+        <property name="maximum">
+         <number>65535</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout">
+     <item>
+      <spacer>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>160</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="AcceptButton">
+       <property name="text">
+        <string>OK</string>
+       </property>
+       <property name="icon">
+        <iconset>:/images/formAccept.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="RejectButton">
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+       <property name="icon">
+        <iconset>:/images/formReject.png</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="4" margin="8"/>
+ <tabstops>
+  <tabstop>NumPortsSpinBox</tabstop>
+  <tabstop>InterfaceComboBox</tabstop>
+  <tabstop>UdpPortSpinBox</tabstop>
+  <tabstop>AcceptButton</tabstop>
+  <tabstop>RejectButton</tabstop>
+ </tabstops>
+ <resources>
+  <include location="qmidinet.qrc"/>
+ </resources>
+ <connections/>
+</ui>
