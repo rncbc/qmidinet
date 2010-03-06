@@ -1,13 +1,13 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
 %define release 1
-%define prefix  @ac_prefix@
+
+%define _prefix	@ac_prefix@
 
 Summary:	A MIDI Network Gateway via IP/UDP Multicast
 Name:		%{name}
 Version:	%{version}
 Release:	%{release}
-Prefix:		%{prefix}
 License:	GPL
 Group:		Productivity/Multimedia/Sound/Midi
 Source0:	%{name}-%{version}.tar.gz
@@ -27,14 +27,14 @@ to be compatible with ipMIDI for Windows (http://nerds.de).
 
 %prep
 %setup
-[ -f Makefile.cvs ] && %__make -f Makefile.cvs
+[ -f Makefile.svn ] && %__make -f Makefile.svn
 
 %build
 %configure
 %__make
 
 %install
-%makeinstall
+%__make INSTALL_ROOT=%{buildroot} install
 
 %clean
 [ -d %{buildroot} -a "%{buildroot}" != "" ] && %__rm -rf  %{buildroot}
@@ -47,5 +47,5 @@ to be compatible with ipMIDI for Windows (http://nerds.de).
 %{_datadir}/pixmaps/%{name}.png
 
 %changelog
-* Fri Mar  5 2010 Rui Nuno Capela <rncbc@users.sourceforge.net> 0.0.1-1
+* Fri Mar  6 2010 Rui Nuno Capela <rncbc@users.sourceforge.net> 0.0.1
 - Created initial qmidinet.spec
