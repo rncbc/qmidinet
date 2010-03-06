@@ -1,4 +1,5 @@
 #!/usr/bin/make -f
+#
 APPNAME := qmidinet
 
 # Uncomment this to turn on verbose mode.
