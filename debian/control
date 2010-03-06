@@ -8,7 +8,7 @@ Standards-Version: 3.7.2
 Package: qmidinet
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: A MIDI Network Gateway via IP/UDP Multicast
+Description: A MIDI Network Gateway via UDP/IP Multicast
  A MIDI network gateway application that sends and receives MIDI
  data (ALSA Sequencer) over the network, using UDP/IP multicast.
  Inspired by multimidicast (http://llg.cubic.org/tools) and designed

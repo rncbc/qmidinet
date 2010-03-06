@@ -1,4 +1,4 @@
-QmidiNet - A MIDI Network Gateway via IP/UDP Multicast
+QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 ------------------------------------------------------
 
 QmidiNet is a MIDI network gateway application that sends and receives

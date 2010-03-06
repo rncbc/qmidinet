@@ -4,7 +4,7 @@
 
 %define _prefix	@ac_prefix@
 
-Summary:	A MIDI Network Gateway via IP/UDP Multicast
+Summary:	A MIDI Network Gateway via UDP/IP Multicast
 Name:		%{name}
 Version:	%{version}
 Release:	%{release}
