@@ -3,7 +3,7 @@ AC_INIT(QmidiNet, 0.0.1, rncbc@rncbc.org, qmidinet)
 
 AC_CONFIG_SRCDIR(src/qmidinet.cpp)
 AC_CONFIG_HEADERS(src/config.h)
-AC_CONFIG_FILES(Makefile src/src.pri qmidinet.spec)
+AC_CONFIG_FILES(Makefile qmidinet.spec src/src.pri src/qmidinet.desktop)
 
 # Set default installation prefix.
 AC_PREFIX_DEFAULT(/usr/local)
