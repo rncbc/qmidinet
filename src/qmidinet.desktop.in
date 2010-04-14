@@ -1,10 +1,11 @@
 [Desktop Entry]
-Encoding=UTF-8
-Type=Application
 Name=@PACKAGE_NAME@
 Version=@PACKAGE_VERSION@
+GenericName=MIDI Network
+Comment=QmidiNet is a MIDI Network Gateway via UDP/IP Multicast
 Exec=@ac_prefix@/bin/qmidinet
 Icon=@ac_prefix@/share/pixmaps/qmidinet
 Categories=Audio;AudioVideo;MIDI;ALSA;Qt;
 Terminal=false
+Type=Application
 X-SuSE-translate=true
