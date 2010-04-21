@@ -38,10 +38,11 @@ $(name).mak:	$(name).pro
 
 
 install:	$(target)
-	@make -f $(name).mak install
+	@make INSTALL_ROOT=$(DESTDIR) -f $(name).mak install
 
 uninstall:	$(DESTDIR)$(prefix)/bin/$(name)
-	@make -f $(name).mak uninstall
+	@make INSTALL_ROOT=$(DESTDIR) -f $(name).mak uninstall
+
 
 clean:	$(name).mak
 	@make -f $(name).mak clean
