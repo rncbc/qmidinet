@@ -49,7 +49,7 @@ public:
 	void show();
 
 	// Message bubble/dialog.
-	void message(const QString& sMessageTitle, const QString& sText);
+	void message(const QString& sTitle, const QString& sText);
 
 public slots:
 

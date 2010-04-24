@@ -3,4 +3,9 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 
 ChangeLog
 
+SVN TRUNK
+
+- Message box title confidence fix (whatever it be:)
+
+
 0.0.1  2010-03-07  First public release.

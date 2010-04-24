@@ -76,7 +76,7 @@ bool qmidinetApplication::setup (void)
 			pOptions->iUdpPort,
 			pOptions->iNumPorts)) {
 		m_midi.close();
-		message(tr("Network Inferface Error"),
+		message(tr("Network Inferface Error - %1").arg(QMIDINET_TITLE),
 			tr("The network interface could not be established.\n\n"
 			"Please, make sure you have an on-line network connection "
 			"and try again."));
@@ -85,7 +85,7 @@ bool qmidinetApplication::setup (void)
 
 	if (!m_midi.open(QMIDINET_TITLE, pOptions->iNumPorts)) {
 		m_udpd.close();
-		message(tr("MIDI Inferface Error"),
+		message(tr("MIDI Inferface Error - %1").arg(QMIDINET_TITLE),
 			tr("The MIDI interface could not be established.\n\n"
 			"Please, make sure you have a MIDI sub-system working"
 			"correctly and try again."));
@@ -156,9 +156,8 @@ void qmidinetApplication::about (void)
 
 // Message bubble/dialog.
 void qmidinetApplication::message (
-	const QString& sMessageTitle, const QString& sText )
+	const QString& sTitle, const QString& sText )
 {
-	const QString sTitle = QMIDINET_TITLE " - " + sMessageTitle;
 	if (m_icon.supportsMessages()) {
 		m_icon.showMessage(sTitle, sText, QSystemTrayIcon::Critical);
 	} else {

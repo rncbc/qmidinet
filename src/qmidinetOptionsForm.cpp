@@ -19,9 +19,12 @@
 
 *****************************************************************************/
 
+#include "qmidinetAbout.h"
 #include "qmidinetOptionsForm.h"
 
 #include "qmidinetOptions.h"
+
+#include <QMessageBox>
 
 
 //----------------------------------------------------------------------------
@@ -53,10 +56,23 @@ qmidinetOptionsForm::qmidinetOptionsForm (
 		m_ui.NumPortsSpinBox->setValue(pOptions->iNumPorts);
 	}
 
+
+	// Start clean.
+	m_iDirtyCount = 0;
+
 	// Try to fix window geometry.
 	adjustSize();
 
 	// UI signal/slot connections...
+	QObject::connect(m_ui.InterfaceComboBox,
+		SIGNAL(editTextChanged(const QString&)),
+		SLOT(change()));
+	QObject::connect(m_ui.UdpPortSpinBox,
+		SIGNAL(valueChanged(int)),
+		SLOT(change()));
+	QObject::connect(m_ui.NumPortsSpinBox,
+		SIGNAL(valueChanged(int)),
+		SLOT(change()));
 	QObject::connect(m_ui.AcceptButton,
 		SIGNAL(clicked()),
 		SLOT(accept()));
@@ -66,25 +82,60 @@ qmidinetOptionsForm::qmidinetOptionsForm (
 }
 
 
+// Change settings (anything else slot).
+void qmidinetOptionsForm::change (void)
+{
+	m_iDirtyCount++;
+}
+
+
 // Accept settings (OK button slot).
 void qmidinetOptionsForm::accept (void)
 {
 	// Save options...
-	qmidinetOptions *pOptions = qmidinetOptions::getInstance();
-	if (pOptions) {
-		// Display options...
-		pOptions->sInterface = m_ui.InterfaceComboBox->currentText();
-		pOptions->iUdpPort   = m_ui.UdpPortSpinBox->value();
-		pOptions->iNumPorts  = m_ui.NumPortsSpinBox->value();
-		// Take care of some translatable adjustments...
-		if (pOptions->sInterface == m_sDefInterface)
-			pOptions->sInterface.clear();
-		// Save/commit to disk.
-		pOptions->saveOptions();
+	if (m_iDirtyCount > 0) {
+		qmidinetOptions *pOptions = qmidinetOptions::getInstance();
+		if (pOptions) {
+			// Display options...
+			pOptions->sInterface = m_ui.InterfaceComboBox->currentText();
+			pOptions->iUdpPort   = m_ui.UdpPortSpinBox->value();
+			pOptions->iNumPorts  = m_ui.NumPortsSpinBox->value();
+			// Take care of some translatable adjustments...
+			if (pOptions->sInterface == m_sDefInterface)
+				pOptions->sInterface.clear();
+			// Save/commit to disk.
+			pOptions->saveOptions();
+		}
 	}
 
 	// Just go with dialog acceptance
 	QDialog::accept();
+}
+
+
+// Reject options (Cancel button slot).
+void qmidinetOptionsForm::reject (void)
+{
+	// Check if there's any pending changes...
+	if (m_iDirtyCount > 0) {
+		switch (QMessageBox::warning(this,
+			QDialog::windowTitle(),
+			tr("Some settings have been changed.\n\n"
+			"Do you want to apply the changes?"),
+			QMessageBox::Apply |
+			QMessageBox::Discard |
+			QMessageBox::Cancel)) {
+		case QMessageBox::Discard:
+			break;
+		case QMessageBox::Apply:
+			accept();
+		default:
+			return;
+		}
+	}
+
+	// Just go with dialog rejection...
+	QDialog::reject();
 }
 
 
