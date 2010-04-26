@@ -1,6 +1,6 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 1
+%define release 2
 
 %define _prefix	@ac_prefix@
 
@@ -34,10 +34,10 @@ to be compatible with ipMIDI for Windows (http://nerds.de).
 %__make
 
 %install
-%__make INSTALL_ROOT=%{buildroot} install
+%__make DESTDIR=%{buildroot} install
 
 %clean
-[ -d %{buildroot} -a "%{buildroot}" != "" ] && %__rm -rf  %{buildroot}
+[ -d %{buildroot} -a "%{buildroot}" != "" ] && %__rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root)

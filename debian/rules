@@ -54,7 +54,7 @@ install: build
 	dh_installdirs
 
 	# Add here commands to install the package
-	$(MAKE) INSTALL_ROOT=$(CURDIR)/debian/$(APPNAME) install
+	$(MAKE) DESTDIR=$(CURDIR)/debian/$(APPNAME) install
 
 
 # Build architecture-independent files here.
