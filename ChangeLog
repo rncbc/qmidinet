@@ -5,6 +5,9 @@ ChangeLog
 
 SVN TRUNK
 
+- Context menu is now also triggered when left-clicking on the
+  system tray icon.
+
 - Message box title confidence fix (whatever it be:)
 
 

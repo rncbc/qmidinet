@@ -57,6 +57,9 @@ public slots:
 	void options();
 	void about();
 
+	// Handle systeam tray activity.
+	void activated(QSystemTrayIcon::ActivationReason);
+
 private:
 
 	// Instance variables.

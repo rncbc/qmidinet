@@ -52,6 +52,10 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv )
 
 	m_icon.setToolTip(QMIDINET_TITLE " - " + tr(QMIDINET_SUBTITLE));
 
+	QObject::connect(&m_icon,
+		SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+		SLOT(activated(QSystemTrayIcon::ActivationReason)));
+
 	QObject::connect(
 		&m_udpd, SIGNAL(received(const QByteArray&, int)),
 		&m_midi, SLOT(receive(const QByteArray&, int)));
@@ -163,6 +167,14 @@ void qmidinetApplication::message (
 	} else {
 		QMessageBox::critical(NULL, sTitle, sText);
 	}
+}
+
+
+// Handle systeam tray activity.
+void qmidinetApplication::activated ( QSystemTrayIcon::ActivationReason reason )
+{
+	if (reason == QSystemTrayIcon::Trigger)
+		m_icon.contextMenu()->exec(QCursor::pos());
 }
 
 
