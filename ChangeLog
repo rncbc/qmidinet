@@ -5,6 +5,8 @@ ChangeLog
 
 SVN TRUNK
 
+- Use standard dialog buttons as provided by QDialogButtonBox.
+
 - Context menu is now also triggered when left-clicking on the
   system tray icon.
 

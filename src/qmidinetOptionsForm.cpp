@@ -73,11 +73,11 @@ qmidinetOptionsForm::qmidinetOptionsForm (
 	QObject::connect(m_ui.NumPortsSpinBox,
 		SIGNAL(valueChanged(int)),
 		SLOT(change()));
-	QObject::connect(m_ui.AcceptButton,
-		SIGNAL(clicked()),
+	QObject::connect(m_ui.DialogButtonBox,
+		SIGNAL(accepted()),
 		SLOT(accept()));
-	QObject::connect(m_ui.RejectButton,
-		SIGNAL(clicked()),
+	QObject::connect(m_ui.DialogButtonBox,
+		SIGNAL(rejected()),
 		SLOT(reject()));
 }
 
