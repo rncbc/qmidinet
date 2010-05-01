@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(QmidiNet, 0.0.4, rncbc@rncbc.org, qmidinet)
+AC_INIT(QmidiNet, 0.0.5, rncbc@rncbc.org, qmidinet)
 
 AC_CONFIG_SRCDIR(src/qmidinet.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -18,6 +18,18 @@ AC_DEFINE_UNQUOTED(CONFIG_PREFIX, ["$ac_prefix"], [Default installation prefix.]
 AC_ARG_ENABLE(debug,
   AC_HELP_STRING([--enable-debug], [enable debugging (default=no)]),
   [ac_debug="$enableval"])
+
+# Enable ALSA MIDI support option.
+AC_ARG_ENABLE(alsa_midi,
+  AC_HELP_STRING([--enable-alsa-midi], [enable ALSA MIDI support (default=yes)]),
+  [ac_alsa_midi="$enableval"],
+  [ac_alsa_midi="yes"])
+
+# Enable JACK MIDI support option.
+AC_ARG_ENABLE(jack_midi,
+  AC_HELP_STRING([--enable-jack-midi], [enable JACK MIDI support (default=yes)]),
+  [ac_jack_midi="$enableval"],
+  [ac_jack_midi="yes"])
 
 if test "x$ac_debug" = "xyes"; then
    AC_DEFINE(CONFIG_DEBUG, 1, [Define if debugging is enabled.])
@@ -49,6 +61,11 @@ AC_ARG_WITH(qt,
 # Set for alternate ALSA installation dir.
 AC_ARG_WITH(alsa,
   AC_HELP_STRING([--with-alsa=PATH], [use alternate ALSA install path]),
+  [ac_with_paths="$ac_with_paths $withval"])
+
+# Set for alternate JACK installation dir.
+AC_ARG_WITH(jack,
+  AC_HELP_STRING([--with-jack=PATH], [use alternate JACK install path]),
   [ac_with_paths="$ac_with_paths $withval"])
 
 
@@ -140,11 +157,23 @@ AC_CHECK_LIB(X11, main)
 AC_CHECK_LIB(Xext, main)
 
 # Check for ALSA libraries.
-AC_CHECK_LIB(asound, main, [ac_libasound="yes"], [ac_libasound="no"])
-if test "x$ac_libasound" = "xno"; then
-   AC_MSG_ERROR([ALSA library not found.])
-else
-   ac_libs="$ac_libs -lasound"
+if test "x$ac_alsa_midi" = "xyes"; then
+   AC_CHECK_LIB(asound, main, [ac_alsa_midi="yes"], [ac_alsa_midi="no"])
+   if test "x$ac_alsa_midi" = "xno"; then
+      AC_MSG_ERROR([*** ALSA library not found.])
+   else
+      ac_libs="$ac_libs -lasound"
+   fi
+fi
+
+# Check for JACK libraries.
+if test "x$ac_jack_midi" = "xyes"; then
+   AC_CHECK_LIB(jack, main, [ac_jack_midi="yes"], [ac_jack_midi="no"])
+   if test "x$ac_jack_midi" = "xno"; then
+      AC_MSG_ERROR([*** JACK library not found.])
+   else
+      ac_libs="$ac_libs -ljack"
+   fi
 fi
 
 AC_SUBST(ac_libs)
@@ -156,9 +185,23 @@ AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS(fcntl.h sys/ioctl.h sys/stat.h unistd.h signal.h)
 
 # Check for ALSA headers.
-AC_CHECK_HEADER(alsa/asoundlib.h, [ac_alsa_h="yes"], [ac_alsa_h="no"])
-if test "x$ac_alsa_h" = "xno"; then
-   AC_MSG_ERROR([ALSA headers not found.])
+if test "x$ac_alsa_midi" = "xyes"; then
+   AC_CHECK_HEADER(alsa/asoundlib.h, [ac_alsa_midi="yes"], [ac_alsa_midi="no"])
+   if test "x$ac_alsa_midi" = "xno"; then
+      AC_MSG_ERROR([*** ALSA headers not found.])
+   else
+      AC_DEFINE(CONFIG_ALSA_MIDI, 1, [Define if ALSA MIDI support is enabled.])
+   fi
+fi
+
+# Check for JACK headers.
+if test "x$ac_jack_midi" = "xyes"; then
+   AC_CHECK_HEADERS(jack/jack.h jack/midiport.h, [ac_jack_midi="yes"], [ac_jack_midi="no"])
+   if test "x$ac_jack_midi" = "xno"; then
+      AC_MSG_ERROR([*** JACK headers not found.])
+   else
+      AC_DEFINE(CONFIG_JACK_MIDI, 1, [Define if JACK MIDI support is enabled.])
+   fi
 fi
 
 AC_SUBST(ac_incpath)
@@ -179,7 +222,8 @@ echo "  $PACKAGE_NAME $PACKAGE_VERSION"
 echo
 echo "  Build target . . . . . . . . . . . . . . . . . . .: $ac_debug"
 echo
-echo "  ALSA MIDI Sequencer support  . . . . . . . . . . .: $ac_libasound"
+echo "  ALSA MIDI support  . . . . . . . . . . . . . . . .: $ac_alsa_midi"
+echo "  JACK MIDI support  . . . . . . . . . . . . . . . .: $ac_jack_midi"
 echo
 echo "  Install prefix . . . . . . . . . . . . . . . . . .: $ac_prefix"
 echo

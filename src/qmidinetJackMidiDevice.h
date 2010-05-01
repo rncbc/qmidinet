@@ -1,4 +1,4 @@
-// qmidinetMidiDevice.h
+// qmidinetJackMidiDevice.h
 //
 /****************************************************************************
    Copyright (C) 2010, rncbc aka Rui Nuno Capela. All rights reserved.
@@ -19,35 +19,37 @@
 
 *****************************************************************************/
 
-#ifndef __qmidinetMidiDevice_h
-#define __qmidinetMidiDevice_h
+#ifndef __qmidinetJackMidiDevice_h
+#define __qmidinetJackMidiDevice_h
 
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <alsa/asoundlib.h>
+#include <jack/jack.h>
+#include <jack/midiport.h>
+#include <jack/ringbuffer.h>
 
 #include <QObject>
 #include <QString>
 
 
 //----------------------------------------------------------------------------
-// qmidinetMidiDevice -- MIDI interface object.
+// qmidinetJackMidiDevice -- JACK MIDI interface object.
 
-class qmidinetMidiDevice : public QObject
+class qmidinetJackMidiDevice : public QObject
 {
 	Q_OBJECT
 
 public:
 
 	// Constructor.
-	qmidinetMidiDevice(QObject *pParent = NULL);
+	qmidinetJackMidiDevice(QObject *pParent = NULL);
 
 	// Destructor.
-	~qmidinetMidiDevice();
+	~qmidinetJackMidiDevice();
 
 	// Kind of singleton reference.
-	static qmidinetMidiDevice *getInstance();
+	static qmidinetJackMidiDevice *getInstance();
 
 	// Device initialization method.
 	bool open(const QString& sClientName, int iNumPorts = 1);
@@ -55,12 +57,16 @@ public:
 	// Device termination method.
 	void close();
 
-	// MIDI event capture method.
-	void capture(snd_seq_event_t *pEv);
+	// MIDI events capture method.
+	void capture();
 
 	// Data transmission methods.
 	bool sendData(unsigned char *data, unsigned short len, int port = 0) const;
 	void recvData(unsigned char *data, unsigned short len, int port = 0);
+
+	// JACK specifics.
+	int process (jack_nframes_t nframes);
+	void shutdown();
 
 signals:
 
@@ -78,22 +84,23 @@ private:
 	int m_nports;
 
 	// Instance variables.
-	snd_seq_t *m_pAlsaSeq;
-	int  m_iAlsaClient;
-	int *m_piAlsaPort;
+	jack_client_t *m_pJackClient;
 
-	snd_midi_event_t **m_ppAlsaEncoder;
-	snd_midi_event_t  *m_pAlsaDecoder;
+	jack_port_t **m_ppJackPortIn;
+	jack_port_t **m_ppJackPortOut;
 
+	jack_ringbuffer_t *m_pJackBufferIn;
+	jack_ringbuffer_t *m_pJackBufferOut;
+	
 	// Network receiver thread.
-	class qmidinetMidiDeviceThread *m_pRecvThread;
+	class qmidinetJackMidiThread *m_pRecvThread;
 
 	// Kind-of singleton reference.
-	static qmidinetMidiDevice *g_pDevice;
+	static qmidinetJackMidiDevice *g_pDevice;
 };
 
 
-#endif	// __qmidinetMidiDevice_h
+#endif	// __qmidinetJackMidiDevice_h
 
 
-// end of qmidinetMidiDevice.h
+// end of qmidinetJackMidiDevice.h

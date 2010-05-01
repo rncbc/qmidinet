@@ -23,7 +23,8 @@
 #define __qmidinet_h
 
 #include "qmidinetUdpDevice.h"
-#include "qmidinetMidiDevice.h"
+#include "qmidinetAlsaMidiDevice.h"
+#include "qmidinetJackMidiDevice.h"
 
 #include <QApplication>
 
@@ -63,10 +64,11 @@ public slots:
 private:
 
 	// Instance variables.
-	QMenu              m_menu;
-	QSystemTrayIcon    m_icon;
-	qmidinetUdpDevice  m_udpd;
-	qmidinetMidiDevice m_midi;
+	QMenu                  m_menu;
+	QSystemTrayIcon        m_icon;
+	qmidinetUdpDevice      m_udpd;
+	qmidinetAlsaMidiDevice m_alsa;
+	qmidinetJackMidiDevice m_jack;
 };
 
 

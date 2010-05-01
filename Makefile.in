@@ -9,14 +9,16 @@ headers = src/config.h \
 	src/qmidinet.h \
 	src/qmidinetAbout.h \
 	src/qmidinetUdpDevice.h \
-	src/qmidinetMidiDevice.h \
+	src/qmidinetAlsaMidiDevice.h \
+	src/qmidinetJackMidiDevice.h \
 	src/qmidinetOptions.h \
 	src/qmidinetOptionsForm.h
 
 sources = \
 	src/qmidinet.cpp \
 	src/qmidinetUdpDevice.cpp \
-	src/qmidinetMidiDevice.cpp \
+	src/qmidinetAlsaMidiDevice.cpp \
+	src/qmidinetJackMidiDevice.cpp \
 	src/qmidinetOptions.cpp \
 	src/qmidinetOptionsForm.cpp
 

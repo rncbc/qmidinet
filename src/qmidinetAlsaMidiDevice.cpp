@@ -1,4 +1,4 @@
-// qmidinetMidiDevice.cpp
+// qmidinetAlsaMidiDevice.cpp
 //
 /****************************************************************************
    Copyright (C) 2010, rncbc aka Rui Nuno Capela. All rights reserved.
@@ -20,21 +20,21 @@
 *****************************************************************************/
 
 #include "qmidinetAbout.h"
-#include "qmidinetMidiDevice.h"
+#include "qmidinetAlsaMidiDevice.h"
 
 #include <QThread>
 
 
 //----------------------------------------------------------------------------
-// qmidinetMidiDevice::RecvThread -- MIDI listener thread.
+// qmidinetAlsaMidiThread -- ALSA MIDI listener thread.
 //
 
-class qmidinetMidiDeviceThread : public QThread
+class qmidinetAlsaMidiThread : public QThread
 {
 public:
 
 	// Constructor.
-	qmidinetMidiDeviceThread(snd_seq_t *pAlsaSeq);
+	qmidinetAlsaMidiThread(snd_seq_t *pAlsaSeq);
 
 	// Run-state accessors.
 	void setRunState(bool bRunState);
@@ -56,26 +56,26 @@ private:
 
 
 // Constructor.
-qmidinetMidiDeviceThread::qmidinetMidiDeviceThread ( snd_seq_t *pAlsaSeq )
+qmidinetAlsaMidiThread::qmidinetAlsaMidiThread ( snd_seq_t *pAlsaSeq )
 	: QThread(), m_pAlsaSeq(pAlsaSeq), m_bRunState(false)
 {
 }
 
 
 // Run-state accessors.
-void qmidinetMidiDeviceThread::setRunState ( bool bRunState )
+void qmidinetAlsaMidiThread::setRunState ( bool bRunState )
 {
 	m_bRunState = bRunState;
 }
 
-bool qmidinetMidiDeviceThread::runState (void) const
+bool qmidinetAlsaMidiThread::runState (void) const
 {
 	return m_bRunState;
 }
 
 
 // The main thread executive.
-void qmidinetMidiDeviceThread::run (void)
+void qmidinetAlsaMidiThread::run (void)
 {
 	int nfds;
 	struct pollfd *pfds;
@@ -95,7 +95,7 @@ void qmidinetMidiDeviceThread::run (void)
 			snd_seq_event_input(m_pAlsaSeq, &pEv);
 			// Process input event - ...
 			// - enqueue to input track mapping;
-			qmidinetMidiDevice::getInstance()->capture(pEv);
+			qmidinetAlsaMidiDevice::getInstance()->capture(pEv);
 		//	snd_seq_free_event(pEv);
 			iPoll = snd_seq_event_input_pending(m_pAlsaSeq, 0);
 		}
@@ -104,13 +104,13 @@ void qmidinetMidiDeviceThread::run (void)
 
 
 //----------------------------------------------------------------------------
-// qmidinetMidiDevice -- MIDI interface device (ALSA).
+// qmidinetAlsaMidiDevice -- MIDI interface device (ALSA).
 //
 
-qmidinetMidiDevice *qmidinetMidiDevice::g_pDevice = NULL;
+qmidinetAlsaMidiDevice *qmidinetAlsaMidiDevice::g_pDevice = NULL;
 
 // Constructor.
-qmidinetMidiDevice::qmidinetMidiDevice ( QObject *pParent )
+qmidinetAlsaMidiDevice::qmidinetAlsaMidiDevice ( QObject *pParent )
 	: QObject(pParent), m_pAlsaSeq(NULL), m_iAlsaClient(-1), m_piAlsaPort(NULL),
 		m_ppAlsaEncoder(NULL), m_pAlsaDecoder(NULL), m_pRecvThread(NULL)
 {
@@ -119,7 +119,7 @@ qmidinetMidiDevice::qmidinetMidiDevice ( QObject *pParent )
 
 
 // Destructor.
-qmidinetMidiDevice::~qmidinetMidiDevice (void)
+qmidinetAlsaMidiDevice::~qmidinetAlsaMidiDevice (void)
 {
 	close();
 
@@ -128,14 +128,14 @@ qmidinetMidiDevice::~qmidinetMidiDevice (void)
 
 
 // Kind of singleton reference.
-qmidinetMidiDevice *qmidinetMidiDevice::getInstance (void)
+qmidinetAlsaMidiDevice *qmidinetAlsaMidiDevice::getInstance (void)
 {
 	return g_pDevice;
 }
 
 
 // Device initialization method.
-bool qmidinetMidiDevice::open ( const QString& sClientName, int iNumPorts )
+bool qmidinetAlsaMidiDevice::open ( const QString& sClientName, int iNumPorts )
 {
 	// Close if already open.
 	close();
@@ -196,7 +196,7 @@ bool qmidinetMidiDevice::open ( const QString& sClientName, int iNumPorts )
 	}
 
 	// Start listener thread...
-	m_pRecvThread = new qmidinetMidiDeviceThread(m_pAlsaSeq);
+	m_pRecvThread = new qmidinetAlsaMidiThread(m_pAlsaSeq);
 	m_pRecvThread->start();
 
 	// Done.
@@ -205,7 +205,7 @@ bool qmidinetMidiDevice::open ( const QString& sClientName, int iNumPorts )
 
 
 // Device termination method.
-void qmidinetMidiDevice::close (void)
+void qmidinetAlsaMidiDevice::close (void)
 {
 	if (m_pRecvThread) {
 		if (m_pRecvThread->isRunning()) {
@@ -251,7 +251,7 @@ void qmidinetMidiDevice::close (void)
 
 
 // MIDI event capture method.
-void qmidinetMidiDevice::capture ( snd_seq_event_t *pEv )
+void qmidinetAlsaMidiDevice::capture ( snd_seq_event_t *pEv )
 {
 	if (pEv == NULL)
 		return;
@@ -322,7 +322,7 @@ void qmidinetMidiDevice::capture ( snd_seq_event_t *pEv )
 
 
 // Data transmission methods.
-bool qmidinetMidiDevice::sendData (
+bool qmidinetAlsaMidiDevice::sendData (
 	unsigned char *data, unsigned short len, int port ) const
 {
 	if (port < 0 || port >= m_nports)
@@ -371,7 +371,7 @@ bool qmidinetMidiDevice::sendData (
 }
 
 
-void qmidinetMidiDevice::recvData (
+void qmidinetAlsaMidiDevice::recvData (
 	unsigned char *data, unsigned short len, int port )
 {
 	emit received(QByteArray((const char *) data, len), port);
@@ -379,10 +379,10 @@ void qmidinetMidiDevice::recvData (
 
 
 // Receive data slot.
-void qmidinetMidiDevice::receive ( const QByteArray& data, int port )
+void qmidinetAlsaMidiDevice::receive ( const QByteArray& data, int port )
 {
 	sendData((unsigned char *) data.constData(), data.length(), port);
 }
 
 
-// end of qmidinetMidiDevice.h
+// end of qmidinetAlsaMidiDevice.h

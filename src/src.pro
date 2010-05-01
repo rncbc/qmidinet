@@ -14,14 +14,16 @@ HEADERS += config.h \
 	qmidinet.h \
 	qmidinetAbout.h \
 	qmidinetUdpDevice.h \
-	qmidinetMidiDevice.h \
+	qmidinetAlsaMidiDevice.h \
+	qmidinetJackMidiDevice.h \
 	qmidinetOptions.h \
 	qmidinetOptionsForm.h
 
 SOURCES += \
 	qmidinet.cpp \
 	qmidinetUdpDevice.cpp \
-	qmidinetMidiDevice.cpp \
+	qmidinetAlsaMidiDevice.cpp \
+	qmidinetJackMidiDevice.cpp \
 	qmidinetOptions.cpp \
 	qmidinetOptionsForm.cpp
 

@@ -5,6 +5,8 @@ ChangeLog
 
 SVN TRUNK
 
+- Transparent JACK MIDI support is being introduced. (EXPERIMENTAL)
+
 - Use standard dialog buttons as provided by QDialogButtonBox.
 
 - Context menu is now also triggered when left-clicking on the
