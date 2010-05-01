@@ -290,15 +290,15 @@ void qmidinetAlsaMidiDevice::capture ( snd_seq_event_t *pEv )
 
 #ifdef CONFIG_DEBUG
 	// - show (input) event for debug purposes...
-	fprintf(stderr, "MIDI In Port %d: 0x%02x", pEv->dest.port, pEv->type);
+	fprintf(stderr, "ALSA MIDI In Port %d: 0x%02x", pEv->dest.port, pEv->type);
 	if (pEv->type == SND_SEQ_EVENT_SYSEX) {
 		fprintf(stderr, " SysEx {");
 		unsigned char *data = (unsigned char *) pEv->data.ext.ptr;
-		for (unsigned int i = 0; i < pEv->data.ext.len; i++)
+		for (unsigned int i = 0; i < pEv->data.ext.len; ++i)
 			fprintf(stderr, " %02x", data[i]);
 		fprintf(stderr, " }\n");
 	} else {
-		for (unsigned int i = 0; i < sizeof(pEv->data.raw8.d); i++)
+		for (unsigned int i = 0; i < sizeof(pEv->data.raw8.d); ++i)
 			fprintf(stderr, " %3d", pEv->data.raw8.d[i]);
 		fprintf(stderr, "\n");
 	}
@@ -346,7 +346,7 @@ bool qmidinetAlsaMidiDevice::sendData (
 		if (n > 0) {
 		#ifdef CONFIG_DEBUG
 			// - show (output) event for debug purposes...
-			fprintf(stderr, "MIDI Out Port %d: 0x%02x", pEv->source.port, pEv->type);
+			fprintf(stderr, "ALSA MIDI Out Port %d: 0x%02x", pEv->source.port, pEv->type);
 			if (pEv->type == SND_SEQ_EVENT_SYSEX) {
 				fprintf(stderr, " SysEx {");
 				unsigned char *data = (unsigned char *) pEv->data.ext.ptr;

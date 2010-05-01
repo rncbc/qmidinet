@@ -301,8 +301,14 @@ void qmidinetJackMidiDevice::capture (void)
 		jack_ringbuffer_read_advance(m_pJackBufferIn, sizeof(ev));
 		char *pMidiData = new char [ev.event.size];
 		jack_ringbuffer_read(m_pJackBufferIn, pMidiData, ev.event.size);
+	#ifdef CONFIG_DEBUG
+		// - show (input) event for debug purposes...
+		fprintf(stderr, "JACK MIDI In Port %d: ", ev.port);
+		for (unsigned int i = 0; i < ev.event.size; ++i)
+			fprintf(stderr, " 0x%02x", pMidiData[i]);
+		fprintf(stderr, "\n");
+	#endif	
 		recvData((unsigned char *) pMidiData, ev.event.size, ev.port);			
-		jack_ringbuffer_read_advance(m_pJackBufferIn, ev.event.size);
 		delete [] pMidiData;
 	}
 }
@@ -406,6 +412,13 @@ bool qmidinetJackMidiDevice::sendData (
 	pJackEventOut->event.buffer = (jack_midi_data_t *) pchBuffer;
 	pJackEventOut->event.size = len;
 	pJackEventOut->port = port;
+#ifdef CONFIG_DEBUG
+	// - show (output) event for debug purposes...
+	fprintf(stderr, "JACK MIDI Out Port %d: ", port);
+	for (unsigned int i = 0; i < len; ++i)
+		fprintf(stderr, " 0x%02x", pchBuffer[i]);
+	fprintf(stderr, "\n");
+#endif	
 	pchBuffer += len;
 	nwrite += len;
 	jack_ringbuffer_write_advance(m_pJackBufferOut, nwrite);
