@@ -295,9 +295,14 @@ void qmidinetJackMidiDevice::capture (void)
 	if (m_pJackBufferIn == NULL)
 		return;
 
+	jack_nframes_t frame_time = jack_frame_time(m_pJackClient);
+
 	qmidinetJackMidiEvent ev;
 	while (jack_ringbuffer_peek(m_pJackBufferIn,
 			(char *) &ev, sizeof(ev)) == sizeof(ev)) {
+		ev.event.time += m_last_frame_time;
+		if (ev.event.time < frame_time)
+			break;
 		jack_ringbuffer_read_advance(m_pJackBufferIn, sizeof(ev));
 		char *pMidiData = new char [ev.event.size];
 		jack_ringbuffer_read(m_pJackBufferIn, pMidiData, ev.event.size);
@@ -317,6 +322,10 @@ void qmidinetJackMidiDevice::capture (void)
 // JACK specifics.
 int qmidinetJackMidiDevice::process ( jack_nframes_t nframes )
 {
+	jack_nframes_t buffer_size = jack_get_buffer_size(m_pJackClient);
+
+	m_last_frame_time  = jack_last_frame_time(m_pJackClient);
+
 	// Enqueue/dequeue events
 	// to/from ring-buffers...
 	for (int i = 0; i < m_nports; ++i) {
@@ -357,8 +366,17 @@ int qmidinetJackMidiDevice::process ( jack_nframes_t nframes )
 			qmidinetJackMidiEvent ev;
 			while (jack_ringbuffer_peek(m_pJackBufferOut,
 				(char *) &ev, sizeof(ev)) == sizeof(ev) && nread < nlimit) {
+				if (ev.event.time > m_last_frame_time)
+					break;
+				jack_nframes_t offset = m_last_frame_time - ev.event.time;
+				if (offset > buffer_size) {
+					// From a previous cycle, somehow; cram it in at the front.
+					offset = 0;
+				} else {
+					// Offset from start of the current cycle.
+					offset = buffer_size - offset;
+				}
 				jack_ringbuffer_read_advance(m_pJackBufferOut, sizeof(ev));
-				int offset = 0;
 				jack_midi_data_t *pMidiData
 					= jack_midi_event_reserve(pvBufferOut, offset, ev.event.size);
 				if (pMidiData == NULL)
@@ -408,7 +426,7 @@ bool qmidinetJackMidiDevice::sendData (
 	pchBuffer += sizeof(qmidinetJackMidiEvent);
 	nwrite += sizeof(qmidinetJackMidiEvent);
 	memcpy(pchBuffer, data, len);
-	pJackEventOut->event.time = 0;
+	pJackEventOut->event.time = jack_frame_time(m_pJackClient);
 	pJackEventOut->event.buffer = (jack_midi_data_t *) pchBuffer;
 	pJackEventOut->event.size = len;
 	pJackEventOut->port = port;

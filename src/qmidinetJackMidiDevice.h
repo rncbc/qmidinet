@@ -91,6 +91,8 @@ private:
 
 	jack_ringbuffer_t *m_pJackBufferIn;
 	jack_ringbuffer_t *m_pJackBufferOut;
+
+	jack_nframes_t m_last_frame_time;
 	
 	// Network receiver thread.
 	class qmidinetJackMidiThread *m_pRecvThread;

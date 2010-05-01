@@ -49,8 +49,8 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv )
 	m_menu.addAction(
 		QIcon(":/images/formReject.png"),
 		tr("Quit"), this, SLOT(quit()));
-	m_icon.setContextMenu(&m_menu);
 
+	m_icon.setContextMenu(&m_menu);
 	m_icon.setToolTip(QMIDINET_TITLE " - " + tr(QMIDINET_SUBTITLE));
 
 	QObject::connect(&m_icon,
