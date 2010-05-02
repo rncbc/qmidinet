@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(QmidiNet, 0.0.5, rncbc@rncbc.org, qmidinet)
+AC_INIT(QmidiNet, 0.0.6, rncbc@rncbc.org, qmidinet)
 
 AC_CONFIG_SRCDIR(src/qmidinet.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -188,7 +188,7 @@ AC_CHECK_HEADERS(fcntl.h sys/ioctl.h sys/stat.h unistd.h signal.h)
 if test "x$ac_alsa_midi" = "xyes"; then
    AC_CHECK_HEADER(alsa/asoundlib.h, [ac_alsa_midi="yes"], [ac_alsa_midi="no"])
    if test "x$ac_alsa_midi" = "xno"; then
-      AC_MSG_ERROR([*** ALSA headers not found.])
+      AC_MSG_WARN([*** ALSA headers not found.])
    else
       AC_DEFINE(CONFIG_ALSA_MIDI, 1, [Define if ALSA MIDI support is enabled.])
    fi
@@ -198,7 +198,7 @@ fi
 if test "x$ac_jack_midi" = "xyes"; then
    AC_CHECK_HEADERS(jack/jack.h jack/midiport.h, [ac_jack_midi="yes"], [ac_jack_midi="no"])
    if test "x$ac_jack_midi" = "xno"; then
-      AC_MSG_ERROR([*** JACK headers not found.])
+      AC_MSG_WARN([*** JACK headers not found.])
    else
       AC_DEFINE(CONFIG_JACK_MIDI, 1, [Define if JACK MIDI support is enabled.])
    fi

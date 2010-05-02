@@ -21,7 +21,6 @@
 
 #include "qmidinet.h"
 
-#include "qmidinetAbout.h"
 #include "qmidinetOptions.h"
 #include "qmidinetOptionsForm.h"
 
@@ -36,8 +35,13 @@
 
 // Constructor.
 qmidinetApplication::qmidinetApplication ( int& argc, char **argv )
-	: QApplication(argc, argv), m_icon(this),
-		m_udpd(this), m_alsa(this), m_jack(this)
+	: QApplication(argc, argv), m_icon(this), m_udpd(this)
+	#ifdef CONFIG_ALSA_MIDI	
+		, m_alsa(this)
+	#endif
+	#ifdef CONFIG_JACK_MIDI	
+		, m_jack(this)
+	#endif
 {
 	m_menu.addAction(
 		QIcon(":/images/qmidinet.png"),
@@ -57,19 +61,23 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv )
 		SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
 		SLOT(activated(QSystemTrayIcon::ActivationReason)));
 
+#ifdef CONFIG_ALSA_MIDI
 	QObject::connect(
 		&m_udpd, SIGNAL(received(const QByteArray&, int)),
 		&m_alsa, SLOT(receive(const QByteArray&, int)));
 	QObject::connect(
 		&m_alsa, SIGNAL(received(const QByteArray&, int)),
 		&m_udpd, SLOT(receive(const QByteArray&, int)));
+#endif
 
+#ifdef CONFIG_JACK_MIDI	
 	QObject::connect(
 		&m_udpd, SIGNAL(received(const QByteArray&, int)),
 		&m_jack, SLOT(receive(const QByteArray&, int)));
 	QObject::connect(
 		&m_jack, SIGNAL(received(const QByteArray&, int)),
 		&m_udpd, SLOT(receive(const QByteArray&, int)));
+#endif
 
 	QApplication::setQuitOnLastWindowClosed(false);
 }
@@ -86,8 +94,12 @@ bool qmidinetApplication::setup (void)
 			pOptions->sInterface,
 			pOptions->iUdpPort,
 			pOptions->iNumPorts)) {
+	#ifdef CONFIG_ALSA_MIDI
 		m_alsa.close();
+	#endif
+	#ifdef CONFIG_JACK_MIDI	
 		m_jack.close();
+	#endif
 		message(tr("Network Inferface Error - %1").arg(QMIDINET_TITLE),
 			tr("The network interface could not be established.\n\n"
 			"Please, make sure you have an on-line network connection "
@@ -95,25 +107,33 @@ bool qmidinetApplication::setup (void)
 		return false;
 	}
 
+#ifdef CONFIG_ALSA_MIDI
 	if (!m_alsa.open(QMIDINET_TITLE, pOptions->iNumPorts)) {
 		m_udpd.close();
+	#ifdef CONFIG_JACK_MIDI	
 		m_jack.close();
+	#endif
 		message(tr("ALSA MIDI Inferface Error - %1").arg(QMIDINET_TITLE),
 			tr("The ALSA MIDI interface could not be established.\n\n"
 			"Please, make sure you have a ALSA MIDI sub-system working"
 			"correctly and try again."));
 		return false;
 	}
+#endif
 
+#ifdef CONFIG_JACK_MIDI	
 	if (!m_jack.open(QMIDINET_TITLE, pOptions->iNumPorts)) {
 		m_udpd.close();
+	#ifdef CONFIG_ALSA_MIDI
 		m_alsa.close();
+	#endif
 		message(tr("JACK MIDI Inferface Error - %1").arg(QMIDINET_TITLE),
 			tr("The JACK MIDI interface could not be established.\n\n"
 			"Please, make sure you have a JACK MIDI sub-system working"
 			"correctly and try again."));
 		return false;
 	}
+#endif
 
 	return true;
 }

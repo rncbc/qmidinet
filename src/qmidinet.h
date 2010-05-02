@@ -23,6 +23,7 @@
 #define __qmidinet_h
 
 #include "qmidinetUdpDevice.h"
+
 #include "qmidinetAlsaMidiDevice.h"
 #include "qmidinetJackMidiDevice.h"
 
@@ -67,8 +68,12 @@ private:
 	QMenu                  m_menu;
 	QSystemTrayIcon        m_icon;
 	qmidinetUdpDevice      m_udpd;
+#ifdef CONFIG_ALSA_MIDI
 	qmidinetAlsaMidiDevice m_alsa;
+#endif
+#ifdef CONFIG_JACK_MIDI
 	qmidinetJackMidiDevice m_jack;
+#endif
 };
 
 

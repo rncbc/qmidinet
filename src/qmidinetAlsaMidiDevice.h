@@ -22,6 +22,10 @@
 #ifndef __qmidinetAlsaMidiDevice_h
 #define __qmidinetAlsaMidiDevice_h
 
+#include "qmidinetAbout.h"
+
+#ifdef CONFIG_ALSA_MIDI
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -93,7 +97,8 @@ private:
 };
 
 
-#endif	// __qmidinetAlsaMidiDevice_h
+#endif	// CONFIG_ALSA_MIDI
 
+#endif	// __qmidinetAlsaMidiDevice_h
 
 // end of qmidinetAlsaMidiDevice.h

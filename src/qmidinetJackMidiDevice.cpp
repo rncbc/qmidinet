@@ -19,8 +19,9 @@
 
 *****************************************************************************/
 
-#include "qmidinetAbout.h"
 #include "qmidinetJackMidiDevice.h"
+
+#ifdef CONFIG_JACK_MIDI
 
 #include <QThread>
 #include <QMutex>
@@ -126,7 +127,7 @@ void qmidinetJackMidiThread::run (void)
 		m_cond.wait(&m_mutex);
 		// Process input events...
 		qmidinetJackMidiDevice::getInstance()->capture();
-			}
+	}
 	m_mutex.unlock();
 }
 
@@ -330,7 +331,7 @@ int qmidinetJackMidiDevice::process ( jack_nframes_t nframes )
 	// to/from ring-buffers...
 	for (int i = 0; i < m_nports; ++i) {
 
-		if (m_ppJackPortIn && m_ppJackPortIn[i]) {
+		if (m_ppJackPortIn && m_ppJackPortIn[i] && m_pJackBufferIn) {
 			void *pvBufferIn
 				= jack_port_get_buffer(m_ppJackPortIn[i], nframes);
 			jack_ringbuffer_data_t vector[2];
@@ -351,13 +352,11 @@ int qmidinetJackMidiDevice::process ( jack_nframes_t nframes )
 				nwrite += pJackEventIn->event.size;
 				pJackEventIn = (struct qmidinetJackMidiEvent *) pchBuffer;
 			}
-			if (nwrite > 0) {
+			if (nwrite > 0)
 				jack_ringbuffer_write_advance(m_pJackBufferIn, nwrite);
-				m_pRecvThread->sync();
-			}
 		}
 	
-		if (m_ppJackPortOut && m_ppJackPortOut[i]) {
+		if (m_ppJackPortOut && m_ppJackPortOut[i] && m_pJackBufferOut) {
 			void *pvBufferOut
 				= jack_port_get_buffer(m_ppJackPortOut[i], nframes);
 			jack_midi_clear_buffer(pvBufferOut);
@@ -365,17 +364,15 @@ int qmidinetJackMidiDevice::process ( jack_nframes_t nframes )
 			int nread = 0;
 			qmidinetJackMidiEvent ev;
 			while (jack_ringbuffer_peek(m_pJackBufferOut,
-				(char *) &ev, sizeof(ev)) == sizeof(ev) && nread < nlimit) {
+					(char *) &ev, sizeof(ev)) == sizeof(ev)
+					&& nread < nlimit) {
 				if (ev.event.time > m_last_frame_time)
 					break;
 				jack_nframes_t offset = m_last_frame_time - ev.event.time;
-				if (offset > buffer_size) {
-					// From a previous cycle, somehow; cram it in at the front.
+				if (offset > buffer_size)
 					offset = 0;
-				} else {
-					// Offset from start of the current cycle.
+				else
 					offset = buffer_size - offset;
-				}
 				jack_ringbuffer_read_advance(m_pJackBufferOut, sizeof(ev));
 				jack_midi_data_t *pMidiData
 					= jack_midi_event_reserve(pvBufferOut, offset, ev.event.size);
@@ -386,10 +383,12 @@ int qmidinetJackMidiDevice::process ( jack_nframes_t nframes )
 				jack_ringbuffer_read_advance(m_pJackBufferOut, ev.event.size);
 				nread += ev.event.size;
 			}
-			if (nread > 0)
-				m_pRecvThread->sync();
 		}
 	}
+
+	if (m_pJackBufferIn
+		&& jack_ringbuffer_read_space(m_pJackBufferIn) > 0)
+		m_pRecvThread->sync();
 
 	return 0;
 }
@@ -458,5 +457,7 @@ void qmidinetJackMidiDevice::receive ( const QByteArray& data, int port )
 	sendData((unsigned char *) data.constData(), data.length(), port);
 }
 
+
+#endif	// CONFIG_JACK_MIDI
 
 // end of qmidinetJackMidiDevice.h

@@ -22,6 +22,10 @@
 #ifndef __qmidinetJackMidiDevice_h
 #define __qmidinetJackMidiDevice_h
 
+#include "qmidinetAbout.h"
+
+#ifdef CONFIG_JACK_MIDI
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -102,7 +106,8 @@ private:
 };
 
 
-#endif	// __qmidinetJackMidiDevice_h
+#endif	// CONFIG_JACK_MIDI
 
+#endif	// __qmidinetJackMidiDevice_h
 
 // end of qmidinetJackMidiDevice.h

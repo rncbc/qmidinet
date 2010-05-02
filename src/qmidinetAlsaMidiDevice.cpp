@@ -19,11 +19,11 @@
 
 *****************************************************************************/
 
-#include "qmidinetAbout.h"
 #include "qmidinetAlsaMidiDevice.h"
 
-#include <QThread>
+#ifdef CONFIG_ALSA_MIDI
 
+#include <QThread>
 
 //----------------------------------------------------------------------------
 // qmidinetAlsaMidiThread -- ALSA MIDI listener thread.
@@ -384,5 +384,7 @@ void qmidinetAlsaMidiDevice::receive ( const QByteArray& data, int port )
 	sendData((unsigned char *) data.constData(), data.length(), port);
 }
 
+
+#endif	// CONFIG_ALSA_MIDI
 
 // end of qmidinetAlsaMidiDevice.h
