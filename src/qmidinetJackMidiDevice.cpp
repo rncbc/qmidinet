@@ -58,7 +58,7 @@ static void qmidinetJackMidiDevice_shutdown ( void *pvArg )
 	qmidinetJackMidiDevice *pJackMidiDevice
 		= static_cast<qmidinetJackMidiDevice *> (pvArg);
 
-	pJackMidiDevice->shutdown();
+	pJackMidiDevice->shutdownNotify();
 }
 
 
@@ -394,11 +394,9 @@ int qmidinetJackMidiDevice::process ( jack_nframes_t nframes )
 }
 
 
-void qmidinetJackMidiDevice::shutdown (void)
+void qmidinetJackMidiDevice::shutdownNotify (void)
 {
-	m_pJackClient = NULL;
-
-	close();
+	emit shutdown();
 }
 
 

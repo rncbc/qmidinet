@@ -70,13 +70,17 @@ public:
 
 	// JACK specifics.
 	int process (jack_nframes_t nframes);
-	void shutdown();
+
+	void shutdownNotify();
 
 signals:
 
 	// Received data signal.
 	void received(const QByteArray& data, int port);
 
+	// Shutdown signal.
+	void shutdown();
+	
 public slots:
 
 	// Receive data slot.

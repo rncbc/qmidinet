@@ -77,6 +77,8 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv )
 	QObject::connect(
 		&m_jack, SIGNAL(received(const QByteArray&, int)),
 		&m_udpd, SLOT(receive(const QByteArray&, int)));
+	QObject::connect(
+		&m_jack, SIGNAL(shutdown()), SLOT(shutdown()));
 #endif
 
 	QApplication::setQuitOnLastWindowClosed(false);
@@ -215,6 +217,19 @@ void qmidinetApplication::activated ( QSystemTrayIcon::ActivationReason reason )
 	if (reason == QSystemTrayIcon::Trigger)
 		m_icon.contextMenu()->exec(QCursor::pos());
 }
+
+
+#ifdef CONFIG_JACK_MIDI
+void qmidinetApplication::shutdown (void)
+{
+	m_jack.close();
+
+	message(tr("JACK MIDI Inferface Error - %1").arg(QMIDINET_TITLE),
+		tr("The JACK MIDI interface has been shutdown.\n\n"
+		"Please, make sure you reactivate the JACK MIDI sub-system"
+		"and try again."));
+}
+#endif
 
 
 //-------------------------------------------------------------------------

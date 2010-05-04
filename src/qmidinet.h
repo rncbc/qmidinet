@@ -62,6 +62,10 @@ public slots:
 	// Handle systeam tray activity.
 	void activated(QSystemTrayIcon::ActivationReason);
 
+#ifdef CONFIG_JACK_MIDI
+	void shutdown();
+#endif
+
 private:
 
 	// Instance variables.
