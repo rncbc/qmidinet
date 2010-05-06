@@ -179,6 +179,16 @@ void qmidinetApplication::about (void)
 	sText += "<br />\n";
 	sText += tr("Version") + ": <b>" QMIDINET_VERSION "</b><br />\n";
 	sText += "<small>" + tr("Build") + ": " __DATE__ " " __TIME__ "</small><br />\n";
+#ifndef CONFIG_ALSA_MIDI
+	sText += "<small><font color=\"red\">";
+	sText += tr("ALSA MIDI support disabled.");
+	sText += "</font></small><br />";
+#endif
+#ifndef CONFIG_JACK_MIDI
+	sText += "<small><font color=\"red\">";
+	sText += tr("JACK MIDI support disabled.");
+	sText += "</font></small><br />";
+#endif
 	sText += "<br />\n";
 	sText += tr("Website") + ": <a href=\"" QMIDINET_WEBSITE "\">" QMIDINET_WEBSITE "</a><br />\n";
 	sText += "<br />\n";
