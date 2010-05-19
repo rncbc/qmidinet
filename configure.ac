@@ -160,7 +160,7 @@ AC_CHECK_LIB(Xext, main)
 if test "x$ac_alsa_midi" = "xyes"; then
    AC_CHECK_LIB(asound, main, [ac_alsa_midi="yes"], [ac_alsa_midi="no"])
    if test "x$ac_alsa_midi" = "xno"; then
-      AC_MSG_ERROR([*** ALSA library not found.])
+      AC_MSG_WARN([*** ALSA library not found.])
    else
       ac_libs="$ac_libs -lasound"
    fi
@@ -170,7 +170,7 @@ fi
 if test "x$ac_jack_midi" = "xyes"; then
    AC_CHECK_LIB(jack, main, [ac_jack_midi="yes"], [ac_jack_midi="no"])
    if test "x$ac_jack_midi" = "xno"; then
-      AC_MSG_ERROR([*** JACK library not found.])
+      AC_MSG_WARN([*** JACK library not found.])
    else
       ac_libs="$ac_libs -ljack"
    fi
