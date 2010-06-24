@@ -54,6 +54,8 @@ qmidinetOptionsForm::qmidinetOptionsForm (
 			m_ui.InterfaceComboBox->setEditText(pOptions->sInterface);
 		m_ui.UdpPortSpinBox->setValue(pOptions->iUdpPort);
 		m_ui.NumPortsSpinBox->setValue(pOptions->iNumPorts);
+		m_ui.AlsaMidiCheckBox->setChecked(pOptions->bAlsaMidi);
+		m_ui.JackMidiCheckBox->setChecked(pOptions->bJackMidi);
 	}
 
 
@@ -72,6 +74,12 @@ qmidinetOptionsForm::qmidinetOptionsForm (
 		SLOT(change()));
 	QObject::connect(m_ui.NumPortsSpinBox,
 		SIGNAL(valueChanged(int)),
+		SLOT(change()));
+	QObject::connect(m_ui.AlsaMidiCheckBox,
+		SIGNAL(toggled(bool)),
+		SLOT(change()));
+	QObject::connect(m_ui.JackMidiCheckBox,
+		SIGNAL(toggled(bool)),
 		SLOT(change()));
 	QObject::connect(m_ui.DialogButtonBox,
 		SIGNAL(accepted()),
@@ -100,6 +108,8 @@ void qmidinetOptionsForm::accept (void)
 			pOptions->sInterface = m_ui.InterfaceComboBox->currentText();
 			pOptions->iUdpPort   = m_ui.UdpPortSpinBox->value();
 			pOptions->iNumPorts  = m_ui.NumPortsSpinBox->value();
+			pOptions->bAlsaMidi  = m_ui.AlsaMidiCheckBox->isChecked();
+			pOptions->bJackMidi  = m_ui.JackMidiCheckBox->isChecked();
 			// Take care of some translatable adjustments...
 			if (pOptions->sInterface == m_sDefInterface)
 				pOptions->sInterface.clear();

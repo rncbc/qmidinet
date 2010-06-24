@@ -53,6 +53,8 @@ public:
 
 	// General options...
 	int     iNumPorts;
+	bool    bAlsaMidi;
+	bool    bJackMidi;
 
 	// Network options...
 	QString sInterface;

@@ -26,8 +26,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>251</width>
-    <height>158</height>
+    <width>273</width>
+    <height>183</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -37,9 +37,9 @@
    <iconset resource="qmidinet.qrc">
     <normaloff>:/images/qmidinet.png</normaloff>:/images/qmidinet.png</iconset>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
+  <layout class="QHBoxLayout">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout">
      <item>
       <widget class="QGroupBox" name="GeneralGroupBox">
        <property name="title">
@@ -48,7 +48,7 @@
        <property name="flat">
         <bool>true</bool>
        </property>
-       <layout class="QFormLayout">
+       <layout class="QGridLayout">
         <item row="0" column="0">
          <widget class="QLabel" name="NumPortsTextLabel">
           <property name="text">
@@ -75,6 +75,37 @@
           </property>
          </widget>
         </item>
+        <item row="1" column="0" colspan="2">
+         <layout class="QHBoxLayout">
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>28</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="AlsaMidiCheckBox">
+            <property name="text">
+             <string>&amp;ALSA</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="JackMidiCheckBox">
+            <property name="text">
+             <string>&amp;JACK</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
        </layout>
       </widget>
      </item>
@@ -86,7 +117,7 @@
        <property name="flat">
         <bool>true</bool>
        </property>
-       <layout class="QFormLayout">
+       <layout class="QGridLayout">
         <item row="0" column="0">
          <widget class="QLabel" name="InterfaceTextLabel">
           <property name="text">
@@ -144,6 +175,8 @@
  <layoutdefault spacing="4" margin="8"/>
  <tabstops>
   <tabstop>NumPortsSpinBox</tabstop>
+  <tabstop>AlsaMidiCheckBox</tabstop>
+  <tabstop>JackMidiCheckBox</tabstop>
   <tabstop>InterfaceComboBox</tabstop>
   <tabstop>UdpPortSpinBox</tabstop>
   <tabstop>DialogButtonBox</tabstop>

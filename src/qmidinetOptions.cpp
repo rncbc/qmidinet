@@ -69,6 +69,8 @@ void qmidinetOptions::loadOptions (void)
 	// General options...
 	m_settings.beginGroup("/General");
 	iNumPorts = m_settings.value("/NumPorts", 1).toInt();
+	bAlsaMidi = m_settings.value("/AlsaMidi", true).toBool();
+	bJackMidi = m_settings.value("/JackMidi", false).toBool();
 	m_settings.endGroup();
 
 	// Network specific options...
@@ -90,6 +92,8 @@ void qmidinetOptions::saveOptions (void)
 	// General options...
 	m_settings.beginGroup("/General");
 	m_settings.setValue("/NumPorts", iNumPorts);
+	m_settings.setValue("/AlsaMidi", bAlsaMidi);
+	m_settings.setValue("/JackMidi", bJackMidi);
 	m_settings.endGroup();
 
 	// Network specific options...

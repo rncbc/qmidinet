@@ -5,6 +5,8 @@ ChangeLog
 
 SVN TRUNK
 
+- Enabling ALSA MIDI and/or JACK MIDI devices is now optional.
+
 - Transparent JACK MIDI support is being introduced. (EXPERIMENTAL)
 
 - Use standard dialog buttons as provided by QDialogButtonBox.

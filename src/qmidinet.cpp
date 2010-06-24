@@ -110,7 +110,8 @@ bool qmidinetApplication::setup (void)
 	}
 
 #ifdef CONFIG_ALSA_MIDI
-	if (!m_alsa.open(QMIDINET_TITLE, pOptions->iNumPorts)) {
+	if (pOptions->bAlsaMidi
+		&& !m_alsa.open(QMIDINET_TITLE, pOptions->iNumPorts)) {
 		m_udpd.close();
 	#ifdef CONFIG_JACK_MIDI	
 		m_jack.close();
@@ -123,8 +124,9 @@ bool qmidinetApplication::setup (void)
 	}
 #endif
 
-#ifdef CONFIG_JACK_MIDI	
-	if (!m_jack.open(QMIDINET_TITLE, pOptions->iNumPorts)) {
+#ifdef CONFIG_JACK_MIDI
+	if (pOptions->bJackMidi
+		&& !m_jack.open(QMIDINET_TITLE, pOptions->iNumPorts)) {
 		m_udpd.close();
 	#ifdef CONFIG_ALSA_MIDI
 		m_alsa.close();
