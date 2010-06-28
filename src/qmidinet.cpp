@@ -92,16 +92,17 @@ bool qmidinetApplication::setup (void)
 	if (pOptions == NULL)
 		return false;
 
+#ifdef CONFIG_ALSA_MIDI
+	m_alsa.close();
+#endif
+#ifdef CONFIG_JACK_MIDI	
+	m_jack.close();
+#endif
+
 	if (!m_udpd.open(
 			pOptions->sInterface,
 			pOptions->iUdpPort,
 			pOptions->iNumPorts)) {
-	#ifdef CONFIG_ALSA_MIDI
-		m_alsa.close();
-	#endif
-	#ifdef CONFIG_JACK_MIDI	
-		m_jack.close();
-	#endif
 		message(tr("Network Inferface Error - %1").arg(QMIDINET_TITLE),
 			tr("The network interface could not be established.\n\n"
 			"Please, make sure you have an on-line network connection "
@@ -113,9 +114,6 @@ bool qmidinetApplication::setup (void)
 	if (pOptions->bAlsaMidi
 		&& !m_alsa.open(QMIDINET_TITLE, pOptions->iNumPorts)) {
 		m_udpd.close();
-	#ifdef CONFIG_JACK_MIDI	
-		m_jack.close();
-	#endif
 		message(tr("ALSA MIDI Inferface Error - %1").arg(QMIDINET_TITLE),
 			tr("The ALSA MIDI interface could not be established.\n\n"
 			"Please, make sure you have a ALSA MIDI sub-system working"
