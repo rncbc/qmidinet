@@ -36,6 +36,213 @@ struct qmidinetJackMidiEvent
 };
 
 
+//---------------------------------------------------------------------
+// qmidinetJackMidiQueue - Home-brew sorter queue.
+//
+
+class qmidinetJackMidiQueue
+{
+public:
+
+	// Constructor.
+	qmidinetJackMidiQueue ( unsigned int size, unsigned int slack )
+	{
+		m_pool  = pool_create(size * (slack + sizeof(Slot)));
+		m_items = new char * [size];
+		m_size  = size;		
+		m_count = 0;
+		m_dirty = 0;
+	}
+
+	// Destructor.
+	~qmidinetJackMidiQueue ()
+	{
+		pool_delete(m_pool);
+		delete [] m_items;
+	}
+
+	// Queue cleanup.
+	void clear ()
+	{
+		pool_clear(m_pool);
+		m_count = 0;
+		m_dirty = 0;
+	}
+
+	// Queue size accessor.
+	int size () const
+		{ return m_size; }
+
+	// Queue count accessor.
+	int count () const
+		{ return m_count; }
+
+	// Queue dirty accessor.
+	bool isDirty () const
+		{ return (m_dirty > 0); }
+
+	// Queue item push insert.
+	char *push ( int port, jack_nframes_t time, size_t size )
+	{
+		char *item = push_item(time, size + sizeof(unsigned short));
+		if (item) {
+			*(unsigned short *) item = port;
+			item += sizeof(unsigned short);
+		}
+		return item;
+	}
+
+	// Queue item pop/remove.
+	char *pop ( int *port, jack_nframes_t *time, size_t *size )
+	{
+		char *item = pop_item(time, size);
+		if (item) {
+			if (port) *port = *(unsigned short *) item;
+			if (size) *size -= sizeof(unsigned short);
+			item += sizeof(unsigned short);
+		}
+		return item;
+	}
+
+protected:
+
+	struct Slot {
+		unsigned int size;
+		union {
+			unsigned long key;
+			Slot *next;
+		} u;
+	};
+
+	static
+	Slot *pool_slot ( char *data )
+		{ return (Slot *) ((char *) data - sizeof(Slot)); }
+
+	static
+	unsigned int pool_slot_size ( char *data )
+		{ return pool_slot(data)->size - sizeof(Slot); }
+
+	static
+	unsigned long pool_slot_key ( char *data )
+		{ return pool_slot(data)->u.key; }
+
+	void pool_clear ( Slot *pool )
+	{
+		Slot *p = (Slot *) ((char *) pool + sizeof(Slot));
+		pool->u.next = p;
+
+		p->size = pool->size - sizeof(Slot);
+		p->u.next = NULL;
+	}
+
+	Slot *pool_create ( unsigned int size )
+	{
+		Slot *pool = (Slot *) ::malloc(sizeof(Slot) + size);
+		pool->size = size;
+
+		pool_clear(pool);
+
+		return pool;
+	}
+
+	void pool_delete ( Slot *pool )
+		{ ::free(pool);	}
+
+	char *pool_alloc ( Slot *pool, unsigned long key, unsigned int size )
+	{
+		Slot *q = pool;
+		Slot *p = pool->u.next;
+
+		size += sizeof(Slot);
+
+		while (p && p->size < size) {
+			q = p;
+			p = p->u.next;
+		}
+
+		if (p == NULL)
+			return NULL;
+
+		Slot *pnext = p->u.next;
+		unsigned int psize = p->size - size;
+
+		if (psize < sizeof(Slot)) {
+			q->u.next = pnext;
+		} else {
+			q->u.next = (Slot *) ((char *) p + size);
+			q->u.next->size = psize;
+			q->u.next->u.next = pnext;
+		}
+
+		p->size = size;
+		p->u.key = key;
+
+		return (char *) p + sizeof(Slot); 
+	}
+
+	void pool_free ( Slot *pool, char *data )
+	{
+		if (data == NULL)
+			return;
+
+		Slot *p = pool_slot(data);
+	//	p->size = size;
+		p->u.next = pool->u.next;
+
+		pool->u.next = p;
+	}
+
+	static
+	int sort_item ( const void *elem1, const void *elem2 )
+	{
+		return long(pool_slot_key(*(char **) elem2))
+			 - long(pool_slot_key(*(char **) elem1));
+	}
+
+	char *push_item ( jack_nframes_t time, size_t size )
+	{
+		char *item = NULL;
+
+		if (m_count < m_size) {
+			item = pool_alloc(m_pool, time, size);
+			if (item) {
+				m_items[m_count++] = item;
+				m_dirty++;
+			}
+		}
+
+		return item;
+	}
+
+	char *pop_item ( jack_nframes_t *time, size_t *size )
+	{
+		char *item = NULL;
+
+		if (m_count > 0) {
+			if (m_dirty > 0) {
+				::qsort(m_items, m_count, sizeof(char *), sort_item);
+				m_dirty = 0;
+			}
+			item = m_items[--m_count];
+			if (time) *time = pool_slot_key(item);
+			if (size) *size = pool_slot_size(item);
+		}
+		else pool_clear(m_pool);
+
+		return item;
+	}
+
+private:
+
+	// Queue instance variables.
+	Slot         *m_pool;
+	char        **m_items;
+	unsigned int  m_size;
+	unsigned int  m_count;
+	int           m_dirty;
+};
+
+
 //----------------------------------------------------------------------
 // qmidinetJackMidiDevice_process -- JACK client process callback.
 //
@@ -156,7 +363,7 @@ qmidinetJackMidiDevice::qmidinetJackMidiDevice ( QObject *pParent )
 	: QObject(pParent), m_pJackClient(NULL),
 		m_ppJackPortIn(NULL), m_ppJackPortOut(NULL),
 		m_pJackBufferIn(NULL), m_pJackBufferOut(NULL),
-		m_pRecvThread(NULL)
+		m_pQueueIn(NULL), m_pRecvThread(NULL)
 {
 	g_pDevice = this;
 }
@@ -223,6 +430,9 @@ bool qmidinetJackMidiDevice::open ( const QString& sClientName, int iNumPorts )
 	m_pJackBufferOut = jack_ringbuffer_create(
 		1024 * m_nports * sizeof(qmidinetJackMidiEvent));
 
+	// Prepare the queue sorter stuff...
+	m_pQueueIn = new qmidinetJackMidiQueue(1024 * m_nports, 8);
+	
 	// Set and go usual callbacks...
 	jack_set_process_callback(m_pJackClient,
 		qmidinetJackMidiDevice_process, this);
@@ -286,6 +496,11 @@ void qmidinetJackMidiDevice::close (void)
 		m_pJackBufferOut = NULL;
 	}
 
+	if (m_pQueueIn) {
+		delete m_pQueueIn;
+		m_pQueueIn = NULL;
+	}
+
 	m_nports = 0;
 }
 
@@ -296,26 +511,44 @@ void qmidinetJackMidiDevice::capture (void)
 	if (m_pJackBufferIn == NULL)
 		return;
 
-	jack_nframes_t frame_time = jack_frame_time(m_pJackClient);
-
+	char *pMidiData;
 	qmidinetJackMidiEvent ev;
+
 	while (jack_ringbuffer_peek(m_pJackBufferIn,
 			(char *) &ev, sizeof(ev)) == sizeof(ev)) {
-		ev.event.time += m_last_frame_time;
-		if (ev.event.time < frame_time)
-			break;
 		jack_ringbuffer_read_advance(m_pJackBufferIn, sizeof(ev));
-		char *pMidiData = new char [ev.event.size];
-		jack_ringbuffer_read(m_pJackBufferIn, pMidiData, ev.event.size);
+		pMidiData = m_pQueueIn->push(ev.port, ev.event.time, ev.event.size);
+		if (pMidiData)
+			jack_ringbuffer_read(m_pJackBufferIn, pMidiData, ev.event.size);
+		else
+			jack_ringbuffer_read_advance(m_pJackBufferIn, ev.event.size);
+	}
+
+	float sample_rate = jack_get_sample_rate(m_pJackClient);
+	jack_nframes_t frame_time = jack_frame_time(m_pJackClient);
+
+	while ((pMidiData = m_pQueueIn->pop(
+			&ev.port, &ev.event.time, &ev.event.size)) != NULL) {	
+		ev.event.time += m_last_frame_time;
+		if (ev.event.time > frame_time) {
+			struct timespec ts;
+			unsigned long sleep_time = ev.event.time - frame_time;
+			float secs = float(sleep_time) / sample_rate;
+			if (secs > 0.0001f) {
+				ts.tv_sec  = time_t(secs);
+				ts.tv_nsec = long(1E+9f * (secs - ts.tv_sec));
+				::nanosleep(&ts, NULL);
+			}
+			frame_time = ev.event.time;
+		}	
 	#ifdef CONFIG_DEBUG
 		// - show (input) event for debug purposes...
-		fprintf(stderr, "JACK MIDI In Port %d: ", ev.port);
+		fprintf(stderr, "JACK MIDI In Port %d: (%d)", ev.port, int(ev.event.size));
 		for (unsigned int i = 0; i < ev.event.size; ++i)
 			fprintf(stderr, " 0x%02x", pMidiData[i]);
 		fprintf(stderr, "\n");
-	#endif	
-		recvData((unsigned char *) pMidiData, ev.event.size, ev.port);			
-		delete [] pMidiData;
+	#endif
+		recvData((unsigned char *) pMidiData, ev.event.size, ev.port);
 	}
 }
 

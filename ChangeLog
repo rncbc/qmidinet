@@ -5,6 +5,9 @@ ChangeLog
 
 SVN TRUNK
 
+- Attain micro-second precision for JACK MIDI timing, through
+  home-brew queue sorting pool =)
+
 - Enabling ALSA MIDI and/or JACK MIDI devices is now optional.
 
 - Transparent JACK MIDI support is being introduced. (EXPERIMENTAL)

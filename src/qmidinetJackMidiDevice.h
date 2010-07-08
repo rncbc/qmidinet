@@ -102,6 +102,9 @@ private:
 
 	jack_nframes_t m_last_frame_time;
 	
+	// Queue sorter.
+	class qmidinetJackMidiQueue *m_pQueueIn;
+
 	// Network receiver thread.
 	class qmidinetJackMidiThread *m_pRecvThread;
 
