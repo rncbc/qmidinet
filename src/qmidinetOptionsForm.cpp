@@ -58,6 +58,12 @@ qmidinetOptionsForm::qmidinetOptionsForm (
 		m_ui.JackMidiCheckBox->setChecked(pOptions->bJackMidi);
 	}
 
+#ifndef CONFIG_ALSA_MIDI
+	m_ui.AlsaMidiCheckBox->setEnabled(false);
+#endif
+#ifndef CONFIG_JACK_MIDI
+	m_ui.JackMidiCheckBox->setEnabled(false);
+#endif
 
 	// Start clean.
 	m_iDirtyCount = 0;

@@ -287,6 +287,9 @@ public:
 	// Wake from executive wait condition (RT-safe).
 	void sync();
 
+	// Sleep for some microseconds.
+	void usleep(unsigned long usecs);
+
 protected:
 
 	// The main thread executive.
@@ -349,6 +352,13 @@ void qmidinetJackMidiThread::sync (void)
 #ifdef CONFIG_DEBUG
 	else qDebug("qmidinetJackMidiThread[%p]::sync(): tryLock() failed.", this);
 #endif
+}
+
+
+// Sleep for some microseconds.
+void qmidinetJackMidiThread::usleep ( unsigned long usecs )
+{
+	QThread::usleep(usecs);
 }
 
 
@@ -531,13 +541,17 @@ void qmidinetJackMidiDevice::capture (void)
 			&ev.port, &ev.event.time, &ev.event.size)) != NULL) {	
 		ev.event.time += m_last_frame_time;
 		if (ev.event.time > frame_time) {
-			struct timespec ts;
 			unsigned long sleep_time = ev.event.time - frame_time;
 			float secs = float(sleep_time) / sample_rate;
 			if (secs > 0.0001f) {
+			#if 0 // defined(__GNUC__) && defined(Q_OS_LINUX)
+				struct timespec ts;
 				ts.tv_sec  = time_t(secs);
 				ts.tv_nsec = long(1E+9f * (secs - ts.tv_sec));
 				::nanosleep(&ts, NULL);
+			#else
+				m_pRecvThread->usleep(long(1E+6f * secs));
+			#endif
 			}
 			frame_time = ev.event.time;
 		}	
