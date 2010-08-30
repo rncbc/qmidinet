@@ -43,6 +43,7 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv )
 		, m_jack(this)
 	#endif
 {
+	m_menu.addAction(tr("Reset"), this, SLOT(reset()));
 	m_menu.addAction(
 		QIcon(":/images/qmidinet.png"),
 		tr("Options..."), this, SLOT(options()));
@@ -141,12 +142,12 @@ bool qmidinetApplication::setup (void)
 }
 
 
-void qmidinetApplication::show (void)
+void qmidinetApplication::show ( bool bSetup )
 {
 	const QIcon icon(":/images/qmidinet.png");
 	QPixmap pm(icon.pixmap(22, 22));
 
-	if (!setup()) {
+	if (!bSetup) {
 		// Merge with the overlay pixmap...
 		const QPixmap pmOverlay(":/images/iconError.png");
 		if (!pmOverlay.mask().isNull()) {
@@ -166,7 +167,14 @@ void qmidinetApplication::show (void)
 void qmidinetApplication::options (void)
 {
 	if (qmidinetOptionsForm(NULL).exec())
-		show();
+		reset();
+}
+
+
+// Restart/reset action
+void qmidinetApplication::reset (void)
+{
+	show(setup());
 }
 
 
@@ -238,6 +246,8 @@ void qmidinetApplication::shutdown (void)
 		tr("The JACK MIDI interface has been shutdown.\n\n"
 		"Please, make sure you reactivate the JACK MIDI sub-system"
 		"and try again."));
+
+	show(false);
 }
 #endif
 
@@ -258,7 +268,7 @@ int main ( int argc, char* argv[] )
 		return 1;
 	}
 
-	app.show();
+	app.reset();
 
 	return app.exec();
 }

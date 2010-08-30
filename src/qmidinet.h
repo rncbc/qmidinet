@@ -46,25 +46,28 @@ public:
 	// Constructor.
 	qmidinetApplication(int& argc, char **argv);
 
-	// Initializers.
-	bool setup();
-	void show();
-
-	// Message bubble/dialog.
-	void message(const QString& sTitle, const QString& sText);
-
 public slots:
 
-	// Options dialog.
+	// Action slots...
 	void options();
+	void reset();
 	void about();
 
-	// Handle systeam tray activity.
+	// Handle system tray activity.
 	void activated(QSystemTrayIcon::ActivationReason);
 
 #ifdef CONFIG_JACK_MIDI
 	void shutdown();
 #endif
+
+protected:
+
+	// Initializer.
+	bool setup();
+	void show(bool bSetup);
+
+	// Message bubble/dialog.
+	void message(const QString& sTitle, const QString& sText);
 
 private:
 
