@@ -3,7 +3,7 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 
 ChangeLog
 
-SVN TRUNK
+0.1.0  2010-09-03  Second public release.
 
 - Attain micro-second precision for JACK MIDI timing, through
   home-brew queue sorting pool =)

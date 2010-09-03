@@ -53,8 +53,8 @@ and optionally as root:
 This procedure will end installing the following couple of files:
 
     ${prefix}/bin/qmidinet
-    ${prefix}/share/pixmaps/qmidinet.png
     ${prefix}/share/applications/qmidinet.desktop
+    ${prefix}/share/icons/hicolor/32x32/apps/qmidinet.png
 
 Just launch ${prefix}/bin/qmidinet and you're off (hopefully).
 
