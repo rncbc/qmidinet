@@ -5,6 +5,8 @@ ChangeLog
 
 SVN TRUNK
 
+- Fixed serious JACK-MIDI DoS bug, now working as advertised.
+
 - Minor debug mode JACK-MIDI event print out fix.
 
 

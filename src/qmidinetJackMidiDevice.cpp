@@ -623,10 +623,10 @@ int qmidinetJackMidiDevice::process ( jack_nframes_t nframes )
 				jack_ringbuffer_read_advance(m_pJackBufferOut, sizeof(ev));
 				jack_midi_data_t *pMidiData
 					= jack_midi_event_reserve(pvBufferOut, offset, ev.event.size);
-				if (pMidiData == NULL)
-					break;
-				jack_ringbuffer_read(m_pJackBufferOut,
-					(char *) pMidiData, ev.event.size);
+				if (pMidiData)
+					jack_ringbuffer_read(m_pJackBufferOut,
+						(char *) pMidiData, ev.event.size);
+				else
 				jack_ringbuffer_read_advance(m_pJackBufferOut, ev.event.size);
 				nread += ev.event.size;
 			}
