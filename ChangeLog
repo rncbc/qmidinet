@@ -3,6 +3,11 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 
 ChangeLog
 
+SVN TRUNK
+
+- Minor debug mode JACK-MIDI event print out fix.
+
+
 0.1.0  2010-09-03  Second public release.
 
 - Attain micro-second precision for JACK MIDI timing, through

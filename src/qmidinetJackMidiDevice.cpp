@@ -664,7 +664,8 @@ bool qmidinetJackMidiDevice::sendData (
 		return false;
 
 	int nwrite = 0;
-	char *pchBuffer = vector[0].buf;
+	unsigned char *pchBuffer
+		= (unsigned char *) vector[0].buf;
 	qmidinetJackMidiEvent *pJackEventOut
 		= (struct qmidinetJackMidiEvent *) pchBuffer;
 	pchBuffer += sizeof(qmidinetJackMidiEvent);
@@ -676,7 +677,7 @@ bool qmidinetJackMidiDevice::sendData (
 	pJackEventOut->port = port;
 #ifdef CONFIG_DEBUG
 	// - show (output) event for debug purposes...
-	fprintf(stderr, "JACK MIDI Out Port %d: ", port);
+	fprintf(stderr, "JACK MIDI Out Port %d:", port);
 	for (unsigned int i = 0; i < len; ++i)
 		fprintf(stderr, " 0x%02x", pchBuffer[i]);
 	fprintf(stderr, "\n");
