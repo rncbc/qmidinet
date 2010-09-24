@@ -1,6 +1,6 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 2
+%define release 3
 
 %define _prefix	@ac_prefix@
 
@@ -52,6 +52,8 @@ to be compatible with ipMIDI for Windows (http://nerds.de).
 %{_datadir}/icons/hicolor/32x32/apps/%{name}.png
 
 %changelog
+* Fri Sep 24 2010 Rui Nuno Capela <rncbc@users.sourceforge.net> 0.1.0-2
+- JACK-MIDI bugfix release.
 * Fri Sep  3 2010 Rui Nuno Capela <rncbc@users.sourceforge.net> 0.1.0-2
 - Second public release.
 * Mon May 17 2010 Rui Nuno Capela <rncbc@users.sourceforge.net>
