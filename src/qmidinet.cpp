@@ -43,10 +43,10 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv )
 		, m_jack(this)
 	#endif
 {
-	m_menu.addAction(tr("Reset"), this, SLOT(reset()));
 	m_menu.addAction(
 		QIcon(":/images/qmidinet.png"),
 		tr("Options..."), this, SLOT(options()));
+	m_menu.addAction(tr("Reset"), this, SLOT(reset()));
 	m_menu.addSeparator();
 	m_menu.addAction(tr("About..."), this, SLOT(about()));
 	m_menu.addAction(tr("About Qt..."), this, SLOT(aboutQt()));
