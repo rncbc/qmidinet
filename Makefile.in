@@ -29,6 +29,13 @@ resources = \
 	src/qmidinet.qrc
 
 
+exec_prefix = @exec_prefix@
+datarootdir = @datarootdir@
+
+export bindir = @bindir@
+export datadir = @datadir@
+
+
 all:	$(target)
 
 
@@ -42,7 +49,7 @@ $(name).mak:	$(name).pro
 install:	$(target)
 	@make INSTALL_ROOT=$(DESTDIR) -f $(name).mak install
 
-uninstall:	$(DESTDIR)$(prefix)/bin/$(name)
+uninstall:	$(DESTDIR)$(bindir)/$(name)
 	@make INSTALL_ROOT=$(DESTDIR) -f $(name).mak uninstall
 
 

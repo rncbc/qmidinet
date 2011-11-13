@@ -42,10 +42,11 @@ unix {
 		PREFIX = /usr/local
 	}
 
-	BINDIR = $$PREFIX/bin
-	DATADIR = $$PREFIX/share
+	BINDIR = $(bindir)
+	DATADIR = $(datadir)
 
-	DEFINES += DATADIR=\"$$DATADIR\" PKGDATADIR=\"$$PKGDATADIR\"
+	DEFINES += BINDIR=\"$$BINDIR\"
+	DEFINES += DATADIR=\"$$DATADIR\"
 
 	#MAKE INSTALL
 	INSTALLS += target desktop icon
