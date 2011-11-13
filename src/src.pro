@@ -42,10 +42,9 @@ unix {
 		PREFIX = /usr/local
 	}
 
-	BINDIR = $(bindir)
-	DATADIR = $(datadir)
+	BINDIR = $$PREFIX/bin
+	DATADIR = $$PREFIX/share
 
-	DEFINES += BINDIR=\"$$BINDIR\"
 	DEFINES += DATADIR=\"$$DATADIR\"
 
 	# make install
