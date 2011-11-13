@@ -33,7 +33,7 @@ RESOURCES += qmidinet.qrc
 
 unix {
 
-	#VARIABLES
+	# variables
 	OBJECTS_DIR = .obj
 	MOC_DIR     = .moc
 	UI_DIR      = .ui
@@ -48,7 +48,7 @@ unix {
 	DEFINES += BINDIR=\"$$BINDIR\"
 	DEFINES += DATADIR=\"$$DATADIR\"
 
-	#MAKE INSTALL
+	# make install
 	INSTALLS += target desktop icon
 
 	target.path = $$BINDIR
