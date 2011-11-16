@@ -5,8 +5,8 @@ ChangeLog
 
 SVN TRUNK
 
-- Fixed Makefile.in handling of installation directories to
-  the configure script eg. --bindir, --datadir.
+- Fixed Makefile.in handling of installation directories to the
+  configure script eg. --datadir.
 
 - Main context menu simple no-brainer reordering.
 
