@@ -33,20 +33,20 @@ all:	$(target)
 
 
 $(target):	$(name).mak $(resources) ${forms} $(sources) $(headers)
-	@make -f $(name).mak
+	@$(MAKE) -f $(name).mak
 
 $(name).mak:	$(name).pro
 	@$(qmake) -o $(name).mak $(name).pro
 
 
 install:	$(target)
-	@make INSTALL_ROOT=$(DESTDIR) -f $(name).mak install
+	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name).mak install
 
 uninstall:	$(DESTDIR)$(prefix)/bin/$(name)
-	@make INSTALL_ROOT=$(DESTDIR) -f $(name).mak uninstall
+	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name).mak uninstall
 
 
 clean:	$(name).mak
-	@make -f $(name).mak clean
+	@$(MAKE) -f $(name).mak clean
 	@rm -f $(target) $(target).mak $(name).mak
 	@rm -rf *.cache *.log *.status
