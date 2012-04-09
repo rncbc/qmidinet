@@ -5,6 +5,9 @@ ChangeLog
 
 SVN TRUNK
 
+- JACK MIDI interface were sinking all incoming events into the
+  the first port, now fixed (heads up from Chris Goddard, thanks).
+
 - Make(ing) -jN parallel builds now available for the masses.
 
 - Fixed Makefile.in handling of installation directories to the

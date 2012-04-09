@@ -29,7 +29,7 @@
 
 #define QMIDINET_SUBTITLE     "A MIDI Network Gateway via UDP/IP Multicast"
 #define QMIDINET_WEBSITE      "http://qmidinet.sourceforge.net"
-#define QMIDINET_COPYRIGHT    "Copyright (C) 2010-2011, rncbc aka Rui Nuno Capela. All rights reserved."
+#define QMIDINET_COPYRIGHT    "Copyright (C) 2010-2012, rncbc aka Rui Nuno Capela. All rights reserved."
 
 #define QMIDINET_DOMAIN       "rncbc.org"
 
