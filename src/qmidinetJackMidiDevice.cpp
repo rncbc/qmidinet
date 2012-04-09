@@ -521,15 +521,15 @@ void qmidinetJackMidiDevice::capture (void)
 	if (m_pJackBufferIn == NULL)
 		return;
 
-	char *pMidiData;
+	char *pchBuffer;
 	qmidinetJackMidiEvent ev;
 
 	while (jack_ringbuffer_peek(m_pJackBufferIn,
 			(char *) &ev, sizeof(ev)) == sizeof(ev)) {
 		jack_ringbuffer_read_advance(m_pJackBufferIn, sizeof(ev));
-		pMidiData = m_pQueueIn->push(ev.port, ev.event.time, ev.event.size);
-		if (pMidiData)
-			jack_ringbuffer_read(m_pJackBufferIn, pMidiData, ev.event.size);
+		pchBuffer = m_pQueueIn->push(ev.port, ev.event.time, ev.event.size);
+		if (pchBuffer)
+			jack_ringbuffer_read(m_pJackBufferIn, pchBuffer, ev.event.size);
 		else
 			jack_ringbuffer_read_advance(m_pJackBufferIn, ev.event.size);
 	}
@@ -537,7 +537,7 @@ void qmidinetJackMidiDevice::capture (void)
 	float sample_rate = jack_get_sample_rate(m_pJackClient);
 	jack_nframes_t frame_time = jack_frame_time(m_pJackClient);
 
-	while ((pMidiData = m_pQueueIn->pop(
+	while ((pchBuffer = m_pQueueIn->pop(
 			&ev.port, &ev.event.time, &ev.event.size)) != NULL) {	
 		ev.event.time += m_last_frame_time;
 		if (ev.event.time > frame_time) {
@@ -559,10 +559,10 @@ void qmidinetJackMidiDevice::capture (void)
 		// - show (input) event for debug purposes...
 		fprintf(stderr, "JACK MIDI In Port %d: (%d)", ev.port, int(ev.event.size));
 		for (unsigned int i = 0; i < ev.event.size; ++i)
-			fprintf(stderr, " 0x%02x", pMidiData[i]);
+			fprintf(stderr, " 0x%02x", (unsigned char) pchBuffer[i]);
 		fprintf(stderr, "\n");
 	#endif
-		recvData((unsigned char *) pMidiData, ev.event.size, ev.port);
+		recvData((unsigned char *) pchBuffer, ev.event.size, ev.port);
 	}
 }
 
@@ -666,8 +666,7 @@ bool qmidinetJackMidiDevice::sendData (
 		return false;
 
 	int nwrite = 0;
-	unsigned char *pchBuffer
-		= (unsigned char *) vector[0].buf;
+	char *pchBuffer = vector[0].buf;
 	qmidinetJackMidiEvent *pJackEventOut
 		= (struct qmidinetJackMidiEvent *) pchBuffer;
 	pchBuffer += sizeof(qmidinetJackMidiEvent);
@@ -681,7 +680,7 @@ bool qmidinetJackMidiDevice::sendData (
 	// - show (output) event for debug purposes...
 	fprintf(stderr, "JACK MIDI Out Port %d:", port);
 	for (unsigned int i = 0; i < len; ++i)
-		fprintf(stderr, " 0x%02x", pchBuffer[i]);
+		fprintf(stderr, " 0x%02x", (unsigned char) pchBuffer[i]);
 	fprintf(stderr, "\n");
 #endif	
 	pchBuffer += len;
