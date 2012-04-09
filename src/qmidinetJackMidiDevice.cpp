@@ -612,7 +612,6 @@ int qmidinetJackMidiDevice::process ( jack_nframes_t nframes )
 			qmidinetJackMidiEvent ev;
 			while (jack_ringbuffer_peek(m_pJackBufferOut,
 					(char *) &ev, sizeof(ev)) == sizeof(ev)
-					&& ev.port == i
 					&& nread < nlimit) {
 				if (ev.port != i)
 					break;
