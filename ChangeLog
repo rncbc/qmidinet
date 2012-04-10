@@ -5,6 +5,9 @@ ChangeLog
 
 SVN TRUNK
 
+- Changed order of JACK MIDI and UDP socket initialization, hoping
+  the later is always owned by the current genuine process.
+
 - JACK MIDI interface were sinking all incoming events into the
   the first port, now fixed (heads up from Chris Goddard, thanks).
 

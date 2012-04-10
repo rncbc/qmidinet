@@ -27,6 +27,7 @@
 #include <QMessageBox>
 #include <QBitmap>
 #include <QPainter>
+#include <QTimer>
 
 
 //-------------------------------------------------------------------------
@@ -35,13 +36,14 @@
 
 // Constructor.
 qmidinetApplication::qmidinetApplication ( int& argc, char **argv )
-	: QApplication(argc, argv), m_icon(this), m_udpd(this)
+	: QApplication(argc, argv), m_icon(this)
 	#ifdef CONFIG_ALSA_MIDI	
 		, m_alsa(this)
 	#endif
 	#ifdef CONFIG_JACK_MIDI	
 		, m_jack(this)
 	#endif
+		, m_udpd(this)
 {
 	m_menu.addAction(
 		QIcon(":/images/qmidinet.png"),
@@ -93,28 +95,17 @@ bool qmidinetApplication::setup (void)
 	if (pOptions == NULL)
 		return false;
 
-#ifdef CONFIG_ALSA_MIDI
-	m_alsa.close();
-#endif
+	m_udpd.close();
 #ifdef CONFIG_JACK_MIDI	
 	m_jack.close();
 #endif
-
-	if (!m_udpd.open(
-			pOptions->sInterface,
-			pOptions->iUdpPort,
-			pOptions->iNumPorts)) {
-		message(tr("Network Inferface Error - %1").arg(QMIDINET_TITLE),
-			tr("The network interface could not be established.\n\n"
-			"Please, make sure you have an on-line network connection "
-			"and try again."));
-		return false;
-	}
+#ifdef CONFIG_ALSA_MIDI
+	m_alsa.close();
+#endif
 
 #ifdef CONFIG_ALSA_MIDI
 	if (pOptions->bAlsaMidi
 		&& !m_alsa.open(QMIDINET_TITLE, pOptions->iNumPorts)) {
-		m_udpd.close();
 		message(tr("ALSA MIDI Inferface Error - %1").arg(QMIDINET_TITLE),
 			tr("The ALSA MIDI interface could not be established.\n\n"
 			"Please, make sure you have a ALSA MIDI sub-system working"
@@ -126,7 +117,6 @@ bool qmidinetApplication::setup (void)
 #ifdef CONFIG_JACK_MIDI
 	if (pOptions->bJackMidi
 		&& !m_jack.open(QMIDINET_TITLE, pOptions->iNumPorts)) {
-		m_udpd.close();
 	#ifdef CONFIG_ALSA_MIDI
 		m_alsa.close();
 	#endif
@@ -137,6 +127,23 @@ bool qmidinetApplication::setup (void)
 		return false;
 	}
 #endif
+
+	if (!m_udpd.open(
+			pOptions->sInterface,
+			pOptions->iUdpPort,
+			pOptions->iNumPorts)) {
+	#ifdef CONFIG_ALSA_MIDI
+		m_alsa.close();
+	#endif
+	#ifdef CONFIG_JACK_MIDI
+		m_jack.close();
+	#endif
+		message(tr("Network Inferface Error - %1").arg(QMIDINET_TITLE),
+			tr("The network interface could not be established.\n\n"
+			"Please, make sure you have an on-line network connection "
+			"and try again."));
+		return false;
+	}
 
 	return true;
 }
@@ -156,6 +163,8 @@ void qmidinetApplication::show ( bool bSetup )
 			pm.setMask(mask);
 			QPainter(&pm).drawPixmap(0, 0, pmOverlay);
 		}
+		// Restart timeout (3 minutes)...
+		QTimer::singleShot(180000, this, SLOT(reset()));
 	}
 
 	m_icon.setIcon(QIcon(pm));

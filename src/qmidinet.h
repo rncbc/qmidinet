@@ -74,13 +74,13 @@ private:
 	// Instance variables.
 	QMenu                  m_menu;
 	QSystemTrayIcon        m_icon;
-	qmidinetUdpDevice      m_udpd;
 #ifdef CONFIG_ALSA_MIDI
 	qmidinetAlsaMidiDevice m_alsa;
 #endif
 #ifdef CONFIG_JACK_MIDI
 	qmidinetJackMidiDevice m_jack;
 #endif
+	qmidinetUdpDevice      m_udpd;
 };
 
 
