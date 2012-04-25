@@ -435,10 +435,8 @@ bool qmidinetJackMidiDevice::open ( const QString& sClientName, int iNumPorts )
 	}
 
 	// Create transient buffers.
-	m_pJackBufferIn = jack_ringbuffer_create(
-		1024 * m_nports * sizeof(qmidinetJackMidiEvent));
-	m_pJackBufferOut = jack_ringbuffer_create(
-		1024 * m_nports * sizeof(qmidinetJackMidiEvent));
+	m_pJackBufferIn = jack_ringbuffer_create(1024 * m_nports);
+	m_pJackBufferOut = jack_ringbuffer_create(1024 * m_nports);
 
 	// Prepare the queue sorter stuff...
 	m_pQueueIn = new qmidinetJackMidiQueue(1024 * m_nports, 8);
@@ -579,28 +577,18 @@ int qmidinetJackMidiDevice::process ( jack_nframes_t nframes )
 	for (int i = 0; i < m_nports; ++i) {
 
 		if (m_ppJackPortIn && m_ppJackPortIn[i] && m_pJackBufferIn) {
+			char achBufferIn[1024];
+			qmidinetJackMidiEvent *pJackEventIn
+				= (struct qmidinetJackMidiEvent *) &achBufferIn[0];
 			void *pvBufferIn
 				= jack_port_get_buffer(m_ppJackPortIn[i], nframes);
-			jack_ringbuffer_data_t vector[2];
-			jack_ringbuffer_get_write_vector(m_pJackBufferIn, vector);
-			char *pchBuffer = vector[0].buf;
-			qmidinetJackMidiEvent *pJackEventIn
-				= (struct qmidinetJackMidiEvent *) pchBuffer;
-			int nlimit = vector[0].len;
 			int nevents = jack_midi_get_event_count(pvBufferIn);
-			int nwrite = 0;
-			for (int n = 0; n < nevents && nwrite < nlimit; ++n) {
+			for (int n = 0; n < nevents; ++n) {
 				jack_midi_event_get(&pJackEventIn->event, pvBufferIn, n);
 				pJackEventIn->port = i;
-				pchBuffer += sizeof(qmidinetJackMidiEvent);
-				nwrite += sizeof(qmidinetJackMidiEvent);
-				memcpy(pchBuffer, pJackEventIn->event.buffer, pJackEventIn->event.size);
-				pchBuffer += pJackEventIn->event.size;
-				nwrite += pJackEventIn->event.size;
-				pJackEventIn = (struct qmidinetJackMidiEvent *) pchBuffer;
+				jack_ringbuffer_write(m_pJackBufferIn, achBufferIn,
+					sizeof(qmidinetJackMidiEvent) + pJackEventIn->event.size);
 			}
-			if (nwrite > 0)
-				jack_ringbuffer_write_advance(m_pJackBufferIn, nwrite);
 		}
 	
 		if (m_ppJackPortOut && m_ppJackPortOut[i] && m_pJackBufferOut) {

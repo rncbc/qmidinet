@@ -5,6 +5,10 @@ ChangeLog
 
 SVN TRUNK
 
+- JACK MIDI in-bound buffering was originally flawed and often the
+  cause for severe random crashes, mostly due to memory corruption,
+  now hopefully fixed.
+
 - Changed order of JACK MIDI and UDP socket initialization, hoping
   the later is always owned by the current genuine process.
 
