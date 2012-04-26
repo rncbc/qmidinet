@@ -662,12 +662,6 @@ bool qmidinetJackMidiDevice::sendData (
 	if (m_pJackBufferOut == NULL)
 		return false;
 
-	jack_ringbuffer_data_t vector[2];
-	jack_ringbuffer_get_write_vector(m_pJackBufferOut, vector);
-	int nlimit = vector[0].len;
-	if (nlimit < len)
-		return false;
-
 	unsigned char  achBuffer[1024];
 	unsigned char *pchBuffer = &achBuffer[0];
 	qmidinetJackMidiEvent *pJackEventOut
