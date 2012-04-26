@@ -577,7 +577,7 @@ int qmidinetJackMidiDevice::process ( jack_nframes_t nframes )
 	for (int i = 0; i < m_nports; ++i) {
 
 		if (m_ppJackPortIn && m_ppJackPortIn[i] && m_pJackBufferIn) {
-			unsigned char  achBuffer[256];
+			unsigned char  achBuffer[1024];
 			unsigned char *pchBuffer = &achBuffer[0];
 			void *pvBufferIn
 				= jack_port_get_buffer(m_ppJackPortIn[i], nframes);
@@ -668,12 +668,11 @@ bool qmidinetJackMidiDevice::sendData (
 	if (nlimit < len)
 		return false;
 
-	int nwrite = 0;
-	char *pchBuffer = vector[0].buf;
+	unsigned char  achBuffer[1024];
+	unsigned char *pchBuffer = &achBuffer[0];
 	qmidinetJackMidiEvent *pJackEventOut
 		= (struct qmidinetJackMidiEvent *) pchBuffer;
 	pchBuffer += sizeof(qmidinetJackMidiEvent);
-	nwrite += sizeof(qmidinetJackMidiEvent);
 	memcpy(pchBuffer, data, len);
 	pJackEventOut->event.time = jack_frame_time(m_pJackClient);
 	pJackEventOut->event.buffer = (jack_midi_data_t *) pchBuffer;
@@ -686,9 +685,8 @@ bool qmidinetJackMidiDevice::sendData (
 		fprintf(stderr, " 0x%02x", (unsigned char) pchBuffer[i]);
 	fprintf(stderr, "\n");
 #endif	
-	pchBuffer += len;
-	nwrite += len;
-	jack_ringbuffer_write_advance(m_pJackBufferOut, nwrite);
+	jack_ringbuffer_write(m_pJackBufferOut,
+		(const char *) achBuffer, sizeof(qmidinetJackMidiEvent) + len);
 
 	return true;
 }
