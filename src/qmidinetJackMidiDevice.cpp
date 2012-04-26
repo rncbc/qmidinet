@@ -435,7 +435,7 @@ bool qmidinetJackMidiDevice::open ( const QString& sClientName, int iNumPorts )
 	}
 
 	// Create transient buffers.
-	m_pJackBufferIn = jack_ringbuffer_create(1024 * m_nports);
+	m_pJackBufferIn  = jack_ringbuffer_create(1024 * m_nports);
 	m_pJackBufferOut = jack_ringbuffer_create(1024 * m_nports);
 
 	// Prepare the queue sorter stuff...
@@ -577,17 +577,30 @@ int qmidinetJackMidiDevice::process ( jack_nframes_t nframes )
 	for (int i = 0; i < m_nports; ++i) {
 
 		if (m_ppJackPortIn && m_ppJackPortIn[i] && m_pJackBufferIn) {
-			char achBufferIn[1024];
-			qmidinetJackMidiEvent *pJackEventIn
-				= (struct qmidinetJackMidiEvent *) &achBufferIn[0];
+			unsigned char  achBuffer[1024];
+			unsigned char *pchBuffer = &achBuffer[0];
 			void *pvBufferIn
 				= jack_port_get_buffer(m_ppJackPortIn[i], nframes);
-			int nevents = jack_midi_get_event_count(pvBufferIn);
+			const int nevents = jack_midi_get_event_count(pvBufferIn);
+			unsigned int nwrite = 0;
 			for (int n = 0; n < nevents; ++n) {
+				qmidinetJackMidiEvent *pJackEventIn
+					= (struct qmidinetJackMidiEvent *) pchBuffer;
 				jack_midi_event_get(&pJackEventIn->event, pvBufferIn, n);
+				const unsigned int nsize
+					= sizeof(qmidinetJackMidiEvent) + pJackEventIn->event.size;
+				if (nwrite + nsize > sizeof(achBuffer))
+					break;
 				pJackEventIn->port = i;
-				jack_ringbuffer_write(m_pJackBufferIn, achBufferIn,
-					sizeof(qmidinetJackMidiEvent) + pJackEventIn->event.size);
+				pchBuffer += sizeof(qmidinetJackMidiEvent);
+				::memcpy(pchBuffer,
+					pJackEventIn->event.buffer, pJackEventIn->event.size);
+				pchBuffer += pJackEventIn->event.size;
+				nwrite += nsize;
+			}
+			if (nwrite > 0) {
+				jack_ringbuffer_write(m_pJackBufferIn,
+					(const char *) achBuffer, nwrite);
 			}
 		}
 	
@@ -595,8 +608,9 @@ int qmidinetJackMidiDevice::process ( jack_nframes_t nframes )
 			void *pvBufferOut
 				= jack_port_get_buffer(m_ppJackPortOut[i], nframes);
 			jack_midi_clear_buffer(pvBufferOut);
-			int nlimit = jack_midi_max_event_size(pvBufferOut); 
-			int nread = 0;
+			const unsigned int nlimit
+				= jack_midi_max_event_size(pvBufferOut);
+			unsigned int nread = 0;
 			qmidinetJackMidiEvent ev;
 			while (jack_ringbuffer_peek(m_pJackBufferOut,
 					(char *) &ev, sizeof(ev)) == sizeof(ev)
