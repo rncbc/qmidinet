@@ -577,26 +577,27 @@ int qmidinetJackMidiDevice::process ( jack_nframes_t nframes )
 	for (int i = 0; i < m_nports; ++i) {
 
 		if (m_ppJackPortIn && m_ppJackPortIn[i] && m_pJackBufferIn) {
-			unsigned char  achBuffer[1024];
+			unsigned char  achBuffer[256];
 			unsigned char *pchBuffer = &achBuffer[0];
 			void *pvBufferIn
 				= jack_port_get_buffer(m_ppJackPortIn[i], nframes);
 			const int nevents = jack_midi_get_event_count(pvBufferIn);
 			unsigned int nwrite = 0;
 			for (int n = 0; n < nevents; ++n) {
+				if (nwrite + sizeof(qmidinetJackMidiEvent) >= sizeof(achBuffer))
+					break;
 				qmidinetJackMidiEvent *pJackEventIn
 					= (struct qmidinetJackMidiEvent *) pchBuffer;
 				jack_midi_event_get(&pJackEventIn->event, pvBufferIn, n);
-				const unsigned int nsize
-					= sizeof(qmidinetJackMidiEvent) + pJackEventIn->event.size;
-				if (nwrite + nsize > sizeof(achBuffer))
+				nwrite += sizeof(qmidinetJackMidiEvent);
+				if (nwrite + pJackEventIn->event.size >= sizeof(achBuffer))
 					break;
-				pJackEventIn->port = i;
 				pchBuffer += sizeof(qmidinetJackMidiEvent);
+				pJackEventIn->port = i;
 				::memcpy(pchBuffer,
 					pJackEventIn->event.buffer, pJackEventIn->event.size);
 				pchBuffer += pJackEventIn->event.size;
-				nwrite += nsize;
+				nwrite += pJackEventIn->event.size;
 			}
 			if (nwrite > 0) {
 				jack_ringbuffer_write(m_pJackBufferIn,
