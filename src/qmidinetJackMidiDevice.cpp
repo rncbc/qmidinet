@@ -577,23 +577,26 @@ int qmidinetJackMidiDevice::process ( jack_nframes_t nframes )
 	for (int i = 0; i < m_nports; ++i) {
 
 		if (m_ppJackPortIn && m_ppJackPortIn[i] && m_pJackBufferIn) {
-			unsigned char  achBuffer[1024];
-			unsigned char *pchBuffer = &achBuffer[0];
 			void *pvBufferIn
 				= jack_port_get_buffer(m_ppJackPortIn[i], nframes);
 			const int nevents = jack_midi_get_event_count(pvBufferIn);
+			const unsigned int nlimit
+				= jack_ringbuffer_write_space(m_pJackBufferIn);
+			unsigned char  achBuffer[nlimit];
+			unsigned char *pchBuffer = &achBuffer[0];
 			unsigned int nwrite = 0;
 			for (int n = 0; n < nevents; ++n) {
-				if (nwrite + sizeof(qmidinetJackMidiEvent) >= sizeof(achBuffer))
+				if (nwrite + sizeof(qmidinetJackMidiEvent) >= nlimit)
 					break;
 				qmidinetJackMidiEvent *pJackEventIn
 					= (struct qmidinetJackMidiEvent *) pchBuffer;
 				jack_midi_event_get(&pJackEventIn->event, pvBufferIn, n);
-				nwrite += sizeof(qmidinetJackMidiEvent);
-				if (nwrite + pJackEventIn->event.size >= sizeof(achBuffer))
+				if (nwrite + sizeof(qmidinetJackMidiEvent)
+					+ pJackEventIn->event.size >= nlimit)
 					break;
-				pchBuffer += sizeof(qmidinetJackMidiEvent);
 				pJackEventIn->port = i;
+				pchBuffer += sizeof(qmidinetJackMidiEvent);
+				nwrite += sizeof(qmidinetJackMidiEvent);
 				::memcpy(pchBuffer,
 					pJackEventIn->event.buffer, pJackEventIn->event.size);
 				pchBuffer += pJackEventIn->event.size;
@@ -662,25 +665,29 @@ bool qmidinetJackMidiDevice::sendData (
 	if (m_pJackBufferOut == NULL)
 		return false;
 
-	unsigned char  achBuffer[1024];
-	unsigned char *pchBuffer = &achBuffer[0];
-	qmidinetJackMidiEvent *pJackEventOut
-		= (struct qmidinetJackMidiEvent *) pchBuffer;
-	pchBuffer += sizeof(qmidinetJackMidiEvent);
-	memcpy(pchBuffer, data, len);
-	pJackEventOut->event.time = jack_frame_time(m_pJackClient);
-	pJackEventOut->event.buffer = (jack_midi_data_t *) pchBuffer;
-	pJackEventOut->event.size = len;
-	pJackEventOut->port = port;
-#ifdef CONFIG_DEBUG
-	// - show (output) event for debug purposes...
-	fprintf(stderr, "JACK MIDI Out Port %d:", port);
-	for (unsigned int i = 0; i < len; ++i)
-		fprintf(stderr, " 0x%02x", (unsigned char) pchBuffer[i]);
-	fprintf(stderr, "\n");
-#endif	
-	jack_ringbuffer_write(m_pJackBufferOut,
-		(const char *) achBuffer, sizeof(qmidinetJackMidiEvent) + len);
+	const unsigned int nlimit
+		= jack_ringbuffer_write_space(m_pJackBufferOut);
+	if (sizeof(qmidinetJackMidiEvent) + len < nlimit) {
+		unsigned char  achBuffer[nlimit];
+		unsigned char *pchBuffer = &achBuffer[0];
+		qmidinetJackMidiEvent *pJackEventOut
+			= (struct qmidinetJackMidiEvent *) pchBuffer;
+		pchBuffer += sizeof(qmidinetJackMidiEvent);
+		memcpy(pchBuffer, data, len);
+		pJackEventOut->event.time = jack_frame_time(m_pJackClient);
+		pJackEventOut->event.buffer = (jack_midi_data_t *) pchBuffer;
+		pJackEventOut->event.size = len;
+		pJackEventOut->port = port;
+	#ifdef CONFIG_DEBUG
+		// - show (output) event for debug purposes...
+		fprintf(stderr, "JACK MIDI Out Port %d:", port);
+		for (unsigned int i = 0; i < len; ++i)
+			fprintf(stderr, " 0x%02x", (unsigned char) pchBuffer[i]);
+		fprintf(stderr, "\n");
+	#endif
+		jack_ringbuffer_write(m_pJackBufferOut,
+			(const char *) achBuffer, sizeof(qmidinetJackMidiEvent) + len);
+	}
 
 	return true;
 }
