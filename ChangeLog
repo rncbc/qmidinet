@@ -3,7 +3,7 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 
 ChangeLog
 
-SVN TRUNK
+0.1.2  2012-05-22  JACK-MIDI crashfix release.
 
 - JACK MIDI in-bound buffering was originally flawed and often the
   cause for severe random crashes, mostly due to memory corruption,
