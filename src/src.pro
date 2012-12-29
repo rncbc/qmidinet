@@ -58,3 +58,6 @@ unix {
 	icon.path = $$DATADIR/icons/hicolor/32x32/apps
 	icon.files += images/$${TARGET}.png 
 }
+
+# QT5 support
+QT += widgets

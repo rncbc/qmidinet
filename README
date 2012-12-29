@@ -31,7 +31,7 @@ The software requirements for build and runtime are listed as follows:
 
   [1] Qt4 (core, gui), C++ class library and tools for
         crossplatform development and internationalization
-        http://qt.nokia.com/products/
+        http://qt-project.org/
 
   [2] ALSA, Advanced Linux Sound Architecture
         http://www.alsa-project.org/
@@ -103,7 +103,7 @@ References
 
 [1] Qt4 (core, gui), C++ class library and tools
      for crossplatform development and internationalization
-     http://qt.nokia.com/products/
+     http://qt-project.org/
 
 [2] ALSA, Advanced Linux Sound Architecture
      http://www.alsa-project.org/

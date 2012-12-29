@@ -3,6 +3,11 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 
 ChangeLog
 
+SVN TRUNK
+
+- Preparations for Qt5 migration. (TESTING)
+
+
 0.1.2  2012-05-22  JACK-MIDI crashfix release.
 
 - JACK MIDI in-bound buffering was originally flawed and often the
