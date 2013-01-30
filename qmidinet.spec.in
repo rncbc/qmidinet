@@ -8,11 +8,11 @@ Summary:	A MIDI Network Gateway via UDP/IP Multicast
 Name:		%{name}
 Version:	%{version}
 Release:	%{release}
-License:	GPL
+License:	GPL-2.0+
 Group:		Productivity/Multimedia/Sound/Midi
 Source0:	%{name}-%{version}.tar.gz
 URL:		http://qmidinet.sourceforge.net/
-Packager:	rncbc.org
+#Packager:	rncbc.org
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
