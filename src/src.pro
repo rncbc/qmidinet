@@ -59,5 +59,8 @@ unix {
 	icon.files += images/$${TARGET}.png 
 }
 
+
 # QT5 support
-QT += widgets
+!lessThan(QT_MAJOR_VERSION, 5) {
+	QT += widgets
+}
