@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(QmidiNet, 0.1.2.4, rncbc@rncbc.org, qmidinet)
+AC_INIT(QmidiNet, 0.1.2.5, rncbc@rncbc.org, qmidinet)
 
 AC_CONFIG_SRCDIR(src/qmidinet.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -67,6 +67,10 @@ AC_ARG_WITH(alsa,
 AC_ARG_WITH(jack,
   AC_HELP_STRING([--with-jack=PATH], [use alternate JACK install path]),
   [ac_with_paths="$ac_with_paths $withval"])
+
+
+# Honor user specified CFLAGS.
+ac_cflags=$CFLAGS
 
 
 # Checks for programs.

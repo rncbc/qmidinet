@@ -5,6 +5,8 @@ ChangeLog
 
 SVN TRUNK
 
+- Added missing blank spaces on some warning messages text lines.
+
 - Preparations for Qt5 migration. (TESTING)
 
 

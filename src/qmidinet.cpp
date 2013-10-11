@@ -1,7 +1,7 @@
 // qmidinet.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2013, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -108,7 +108,7 @@ bool qmidinetApplication::setup (void)
 		&& !m_alsa.open(QMIDINET_TITLE, pOptions->iNumPorts)) {
 		message(tr("ALSA MIDI Inferface Error - %1").arg(QMIDINET_TITLE),
 			tr("The ALSA MIDI interface could not be established.\n\n"
-			"Please, make sure you have a ALSA MIDI sub-system working"
+			"Please, make sure you have a ALSA MIDI sub-system working "
 			"correctly and try again."));
 		return false;
 	}
@@ -122,7 +122,7 @@ bool qmidinetApplication::setup (void)
 	#endif
 		message(tr("JACK MIDI Inferface Error - %1").arg(QMIDINET_TITLE),
 			tr("The JACK MIDI interface could not be established.\n\n"
-			"Please, make sure you have a JACK MIDI sub-system working"
+			"Please, make sure you have a JACK MIDI sub-system working "
 			"correctly and try again."));
 		return false;
 	}
@@ -253,7 +253,7 @@ void qmidinetApplication::shutdown (void)
 
 	message(tr("JACK MIDI Inferface Error - %1").arg(QMIDINET_TITLE),
 		tr("The JACK MIDI interface has been shutdown.\n\n"
-		"Please, make sure you reactivate the JACK MIDI sub-system"
+		"Please, make sure you reactivate the JACK MIDI sub-system "
 		"and try again."));
 
 	show(false);
