@@ -1,7 +1,7 @@
 // qmidinetAlsaMidiDevice.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2013, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -208,11 +208,10 @@ bool qmidinetAlsaMidiDevice::open ( const QString& sClientName, int iNumPorts )
 void qmidinetAlsaMidiDevice::close (void)
 {
 	if (m_pRecvThread) {
-		if (m_pRecvThread->isRunning()) {
+		if (m_pRecvThread->isRunning()) do {
 			m_pRecvThread->setRunState(false);
 		//	m_pRecvThread->terminate();
-			m_pRecvThread->wait(1200); // Timeout>1sec.
-		}
+		} while	(!m_pRecvThread->wait(200));
 		delete m_pRecvThread;
 		m_pRecvThread = NULL;
 	}
