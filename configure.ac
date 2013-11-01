@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(QmidiNet, 0.1.2.6, rncbc@rncbc.org, qmidinet)
+AC_INIT(QmidiNet, 0.1.2.7, rncbc@rncbc.org, qmidinet)
 
 AC_CONFIG_SRCDIR(src/qmidinet.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -46,7 +46,7 @@ ac_with_paths="/usr /usr/local"
 
 # Some a-la-debian alternatives...
 for X in /usr/lib /usr/lib64 /usr/share; do
-  for Y in qt qt4; do
+  for Y in qt qt4 qt5; do
     if test -d $X/$Y/bin; then
       ac_with_paths="$ac_with_paths $X/$Y"
     fi
@@ -94,7 +94,7 @@ for X in $ac_with_paths; do
 #   ac_path="$X:$ac_path"
 # fi
   if test -d $X/include; then
-    for Y in qt qt4; do
+    for Y in qt qt4 qt5; do
       if test -d $X/include/$Y; then
         CFLAGS="-I$X/include/$Y $CFLAGS"
         CPPFLAGS="-I$X/include/$Y $CPPFLAGS"
@@ -115,6 +115,13 @@ for X in $ac_with_paths; do
   fi
 done
 
+
+# Check for proper flags.
+ac_arch=`uname -m`
+if test "$ac_arch" == "x86_64"; then
+   CFLAGS="-fPIC $CFLAGS"
+   CPPFLAGS="-fPIC $CPPFLAGS"
+fi
 
 # Check for proper Qt version.
 AC_CACHE_CHECK([for Qt library version >= 4.4],
