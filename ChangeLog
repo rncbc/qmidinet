@@ -3,13 +3,13 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 
 ChangeLog
 
-SVN TRUNK
- 
+0.1.3  2013-12-31  A fifth of a Jubilee.
+
 - More preparations for Qt5 configure build.
 
 - Added missing blank spaces on some warning messages text lines.
 
-- Preparations for Qt5 migration. (TESTING)
+- Preparations for Qt5 migration.
 
 
 0.1.2  2012-05-22  JACK-MIDI crashfix release.

@@ -1,6 +1,6 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 3
+%define release 5
 
 %define _prefix	@ac_prefix@
 
@@ -52,11 +52,15 @@ designed to be compatible with ipMIDI for Windows (http://nerds.de).
 %{_datadir}/icons/hicolor/32x32/apps/%{name}.png
 
 %changelog
-* Fri Sep 24 2010 Rui Nuno Capela <rncbc@users.sourceforge.net> 0.1.0-2
+* Tue Dec 31 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.1.3
+- A fifth of a Jubilee release.
+* Tue May 22 2012 Rui Nuno Capela <rncbc@rncbc.org> 0.1.2
+- JACK-MIDI crashfix release.
+* Fri Sep 24 2010 Rui Nuno Capela <rncbc@rncbc.org> 0.1.1
 - JACK-MIDI bugfix release.
-* Fri Sep  3 2010 Rui Nuno Capela <rncbc@users.sourceforge.net> 0.1.0-2
+* Fri Sep  3 2010 Rui Nuno Capela <rncbc@rncbc.org> 0.1.0
 - Second public release.
-* Mon May 17 2010 Rui Nuno Capela <rncbc@users.sourceforge.net>
+* Mon May 17 2010 Rui Nuno Capela <rncbc@rncbc.org>
 - Standard desktop icon fixing. 
-* Fri Mar  6 2010 Rui Nuno Capela <rncbc@users.sourceforge.net> 0.0.1
+* Fri Mar  6 2010 Rui Nuno Capela <rncbc@rncbc.org> 0.0.1
 - Created initial qmidinet.spec
