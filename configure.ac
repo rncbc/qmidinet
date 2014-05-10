@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(QmidiNet, 0.1.3.1, rncbc@rncbc.org, qmidinet)
+AC_INIT(QmidiNet, 0.1.3.2, rncbc@rncbc.org, qmidinet)
 
 AC_CONFIG_SRCDIR(src/qmidinet.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -81,6 +81,12 @@ AC_ARG_WITH(jack,
 
 # Honor user specified CFLAGS.
 ac_cflags=$CFLAGS
+
+
+
+# Honor user specified flags.
+ac_cflags=$CFLAGS
+ac_ldflags=$LDFLAGS
 
 
 # Checks for programs.
@@ -249,6 +255,8 @@ if test "x$ac_jack_midi" = "xyes"; then
 fi
 
 AC_SUBST(ac_incpath)
+AC_SUBST(ac_cflags)
+AC_SUBST(ac_ldflags)
 
 
 # Checks for typedefs, structures, and compiler characteristics.
