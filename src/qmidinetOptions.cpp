@@ -1,7 +1,7 @@
 // qmidinetOptions.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2014, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -127,11 +127,20 @@ void qmidinetOptions::print_usage ( const QString& arg0 )
 	out << QObject::tr("Usage: %1 [options]").arg(arg0) + sEol;
 	out << QObject::tr("Options:") + sEol;
 	out << "  -n, --num-ports=[num-ports]" + sEot +
-			QObject::tr("Use this number of ports (default=1)") + sEol;
+		QObject::tr("Use this number of ports (default=%1)")
+			.arg(iNumPorts) + sEol;
 	out << "  -i, --interface=[interface]" + sEot +
-		QObject::tr("Use specific network interface (default=all)") + sEol;
+		QObject::tr("Use specific network interface (default=%1)")
+			.arg(sInterface.isEmpty() ? "all" : sInterface) + sEol;
 	out << "  -p, --port=[port]" + sEot +
-			QObject::tr("Use specific network port (default=21928)") + sEol;
+		QObject::tr("Use specific network port (default=%1)")
+			.arg(iUdpPort) + sEol;
+	out << "  -a, --alsa-midi=[flag]" + sEot +
+		QObject::tr("Enable ALSA MIDI (0|1|yes|no|on|off, default=%1)")
+			.arg(int(bAlsaMidi)) + sEol;
+	out << "  -j, --jack-midi=[flag]" + sEot +
+		QObject::tr("Enable JACK MIDI (0|1|yes|no|on|off, default=%1)")
+			.arg(int(bJackMidi)) + sEol;
 	out << "  -h, --help" + sEot +
 		QObject::tr("Show help about command line options") + sEol;
 	out << "  -v, --version" + sEot +
@@ -145,13 +154,13 @@ bool qmidinetOptions::parse_args ( const QStringList& args )
 	QTextStream out(stderr);
 	const QString sEot = "\n\t";
 	const QString sEol = "\n\n";
-	int argc = args.count();
+	const int argc = args.count();
 
 	for (int i = 1; i < argc; ++i) {
 
 		QString sVal;
 		QString sArg = args.at(i);
-		int iEqual = sArg.indexOf('=');
+		const int iEqual = sArg.indexOf('=');
 		if (iEqual >= 0) {
 			sVal = sArg.right(sArg.length() - iEqual - 1);
 			sArg = sArg.left(iEqual);
@@ -181,6 +190,26 @@ bool qmidinetOptions::parse_args ( const QStringList& args )
 				return false;
 			}
 			iUdpPort = sVal.toInt();
+			if (iEqual < 0)
+				i++;
+		}
+		else
+		if (sArg == "-a" || sArg == "--alsa-midi") {
+			if (sVal.isEmpty()) {
+				out << QObject::tr("Option -a requires an argument (alsa-midi).") + sEol;
+				return false;
+			}
+			bAlsaMidi = !(sVal == "0" || sVal == "no" || sVal == "off");
+			if (iEqual < 0)
+				i++;
+		}
+		else
+		if (sArg == "-j" || sArg == "--jack-midi") {
+			if (sVal.isEmpty()) {
+				out << QObject::tr("Option -j requires an argument (jack-midi).") + sEol;
+				return false;
+			}
+			bJackMidi = !(sVal == "0" || sVal == "no" || sVal == "off");
 			if (iEqual < 0)
 				i++;
 		}

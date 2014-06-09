@@ -5,6 +5,10 @@ ChangeLog
 
 SVN TRUNK
 
+- First attempt to allow a headless application run mode, without
+  GUI or system-tray icon accessibility, with all options given 
+  as command line arguments. (EXPERIMENTAL)
+
 - Allow the build system to include an user specified LDFLAGS.
 
 

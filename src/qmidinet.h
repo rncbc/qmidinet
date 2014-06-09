@@ -1,7 +1,7 @@
 // qmidinet.h
 //
 /****************************************************************************
-   Copyright (C) 2010-2013, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2014, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -27,24 +27,85 @@
 #include "qmidinetAlsaMidiDevice.h"
 #include "qmidinetJackMidiDevice.h"
 
-#include <QApplication>
+#include <QCoreApplication>
 
 #include <QSystemTrayIcon>
 #include <QMenu>
+
+
+// Forward decls.
+class qmidinetSystemTrayIcon;
 
 
 //-------------------------------------------------------------------------
 // qmidinetApplication -- Singleton application instance.
 //
 
-class qmidinetApplication : public QApplication
+class qmidinetApplication : public QObject
 {
 	Q_OBJECT
 
 public:
 
 	// Constructor.
-	qmidinetApplication(int& argc, char **argv);
+	qmidinetApplication(int& argc, char **argv, bool bGUI);
+
+	// Destructor.
+	~qmidinetApplication();
+
+	// Initializers.
+	bool setup();
+
+	// Messager.
+	void message(const QString& sTitle, const QString& sText);
+
+	// Simple accessor.
+	QCoreApplication *app() const { return m_pApp; }
+
+public slots:
+
+	// Action slots...
+	void reset();
+
+#ifdef CONFIG_JACK_MIDI
+	void shutdown();
+#endif
+
+private:
+
+	// Instance variables.
+	QCoreApplication *m_pApp;
+
+	qmidinetSystemTrayIcon *m_pIcon;
+
+#ifdef CONFIG_ALSA_MIDI
+	qmidinetAlsaMidiDevice m_alsa;
+#endif
+#ifdef CONFIG_JACK_MIDI
+	qmidinetJackMidiDevice m_jack;
+#endif
+	qmidinetUdpDevice m_udpd;
+};
+
+
+//-------------------------------------------------------------------------
+// qmidinetSystemTrayIcon -- Singleton widget instance.
+//
+
+class qmidinetSystemTrayIcon : public QSystemTrayIcon
+{
+	Q_OBJECT
+
+public:
+
+	// Constructor.
+	qmidinetSystemTrayIcon(qmidinetApplication *pApp);
+
+	// Initializers.
+	void show(bool bSetup);
+
+	// Message bubble/dialog.
+	void message(const QString& sTitle, const QString& sText);
 
 public slots:
 
@@ -56,31 +117,12 @@ public slots:
 	// Handle system tray activity.
 	void activated(QSystemTrayIcon::ActivationReason);
 
-#ifdef CONFIG_JACK_MIDI
-	void shutdown();
-#endif
-
-protected:
-
-	// Initializer.
-	bool setup();
-	void show(bool bSetup);
-
-	// Message bubble/dialog.
-	void message(const QString& sTitle, const QString& sText);
-
 private:
 
 	// Instance variables.
-	QMenu                  m_menu;
-	QSystemTrayIcon        m_icon;
-#ifdef CONFIG_ALSA_MIDI
-	qmidinetAlsaMidiDevice m_alsa;
-#endif
-#ifdef CONFIG_JACK_MIDI
-	qmidinetJackMidiDevice m_jack;
-#endif
-	qmidinetUdpDevice      m_udpd;
+	qmidinetApplication *m_pApp;
+
+	QMenu m_menu;
 };
 
 

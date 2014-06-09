@@ -1,7 +1,7 @@
 // qmidinet.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010-2013, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2014, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -35,8 +35,8 @@
 //
 
 // Constructor.
-qmidinetApplication::qmidinetApplication ( int& argc, char **argv )
-	: QApplication(argc, argv), m_icon(this)
+qmidinetApplication::qmidinetApplication ( int& argc, char **argv, bool bGUI )
+	: QObject(NULL), m_pApp(NULL), m_pIcon(NULL)
 	#ifdef CONFIG_ALSA_MIDI	
 		, m_alsa(this)
 	#endif
@@ -45,24 +45,15 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv )
 	#endif
 		, m_udpd(this)
 {
-	m_menu.addAction(
-		QIcon(":/images/qmidinet.png"),
-		tr("Options..."), this, SLOT(options()));
-	m_menu.addAction(tr("Reset"), this, SLOT(reset()));
-	m_menu.addSeparator();
-	m_menu.addAction(tr("About..."), this, SLOT(about()));
-	m_menu.addAction(tr("About Qt..."), this, SLOT(aboutQt()));
-	m_menu.addSeparator();
-	m_menu.addAction(
-		QIcon(":/images/formReject.png"),
-		tr("Quit"), this, SLOT(quit()));
-
-	m_icon.setContextMenu(&m_menu);
-	m_icon.setToolTip(QMIDINET_TITLE " - " + tr(QMIDINET_SUBTITLE));
-
-	QObject::connect(&m_icon,
-		SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-		SLOT(activated(QSystemTrayIcon::ActivationReason)));
+	if (bGUI) {
+		QApplication *pApp = new QApplication(argc, argv);
+		pApp->setQuitOnLastWindowClosed(false);
+		m_pApp  = pApp;
+		m_pIcon = new qmidinetSystemTrayIcon(this);
+	} else {
+		m_pApp  = new QCoreApplication(argc, argv);
+		m_pIcon = NULL;
+	}
 
 #ifdef CONFIG_ALSA_MIDI
 	QObject::connect(
@@ -83,8 +74,14 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv )
 	QObject::connect(
 		&m_jack, SIGNAL(shutdown()), SLOT(shutdown()));
 #endif
+}
 
-	QApplication::setQuitOnLastWindowClosed(false);
+
+// Destructor.
+qmidinetApplication::~qmidinetApplication (void)
+{
+	if (m_pIcon) delete m_pIcon;
+	if (m_pApp)  delete m_pApp;
 }
 
 
@@ -149,7 +146,75 @@ bool qmidinetApplication::setup (void)
 }
 
 
-void qmidinetApplication::show ( bool bSetup )
+void qmidinetApplication::reset (void)
+{
+	if (m_pIcon)
+		m_pIcon->reset();
+	else if (!setup())
+		QTimer::singleShot(180000, this, SLOT(reset()));
+}
+
+
+// Message bubble/dialog.
+void qmidinetApplication::message (
+	const QString& sTitle, const QString& sText )
+{
+	if (m_pIcon && m_pIcon->isVisible()) {
+		m_pIcon->message(sTitle, sText);
+	} else {
+		const QString sMessage = sTitle + ": " + sText.simplified();
+		qCritical(sMessage.toUtf8().constData());
+	}
+}
+
+
+#ifdef CONFIG_JACK_MIDI
+void qmidinetApplication::shutdown (void)
+{
+	m_jack.close();
+
+	message(tr("JACK MIDI Inferface Error - %1").arg(QMIDINET_TITLE),
+		tr("The JACK MIDI interface has been shutdown.\n\n"
+		"Please, make sure you reactivate the JACK MIDI sub-system "
+		"and try again."));
+
+	if (m_pIcon)
+		m_pIcon->show(false);
+}
+#endif
+
+
+//-------------------------------------------------------------------------
+// qmidinetSystemTrayIcon -- Singleton application instance.
+//
+
+// Constructor.
+qmidinetSystemTrayIcon::qmidinetSystemTrayIcon ( qmidinetApplication *pApp )
+	: QSystemTrayIcon(pApp), m_pApp(pApp)
+{
+	m_menu.addAction(
+		QIcon(":/images/qmidinet.png"),
+		tr("Options..."), this, SLOT(options()));
+	m_menu.addAction(tr("Reset"), this, SLOT(reset()));
+	m_menu.addSeparator();
+	m_menu.addAction(tr("About..."), this, SLOT(about()));
+	m_menu.addAction(tr("About Qt..."), m_pApp->app(), SLOT(aboutQt()));
+	m_menu.addSeparator();
+	m_menu.addAction(
+		QIcon(":/images/formReject.png"),
+		tr("Quit"), m_pApp->app(), SLOT(quit()));
+
+	QSystemTrayIcon::setContextMenu(&m_menu);
+	QSystemTrayIcon::setToolTip(QMIDINET_TITLE " - " + tr(QMIDINET_SUBTITLE));
+
+	QObject::connect(this,
+		SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+		SLOT(activated(QSystemTrayIcon::ActivationReason)));
+}
+
+
+// Initializer.
+void qmidinetSystemTrayIcon::show ( bool bSetup )
 {
 	const QIcon icon(":/images/qmidinet.png");
 	QPixmap pm(icon.pixmap(22, 22));
@@ -167,13 +232,13 @@ void qmidinetApplication::show ( bool bSetup )
 		QTimer::singleShot(180000, this, SLOT(reset()));
 	}
 
-	m_icon.setIcon(QIcon(pm));
-	m_icon.show();
+	QSystemTrayIcon::setIcon(QIcon(pm));
+	QSystemTrayIcon::show();
 }
 
 
 // Options dialog.
-void qmidinetApplication::options (void)
+void qmidinetSystemTrayIcon::options (void)
 {
 	if (qmidinetOptionsForm(NULL).exec())
 		reset();
@@ -181,14 +246,14 @@ void qmidinetApplication::options (void)
 
 
 // Restart/reset action
-void qmidinetApplication::reset (void)
+void qmidinetSystemTrayIcon::reset (void)
 {
-	show(setup());
+	show(m_pApp->setup());
 }
 
 
 // About dialog.
-void qmidinetApplication::about (void)
+void qmidinetSystemTrayIcon::about (void)
 {
 	// Stuff the about box text...
 	QString sText = "<p>\n";
@@ -218,7 +283,7 @@ void qmidinetApplication::about (void)
 	sText += "</p>\n";
 
 	QMessageBox abox;
-	abox.setWindowIcon(m_icon.icon());
+	abox.setWindowIcon(QSystemTrayIcon::icon());
 	abox.setWindowTitle(tr("About %1").arg(QMIDINET_TITLE));
 	abox.setIconPixmap(QPixmap(":/images/qmidinet.png"));
 	abox.setText(sText);
@@ -227,11 +292,11 @@ void qmidinetApplication::about (void)
 
 
 // Message bubble/dialog.
-void qmidinetApplication::message (
+void qmidinetSystemTrayIcon::message (
 	const QString& sTitle, const QString& sText )
 {
-	if (m_icon.supportsMessages()) {
-		m_icon.showMessage(sTitle, sText, QSystemTrayIcon::Critical);
+	if (QSystemTrayIcon::supportsMessages()) {
+		QSystemTrayIcon::showMessage(sTitle, sText, QSystemTrayIcon::Critical);
 	} else {
 		QMessageBox::critical(NULL, sTitle, sText);
 	}
@@ -239,26 +304,11 @@ void qmidinetApplication::message (
 
 
 // Handle systeam tray activity.
-void qmidinetApplication::activated ( QSystemTrayIcon::ActivationReason reason )
+void qmidinetSystemTrayIcon::activated ( QSystemTrayIcon::ActivationReason reason )
 {
 	if (reason == QSystemTrayIcon::Trigger)
-		m_icon.contextMenu()->exec(QCursor::pos());
+		QSystemTrayIcon::contextMenu()->exec(QCursor::pos());
 }
-
-
-#ifdef CONFIG_JACK_MIDI
-void qmidinetApplication::shutdown (void)
-{
-	m_jack.close();
-
-	message(tr("JACK MIDI Inferface Error - %1").arg(QMIDINET_TITLE),
-		tr("The JACK MIDI interface has been shutdown.\n\n"
-		"Please, make sure you reactivate the JACK MIDI sub-system "
-		"and try again."));
-
-	show(false);
-}
-#endif
 
 
 //-------------------------------------------------------------------------
@@ -269,17 +319,18 @@ int main ( int argc, char* argv[] )
 {
 	Q_INIT_RESOURCE(qmidinet);
 
-	qmidinetApplication app(argc, argv);
+	const bool bGUI = (::getenv("DISPLAY") != 0);
+	qmidinetApplication app(argc, argv, bGUI);
 
 	qmidinetOptions opts;
-	if (!opts.parse_args(app.arguments())) {
-		app.quit();
+	if (!opts.parse_args(app.app()->arguments())) {
+		app.app()->quit();
 		return 1;
 	}
 
 	app.reset();
 
-	return app.exec();
+	return app.app()->exec();
 }
 
 
