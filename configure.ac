@@ -79,11 +79,6 @@ AC_ARG_WITH(jack,
   [ac_with_paths="$ac_with_paths $withval"])
 
 
-# Honor user specified CFLAGS.
-ac_cflags=$CFLAGS
-
-
-
 # Honor user specified flags.
 ac_cflags=$CFLAGS
 ac_ldflags=$LDFLAGS
