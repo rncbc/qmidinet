@@ -319,7 +319,19 @@ int main ( int argc, char* argv[] )
 {
 	Q_INIT_RESOURCE(qmidinet);
 
-	const bool bGUI = (::getenv("DISPLAY") != 0);
+#ifdef Q_WS_X11
+	bool bGUI = (::getenv("DISPLAY") != 0);
+#else
+	bool bGUI = true;
+#endif
+	for (int i = 1; i < argc; ++i) {
+		const QString& sArg = QString::fromLocal8Bit(argv[i]);
+		if (sArg == "-g" || sArg == "--no-gui") {
+			bGUI = false;
+			break;
+		}
+	}
+
 	qmidinetApplication app(argc, argv, bGUI);
 
 	qmidinetOptions opts;

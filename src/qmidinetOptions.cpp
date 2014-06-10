@@ -135,12 +135,14 @@ void qmidinetOptions::print_usage ( const QString& arg0 )
 	out << "  -p, --port=[port]" + sEot +
 		QObject::tr("Use specific network port (default=%1)")
 			.arg(iUdpPort) + sEol;
-	out << "  -a, --alsa-midi=[flag]" + sEot +
+	out << "  -a, --alsa-midi[=flag]" + sEot +
 		QObject::tr("Enable ALSA MIDI (0|1|yes|no|on|off, default=%1)")
 			.arg(int(bAlsaMidi)) + sEol;
-	out << "  -j, --jack-midi=[flag]" + sEot +
+	out << "  -j, --jack-midi[=flag]" + sEot +
 		QObject::tr("Enable JACK MIDI (0|1|yes|no|on|off, default=%1)")
 			.arg(int(bJackMidi)) + sEol;
+	out << "  -g, --no-gui" + sEot +
+		QObject::tr("Disable the graphical user interface (GUI)") + sEol;
 	out << "  -h, --help" + sEot +
 		QObject::tr("Show help about command line options") + sEol;
 	out << "  -v, --version" + sEot +
@@ -164,9 +166,11 @@ bool qmidinetOptions::parse_args ( const QStringList& args )
 		if (iEqual >= 0) {
 			sVal = sArg.right(sArg.length() - iEqual - 1);
 			sArg = sArg.left(iEqual);
-		}
-		else if (i < argc - 1)
+		} else if (i < argc - 1) {
 			sVal = args.at(i + 1);
+			if (sVal[0] == '-')
+				sVal.clear();
+		}
 
 		if (sArg == "-n" || sArg == "--num-ports") {
 			if (sVal.isEmpty()) {
@@ -174,14 +178,12 @@ bool qmidinetOptions::parse_args ( const QStringList& args )
 				return false;
 			}
 			iNumPorts = sVal.toInt();
-			if (iEqual < 0)
-				i++;
+			if (iEqual < 0) ++i;
 		}
 		else
 		if (sArg == "-i" || sArg == "--interface") {
 			sInterface = sVal; // Maybe empty!
-			if (iEqual < 0)
-				i++;
+			if (iEqual < 0) ++i;
 		}
 		else
 		if (sArg == "-p" || sArg == "--port") {
@@ -190,28 +192,25 @@ bool qmidinetOptions::parse_args ( const QStringList& args )
 				return false;
 			}
 			iUdpPort = sVal.toInt();
-			if (iEqual < 0)
-				i++;
+			if (iEqual < 0) ++i;
 		}
 		else
 		if (sArg == "-a" || sArg == "--alsa-midi") {
 			if (sVal.isEmpty()) {
-				out << QObject::tr("Option -a requires an argument (alsa-midi).") + sEol;
-				return false;
+				bAlsaMidi = true;
+			} else {
+				bAlsaMidi = !(sVal == "0" || sVal == "no" || sVal == "off");
+				if (iEqual < 0) ++i;
 			}
-			bAlsaMidi = !(sVal == "0" || sVal == "no" || sVal == "off");
-			if (iEqual < 0)
-				i++;
 		}
 		else
 		if (sArg == "-j" || sArg == "--jack-midi") {
 			if (sVal.isEmpty()) {
-				out << QObject::tr("Option -j requires an argument (jack-midi).") + sEol;
-				return false;
+				bJackMidi = true;
+			} else {
+				bJackMidi = !(sVal == "0" || sVal == "no" || sVal == "off");
+				if (iEqual < 0) ++i;
 			}
-			bJackMidi = !(sVal == "0" || sVal == "no" || sVal == "off");
-			if (iEqual < 0)
-				i++;
 		}
 		else
 		if (sArg == "-h" || sArg == "--help") {
