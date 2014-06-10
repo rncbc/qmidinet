@@ -324,7 +324,7 @@ int main ( int argc, char* argv[] )
 #else
 	bool bGUI = true;
 #endif
-	for (int i = 1; i < argc; ++i) {
+	if (bGUI) for (int i = 1; i < argc; ++i) {
 		const QString& sArg = QString::fromLocal8Bit(argv[i]);
 		if (sArg == "-g" || sArg == "--no-gui") {
 			bGUI = false;
