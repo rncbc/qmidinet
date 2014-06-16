@@ -127,19 +127,19 @@ void qmidinetOptions::print_usage ( const QString& arg0 )
 	out << QObject::tr("Usage: %1 [options]").arg(arg0) + sEol;
 	out << QObject::tr("Options:") + sEol;
 	out << "  -n, --num-ports=[num-ports]" + sEot +
-		QObject::tr("Use this number of ports (default=%1)")
+		QObject::tr("Use this number of ports (default = %1)")
 			.arg(iNumPorts) + sEol;
 	out << "  -i, --interface=[interface]" + sEot +
-		QObject::tr("Use specific network interface (default=%1)")
+		QObject::tr("Use specific network interface (default = %1)")
 			.arg(sInterface.isEmpty() ? "all" : sInterface) + sEol;
 	out << "  -p, --port=[port]" + sEot +
-		QObject::tr("Use specific network port (default=%1)")
+		QObject::tr("Use specific network port (default = %1)")
 			.arg(iUdpPort) + sEol;
 	out << "  -a, --alsa-midi[=flag]" + sEot +
-		QObject::tr("Enable ALSA MIDI (0|1|yes|no|on|off, default=%1)")
+		QObject::tr("Enable ALSA MIDI (0|1|yes|no|on|off, default = %1)")
 			.arg(int(bAlsaMidi)) + sEol;
 	out << "  -j, --jack-midi[=flag]" + sEot +
-		QObject::tr("Enable JACK MIDI (0|1|yes|no|on|off, default=%1)")
+		QObject::tr("Enable JACK MIDI (0|1|yes|no|on|off, default = %1)")
 			.arg(int(bJackMidi)) + sEol;
 	out << "  -g, --no-gui" + sEot +
 		QObject::tr("Disable the graphical user interface (GUI)") + sEol;
