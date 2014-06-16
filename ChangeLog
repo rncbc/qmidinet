@@ -5,6 +5,9 @@ ChangeLog
 
 SVN TRUNK
 
+- A man page has beed added (making up Alessio Treglia's work on
+  debian, thanks).
+
 - First attempt to allow a headless application run mode, without
   GUI or system-tray icon accessibility, with all options given 
   as command line arguments. (EXPERIMENTAL)

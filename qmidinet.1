@@ -1,0 +1,56 @@
+.TH QMIDINET "1" "June 2014"
+.SH NAME
+qmidinet \- MIDI Network Gateway via UDP/IP Multicast
+.SH SYNOPSIS
+.B qmidinet
+[\fIoptions\fR]
+.SH DESCRIPTION
+This manual page documents briefly the
+.B qmidinet
+command.
+.PP
+\fBQmidiNet\fP is a MIDI network gateway application that sends and
+receives MIDI data (ALSA Sequencer) over the network, using UDP/IP
+multicast.
+.PP
+It was inspired by multimidicast (http://llg.cubic.org/tools) and
+designed to be compatible with ipMIDI for Windows (http://nerds.de).
+.SH OPTIONS
+.HP
+\fB\-n\fR, \fB\-\-num\-ports\fR=[\fInum\-ports\fR]
+.IP
+Use this number of ports (default=1)
+.HP
+\fB\-i\fR, \fB\-\-interface\fR=[\fIinterface\fR]
+.IP
+Use specific network interface (default=all)
+.HP
+\fB\-p\fR, \fB\-\-port\fR=[\fIport\fR]
+.IP
+Use specific network port (default=21928)
+.HP
+\fB\-a\fR, \fB\-\-alsa-midi\fR[=\fIflag\fR]
+.IP
+Enable ALSA MIDI (0|1|yes|no|on|off, default=1)
+.HP
+\fB\-j\fR, \fB\-\-jack-midi\fR[=\fIflag\fR]
+.IP
+Enable JACK MIDI (0|1|yes|no|on|off, default=0)
+.HP
+\fB\-g\fR, \fB\-\-no-gui\fR
+.IP
+Disable the graphical user interface (GUI)
+.HP
+\fB\-h\fR, \fB\-\-help\fR
+.IP
+Show help about command line options
+.HP
+\fB\-v\fR, \fB\-\-version\fR
+.IP
+Show version information
+.PP
+.SH AUTHOR
+qmidinet was written by Rui Nuno Capela.
+.PP
+This manual page was written by Alessio Treglia <alessio@debian.org>,
+for the Debian project (but may be used by others).

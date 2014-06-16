@@ -47,9 +47,12 @@ designed to be compatible with ipMIDI for Windows (http://nerds.de).
 %dir %{_datadir}/icons/hicolor
 %dir %{_datadir}/icons/hicolor/32x32
 %dir %{_datadir}/icons/hicolor/32x32/apps
+#dir %{_datadir}/man
+#dir %{_datadir}/man/man1
 %{_bindir}/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/32x32/apps/%{name}.png
+%{_datadir}/man/man1/%{name}.1.gz
 
 %changelog
 * Tue Dec 31 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.1.3
