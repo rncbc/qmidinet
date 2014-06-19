@@ -1,3 +1,9 @@
+qmidinet (0.2.0-6) unstable; urgency=low
+
+  * Headless finally.
+
+ -- Rui Nuno Capela <rncbc@rncbc.org>  Thu, 19 Jun 2014 18:00:00 +0100
+
 qmidinet (0.1.3-5) unstable; urgency=low
 
   * A fifth of a Jubilee release.

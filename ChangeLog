@@ -3,14 +3,14 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 
 ChangeLog
 
-SVN TRUNK
+0.2.0  2014-06-19  Headless finally.
 
 - A man page has beed added (making up Alessio Treglia's work on
   debian, thanks).
 
 - First attempt to allow a headless application run mode, without
   GUI or system-tray icon accessibility, with all options given 
-  as command line arguments. (EXPERIMENTAL)
+  as command line arguments.
 
 - Allow the build system to include an user specified LDFLAGS.
 
