@@ -1,7 +1,7 @@
 // qmidinetOptionsForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2015, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -45,6 +45,11 @@ qmidinetOptionsForm::qmidinetOptionsForm (
 	m_ui.InterfaceComboBox->addItem("wlan0");
 	m_ui.InterfaceComboBox->addItem("eth0");
 
+	m_ui.UdpAddrComboBox->clear();
+	m_ui.UdpAddrComboBox->addItem(QMIDINET_UDP_ADDR);
+
+	m_ui.UdpPortSpinBox->setValue(QMIDINET_UDP_PORT);
+
 	// Populate dialog widgets with current settings...
 	qmidinetOptions *pOptions = qmidinetOptions::getInstance();
 	if (pOptions) {
@@ -52,6 +57,10 @@ qmidinetOptionsForm::qmidinetOptionsForm (
 			m_ui.InterfaceComboBox->setCurrentIndex(0);
 		else
 			m_ui.InterfaceComboBox->setEditText(pOptions->sInterface);
+		if (pOptions->sUdpAddr.isEmpty())
+			m_ui.UdpAddrComboBox->setCurrentIndex(0);
+		else
+			m_ui.UdpAddrComboBox->setEditText(pOptions->sUdpAddr);
 		m_ui.UdpPortSpinBox->setValue(pOptions->iUdpPort);
 		m_ui.NumPortsSpinBox->setValue(pOptions->iNumPorts);
 		m_ui.AlsaMidiCheckBox->setChecked(pOptions->bAlsaMidi);
@@ -73,6 +82,9 @@ qmidinetOptionsForm::qmidinetOptionsForm (
 
 	// UI signal/slot connections...
 	QObject::connect(m_ui.InterfaceComboBox,
+		SIGNAL(editTextChanged(const QString&)),
+		SLOT(change()));
+	QObject::connect(m_ui.UdpAddrComboBox,
 		SIGNAL(editTextChanged(const QString&)),
 		SLOT(change()));
 	QObject::connect(m_ui.UdpPortSpinBox,
@@ -99,7 +111,7 @@ qmidinetOptionsForm::qmidinetOptionsForm (
 // Change settings (anything else slot).
 void qmidinetOptionsForm::change (void)
 {
-	m_iDirtyCount++;
+	++m_iDirtyCount;
 }
 
 
@@ -112,6 +124,7 @@ void qmidinetOptionsForm::accept (void)
 		if (pOptions) {
 			// Display options...
 			pOptions->sInterface = m_ui.InterfaceComboBox->currentText();
+			pOptions->sUdpAddr   = m_ui.UdpAddrComboBox->currentText();
 			pOptions->iUdpPort   = m_ui.UdpPortSpinBox->value();
 			pOptions->iNumPorts  = m_ui.NumPortsSpinBox->value();
 			pOptions->bAlsaMidi  = m_ui.AlsaMidiCheckBox->isChecked();
@@ -156,4 +169,3 @@ void qmidinetOptionsForm::reject (void)
 
 
 // end of qmidinetOptionsForm.cpp
-

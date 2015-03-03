@@ -3,7 +3,7 @@
  <author>rncbc aka Rui Nuno Capela</author>
  <comment>QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 
-   Copyright (C) 2010, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2015, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -66,6 +66,23 @@
          </widget>
         </item>
         <item row="1" column="0">
+         <widget class="QLabel" name="UdpAddrTextLabel">
+          <property name="text">
+           <string>&amp;UDP Address:</string>
+          </property>
+          <property name="buddy">
+           <cstring>UdpAddrComboBox</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QComboBox" name="UdpAddrComboBox">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
          <widget class="QLabel" name="UdpPortTextLabel">
           <property name="text">
            <string>UDP &amp;Port:</string>
@@ -75,7 +92,7 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
+        <item row="2" column="1">
          <widget class="QSpinBox" name="UdpPortSpinBox">
           <property name="accelerated">
            <bool>true</bool>
@@ -174,6 +191,7 @@
  <layoutdefault spacing="4" margin="8"/>
  <tabstops>
   <tabstop>InterfaceComboBox</tabstop>
+  <tabstop>UdpAddrComboBox</tabstop>
   <tabstop>UdpPortSpinBox</tabstop>
   <tabstop>NumPortsSpinBox</tabstop>
   <tabstop>AlsaMidiCheckBox</tabstop>

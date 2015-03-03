@@ -1,7 +1,7 @@
 // qmidinetUdpDevice.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2015, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -180,8 +180,8 @@ qmidinetUdpDevice *qmidinetUdpDevice::getInstance (void)
 
 
 // Device initialization method.
-bool qmidinetUdpDevice::open (
-	const QString& sInterface, int iUdpPort, int iNumPorts )
+bool qmidinetUdpDevice::open ( const QString& sInterface,
+	const QString& sUdpAddr, int iUdpPort, int iNumPorts )
 {
 	// Close if already open.
 	close();
@@ -199,6 +199,11 @@ bool qmidinetUdpDevice::open (
 	const QByteArray aInterface = sInterface.toLocal8Bit();
 	if (!aInterface.isEmpty())
 		ifname = aInterface.constData();
+
+	const char *udp_addr = NULL;
+	const QByteArray aUdpAddr = sUdpAddr.toLocal8Bit();
+	if (!aUdpAddr.isEmpty())
+		udp_addr = aUdpAddr.constData();
 
 	// Set the number of ports.
 	m_nports = iNumPorts;
@@ -247,7 +252,7 @@ bool qmidinetUdpDevice::open (
 		}
 
 		struct ip_mreq mreq;
-		mreq.imr_multiaddr.s_addr = ::inet_addr("225.0.0.37");
+		mreq.imr_multiaddr.s_addr = ::inet_addr(udp_addr);
 		mreq.imr_interface.s_addr = if_addr_in.s_addr;
 		if(::setsockopt (m_sockin[i], IPPROTO_IP, IP_ADD_MEMBERSHIP,
 				(char *) &mreq, sizeof(mreq)) < 0) {
@@ -289,7 +294,7 @@ bool qmidinetUdpDevice::open (
 
 		::memset(&m_addrout[i], 0, sizeof(struct sockaddr_in));
 		m_addrout[i].sin_family = AF_INET;
-		m_addrout[i].sin_addr.s_addr = ::inet_addr("225.0.0.37");
+		m_addrout[i].sin_addr.s_addr = ::inet_addr(udp_addr);
 		m_addrout[i].sin_port = htons(iUdpPort + i);
 
 		// Turn off loopback...

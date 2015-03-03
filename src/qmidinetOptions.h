@@ -1,7 +1,7 @@
 // qmidinetOptions.h
 //
 /****************************************************************************
-   Copyright (C) 2010-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-201, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -24,6 +24,11 @@
 
 #include <QSettings>
 #include <QStringList>
+
+
+// Some hard-coded default options....
+#define QMIDINET_UDP_ADDR "225.0.0.37"
+#define QMIDINET_UDP_PORT  21928
 
 
 //-------------------------------------------------------------------------
@@ -58,6 +63,7 @@ public:
 
 	// Network options...
 	QString sInterface;
+	QString sUdpAddr;
 	int     iUdpPort;
 
 	// Singleton instance accessor.

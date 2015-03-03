@@ -1,7 +1,7 @@
 // qmidinetOptions.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2015, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -76,7 +76,8 @@ void qmidinetOptions::loadOptions (void)
 	// Network specific options...
 	m_settings.beginGroup("/Network");
 	sInterface = m_settings.value("/Interface").toString();
-	iUdpPort = m_settings.value("/UdpPort", 21928).toInt();
+	sUdpAddr = m_settings.value("/UdpAddr", QMIDINET_UDP_ADDR).toString();
+	iUdpPort = m_settings.value("/UdpPort", QMIDINET_UDP_PORT).toInt();
 	m_settings.endGroup();
 
 	m_settings.endGroup();
@@ -99,6 +100,7 @@ void qmidinetOptions::saveOptions (void)
 	// Network specific options...
 	m_settings.beginGroup("/Network");
 	m_settings.setValue("/Interface", sInterface);
+	m_settings.setValue("/UdpAddr", sUdpAddr);
 	m_settings.setValue("/UdpPort", iUdpPort);
 	m_settings.endGroup();
 
@@ -132,7 +134,10 @@ void qmidinetOptions::print_usage ( const QString& arg0 )
 	out << "  -i, --interface=[interface]" + sEot +
 		QObject::tr("Use specific network interface (default = %1)")
 			.arg(sInterface.isEmpty() ? "all" : sInterface) + sEol;
-	out << "  -p, --port=[port]" + sEot +
+	out << "  -u, --address, --udp-addr=[address]" + sEot +
+		QObject::tr("Use specific network address (default = %1)")
+			.arg(sUdpAddr) + sEol;
+	out << "  -p, --port, --udp-port=[port]" + sEot +
 		QObject::tr("Use specific network port (default = %1)")
 			.arg(iUdpPort) + sEol;
 	out << "  -a, --alsa-midi[=flag]" + sEot +
@@ -186,7 +191,16 @@ bool qmidinetOptions::parse_args ( const QStringList& args )
 			if (iEqual < 0) ++i;
 		}
 		else
-		if (sArg == "-p" || sArg == "--port") {
+		if (sArg == "-u" || sArg == "--address" || sArg == "--udp-addr") {
+			if (sVal.isEmpty()) {
+				out << QObject::tr("Option -d requires an argument (address).") + sEol;
+				return false;
+			}
+			sUdpAddr = sVal;
+			if (iEqual < 0) ++i;
+		}
+		else
+		if (sArg == "-p" || sArg == "--port" || sArg == "--udp-port") {
 			if (sVal.isEmpty()) {
 				out << QObject::tr("Option -p requires an argument (port).") + sEol;
 				return false;
