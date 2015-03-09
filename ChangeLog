@@ -5,6 +5,8 @@ ChangeLog
 
 GIT HEAD
 
+- Added application description as freedesktop.org's AppData.
+
 - Previously hard-coded UDP/IP multicast address (225.0.0.37) is
   now an user configurable option.
 
