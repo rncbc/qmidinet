@@ -5,6 +5,9 @@ ChangeLog
 
 GIT HEAD
 
+- Reset (to network defaults) button added to options dialog,
+  which also gets some layout reform.
+
 - Added application description as freedesktop.org's AppData.
 
 - Previously hard-coded UDP/IP multicast address (225.0.0.37) is

@@ -44,6 +44,8 @@ protected slots:
 	void accept();
 	void reject();
 
+	void buttonClick(QAbstractButton *);
+
 private:
 
 	// The Qt-designer UI struct...

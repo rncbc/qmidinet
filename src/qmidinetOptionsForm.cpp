@@ -105,6 +105,9 @@ qmidinetOptionsForm::qmidinetOptionsForm (
 	QObject::connect(m_ui.DialogButtonBox,
 		SIGNAL(rejected()),
 		SLOT(reject()));
+	QObject::connect(m_ui.DialogButtonBox,
+		SIGNAL(clicked(QAbstractButton *)),
+		SLOT(buttonClick(QAbstractButton *)));
 }
 
 
@@ -134,6 +137,8 @@ void qmidinetOptionsForm::accept (void)
 				pOptions->sInterface.clear();
 			// Save/commit to disk.
 			pOptions->saveOptions();
+			// Clean all dirt...
+			m_iDirtyCount = 0;
 		}
 	}
 
@@ -165,6 +170,19 @@ void qmidinetOptionsForm::reject (void)
 
 	// Just go with dialog rejection...
 	QDialog::reject();
+}
+
+
+// Reset options (generic button slot).
+void qmidinetOptionsForm::buttonClick ( QAbstractButton *pButton )
+{
+	const QDialogButtonBox::ButtonRole buttonRole
+		= m_ui.DialogButtonBox->buttonRole(pButton);
+	if (buttonRole == QDialogButtonBox::ResetRole) {
+		m_ui.InterfaceComboBox->setCurrentIndex(0);
+		m_ui.UdpAddrComboBox->setCurrentIndex(0);
+		m_ui.UdpPortSpinBox->setValue(QMIDINET_UDP_PORT);
+	}
 }
 
 
