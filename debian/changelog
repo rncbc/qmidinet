@@ -1,3 +1,9 @@
+qmidinet (0.2.1-7) unstable; urgency=low
+
+  * Pre-LAC2015 pre-season release.
+
+ -- Rui Nuno Capela <rncbc@rncbc.org>  Mon, 23 Mar 2015 18:30:00 +0100
+
 qmidinet (0.2.0-6) unstable; urgency=low
 
   * Headless finally.
