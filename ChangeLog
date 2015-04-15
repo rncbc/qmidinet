@@ -4,6 +4,11 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 ChangeLog
 
 
+GIT HEAD
+
+- Fixed for some strict tests for Qt4 vs. Qt5 configure builds.
+
+
 0.2.1  2015-03-23  Pre-LAC2015 pre-season release.
 
 - Reset (to network defaults) button added to options dialog,
