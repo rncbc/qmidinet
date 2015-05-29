@@ -29,9 +29,9 @@ The software requirements for build and runtime are listed as follows:
 
   Mandatory:
 
-  [1] Qt4 (core, gui), C++ class library and tools for
-        crossplatform development and internationalization
-        http://qt-project.org/
+  [1] Qt framework, C++ class library and tools for
+        cross-platform application and UI development
+        http://qt.io/
 
   [2] ALSA, Advanced Linux Sound Architecture
         http://www.alsa-project.org/
@@ -101,9 +101,9 @@ web site (http://www.rncbc.org).
 References
 ----------
 
-[1] Qt4 (core, gui), C++ class library and tools
-     for crossplatform development and internationalization
-     http://qt-project.org/
+[1] Qt framework, C++ class library and tools for
+     cross-platform application and UI development
+     http://qt.io/
 
 [2] ALSA, Advanced Linux Sound Architecture
      http://www.alsa-project.org/
