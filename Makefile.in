@@ -1,5 +1,6 @@
 prefix  = @ac_prefix@
-qmake   = @ac_qmake@
+
+QMAKE   = @ac_qmake@
 
 name    = qmidinet
 
@@ -39,7 +40,7 @@ $(target):	$(name).mak $(resources) ${forms} $(sources) $(headers)
 	@$(MAKE) -f $(name).mak
 
 $(name).mak:	$(name).pro
-	@$(qmake) -o $(name).mak $(name).pro
+	@$(QMAKE) -o $(name).mak $(name).pro
 
 
 install:	$(target) $(name).1
