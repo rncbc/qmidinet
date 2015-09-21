@@ -6,9 +6,12 @@ ChangeLog
 
 GIT HEAD
 
+- System tray icon now blinks on network send/receive activity.
+  (EXPERIMENTAL)
+
 - Prefer Qt5 over Qt4 by default with configure script.
 
-- Complete rewrite of Qt4 vs. Qt5 configure builds. (TESTING)
+- Complete rewrite of Qt4 vs. Qt5 configure builds.
 
 - Fixed for some strict tests for Qt4 vs. Qt5 configure builds.
 
@@ -79,7 +82,7 @@ GIT HEAD
 
 - Enabling ALSA MIDI and/or JACK MIDI devices is now optional.
 
-- Transparent JACK MIDI support is being introduced. (EXPERIMENTAL)
+- Transparent JACK MIDI support is being introduced.
 
 - Use standard dialog buttons as provided by QDialogButtonBox.
 

@@ -1,8 +1,8 @@
 <RCC version="1.0">
 	<qresource>
 		<file>images/qmidinet.png</file>
-		<file>images/formAccept.png</file>
-		<file>images/formReject.png</file>
 		<file>images/iconError.png</file>
+		<file>images/iconSend.png</file>
+		<file>images/iconReceive.png</file>
 	</qresource>
 </RCC>

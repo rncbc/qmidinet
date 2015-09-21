@@ -55,6 +55,7 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv, bool bGUI )
 		m_pIcon = NULL;
 	}
 
+
 #ifdef CONFIG_ALSA_MIDI
 	QObject::connect(
 		&m_udpd, SIGNAL(received(const QByteArray&, int)),
@@ -64,16 +65,33 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv, bool bGUI )
 		&m_udpd, SLOT(receive(const QByteArray&, int)));
 #endif
 
-#ifdef CONFIG_JACK_MIDI	
+#ifdef CONFIG_JACK_MIDI
 	QObject::connect(
 		&m_udpd, SIGNAL(received(const QByteArray&, int)),
 		&m_jack, SLOT(receive(const QByteArray&, int)));
 	QObject::connect(
 		&m_jack, SIGNAL(received(const QByteArray&, int)),
 		&m_udpd, SLOT(receive(const QByteArray&, int)));
-	QObject::connect(
-		&m_jack, SIGNAL(shutdown()), SLOT(shutdown()));
+	QObject::connect(&m_jack,
+		SIGNAL(shutdown()),
+		SLOT(shutdown()));
 #endif
+
+	if (m_pIcon) {
+		QObject::connect(
+			&m_udpd, SIGNAL(received(const QByteArray&, int)),
+			m_pIcon, SLOT(receiving()));
+	#ifdef CONFIG_ALSA_MIDI
+		QObject::connect(
+			&m_alsa, SIGNAL(received(const QByteArray&, int)),
+			m_pIcon, SLOT(sending()));
+	#endif
+	#ifdef CONFIG_JACK_MIDI
+		QObject::connect(
+			&m_jack, SIGNAL(received(const QByteArray&, int)),
+			m_pIcon, SLOT(sending()));
+	#endif
+	}
 }
 
 
@@ -191,7 +209,7 @@ void qmidinetApplication::shutdown (void)
 
 // Constructor.
 qmidinetSystemTrayIcon::qmidinetSystemTrayIcon ( qmidinetApplication *pApp )
-	: QSystemTrayIcon(pApp), m_pApp(pApp)
+	: QSystemTrayIcon(pApp), m_pApp(pApp), m_iSending(0), m_iReceiving(0)
 {
 	m_menu.addAction(
 		QIcon(":/images/qmidinet.png"),
@@ -221,16 +239,36 @@ void qmidinetSystemTrayIcon::show ( bool bSetup )
 	QPixmap pm(icon.pixmap(22, 22));
 
 	if (!bSetup) {
-		// Merge with the overlay pixmap...
-		const QPixmap pmOverlay(":/images/iconError.png");
-		if (!pmOverlay.mask().isNull()) {
+		// Merge with the error overlay pixmap...
+		const QPixmap pmError(":/images/iconError.png");
+		if (!pmError.mask().isNull()) {
 			QBitmap mask = pm.mask();
-			QPainter(&mask).drawPixmap(0, 0, pmOverlay.mask());
+			QPainter(&mask).drawPixmap(0, 0, pmError.mask());
 			pm.setMask(mask);
-			QPainter(&pm).drawPixmap(0, 0, pmOverlay);
+			QPainter(&pm).drawPixmap(0, 0, pmError);
 		}
 		// Restart timeout (3 minutes)...
 		QTimer::singleShot(180000, this, SLOT(reset()));
+	} else {
+		// Merge with the status overlay pixmaps...
+		if (m_iSending > 0) {
+			const QPixmap pmSend(":/images/iconSend.png");
+			if (!pmSend.mask().isNull()) {
+				QBitmap mask = pm.mask();
+				QPainter(&mask).drawPixmap(0, 0, pmSend.mask());
+				pm.setMask(mask);
+				QPainter(&pm).drawPixmap(0, 0, pmSend);
+			}
+		}
+		if (m_iReceiving > 0) {
+			const QPixmap pmReceive(":/images/iconReceive.png");
+			if (!pmReceive.mask().isNull()) {
+				QBitmap mask = pm.mask();
+				QPainter(&mask).drawPixmap(0, 0, pmReceive.mask());
+				pm.setMask(mask);
+				QPainter(&pm).drawPixmap(0, 0, pmReceive);
+			}
+		}
 	}
 
 	QSystemTrayIcon::setIcon(QIcon(pm));
@@ -309,6 +347,33 @@ void qmidinetSystemTrayIcon::activated ( QSystemTrayIcon::ActivationReason reaso
 {
 	if (reason == QSystemTrayIcon::Trigger)
 		QSystemTrayIcon::contextMenu()->exec(QCursor::pos());
+}
+
+
+// Status changes.
+void qmidinetSystemTrayIcon::sending (void)
+{
+	if (++m_iSending < 2) {
+		show(true);
+		QTimer::singleShot(200, this, SLOT(timerOff()));
+	}
+}
+
+
+void qmidinetSystemTrayIcon::receiving (void)
+{
+	if (++m_iReceiving < 2) {
+		show(true);
+		QTimer::singleShot(200, this, SLOT(timerOff()));
+	}
+}
+
+
+void qmidinetSystemTrayIcon::timerOff (void)
+{
+	m_iSending = m_iReceiving = 0;
+
+	show(true);
 }
 
 

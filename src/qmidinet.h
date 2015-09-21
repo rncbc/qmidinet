@@ -117,12 +117,24 @@ public slots:
 	// Handle system tray activity.
 	void activated(QSystemTrayIcon::ActivationReason);
 
+	// Send/receive ON slots.
+	void sending();
+	void receiving();
+
+protected slots:
+
+	// Send/receive timer OFF slot.
+	void timerOff();
+
 private:
 
 	// Instance variables.
 	qmidinetApplication *m_pApp;
 
 	QMenu m_menu;
+
+	int m_iSending;
+	int m_iReceiving;
 };
 
 
