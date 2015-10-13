@@ -78,5 +78,5 @@ designed to be compatible with ipMIDI for Windows (http://nerds.de).
 - Second public release.
 * Mon May 17 2010 Rui Nuno Capela <rncbc@rncbc.org>
 - Standard desktop icon fixing. 
-* Fri Mar  6 2010 Rui Nuno Capela <rncbc@rncbc.org> 0.0.1
+* Sat Mar  6 2010 Rui Nuno Capela <rncbc@rncbc.org> 0.0.1
 - Created initial qmidinet.spec
