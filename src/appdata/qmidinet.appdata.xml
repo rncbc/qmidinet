@@ -21,4 +21,7 @@
  <url type="homepage">http://qmidinet.sourceforge.net</url>
  <updatecontact>rncbc@rncbc.org</updatecontact>
  <project_group>rncbc.org</project_group>
+ <kudos>
+  <kudo>ModernToolkit</kudo>
+ </kudos>
 </component>
