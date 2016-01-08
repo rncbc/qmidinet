@@ -18,6 +18,16 @@
    <caption>The system tray icon showing the application in action</caption>
   </screenshot>
  </screenshots>
+ <keywords>
+  <keyword>MIDI</keyword>
+  <keyword>ALSA</keyword>
+  <keyword>JACK</keyword>
+  <keyword>Multicast</keyword>
+  <keyword>Network</keyword>
+  <keyword>UDP</keyword>
+  <keyword>IP</keyword>
+  <keyword>Qt</keyword>
+ </keywords>
  <url type="homepage">http://qmidinet.sourceforge.net</url>
  <updatecontact>rncbc@rncbc.org</updatecontact>
  <project_group>rncbc.org</project_group>
