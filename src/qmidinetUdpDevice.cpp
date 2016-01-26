@@ -1,7 +1,7 @@
 // qmidinetUdpDevice.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2016, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -30,6 +30,7 @@ static WSADATA g_wsaData;
 typedef int socklen_t;
 #else
 #include <unistd.h>
+#include <fcntl.h>
 #include <sys/ioctl.h>
 inline void closesocket(int s) { ::close(s); }
 #endif
@@ -237,6 +238,9 @@ bool qmidinetUdpDevice::open ( const QString& sInterface,
 		// INADDR_ANY will bind to default interface,
 		// specify alternate interface nameon which to bind...
 		struct in_addr if_addr_in;
+	#if defined(WIN32)
+		if_addr_in.s_addr = htonl(INADDR_ANY);
+	#else
 		if (ifname) {
 			if (!get_address(m_sockin[i], &if_addr_in, ifname)) {
 				fprintf(stderr, "socket(in): could not find interface address for %s\n", ifname);
@@ -250,6 +254,7 @@ bool qmidinetUdpDevice::open ( const QString& sInterface,
 		} else {
 			if_addr_in.s_addr = htonl(INADDR_ANY);
 		}
+	#endif
 
 		struct ip_mreq mreq;
 		mreq.imr_multiaddr.s_addr = ::inet_addr(udp_addr);
@@ -260,6 +265,17 @@ bool qmidinetUdpDevice::open ( const QString& sInterface,
 			fprintf(stderr, "socket(in): your kernel is probably missing multicast support.\n");
 			return false;
 		}
+
+	#if defined(WIN32)
+		unsigned long mode = 1;
+		if (::ioctlsocket(m_sockin[i], FIONBIO, &mode)) {
+			::perror("ioctlsocket(O_NONBLOCK)");
+			return false;
+		}
+	#else
+		if (::fcntl(m_sockin[i], F_SETFL, O_NONBLOCK))
+			::perror("fcntl(O_NONBLOCK)");
+	#endif
 	}
 
 	// Output socket...
@@ -279,6 +295,7 @@ bool qmidinetUdpDevice::open ( const QString& sInterface,
 		}
 
 		// Will Hall, Oct 2007
+	#if !defined(WIN32)
 		if (ifname) {
 			struct in_addr if_addr_out;
 			if (!get_address(m_sockout[i], &if_addr_out, ifname)) {
@@ -291,6 +308,7 @@ bool qmidinetUdpDevice::open ( const QString& sInterface,
 				return false;
 			}
 		}
+	#endif
 
 		::memset(&m_addrout[i], 0, sizeof(struct sockaddr_in));
 		m_addrout[i].sin_family = AF_INET;
@@ -299,11 +317,31 @@ bool qmidinetUdpDevice::open ( const QString& sInterface,
 
 		// Turn off loopback...
 		int loop = 0;
-		if (::setsockopt(m_sockout[i], IPPROTO_IP, IP_MULTICAST_LOOP,
+	#if defined(WIN32)
+		// NOTE: The Winsock version of the IP_MULTICAST_LOOP option
+		// is the semantically reverse than the UNIX version.
+		const int sock = m_sockin[i];
+	#else
+		const int sock = m_sockout[i];
+	#endif
+		if (::setsockopt(sock, IPPROTO_IP, IP_MULTICAST_LOOP,
 				(char *) &loop, sizeof (loop)) < 0) {
 			::perror("setsockopt(IP_MULTICAST_LOOP)");
 			return false;
 		}
+
+	#if defined(WIN32)
+		unsigned long mode = 1;
+		if (::ioctlsocket(m_sockout[i], FIONBIO, &mode)) {
+			::perror("ioctlsocket(O_NONBLOCK)");
+			return false;
+		}
+	#else
+		if (::fcntl(m_sockout[i], F_SETFL, O_NONBLOCK)) {
+			::perror("fcntl(O_NONBLOCK)");
+			return false;
+		}
+	#endif
 	}
 
 	// Start listener thread...

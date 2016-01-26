@@ -6,6 +6,10 @@ ChangeLog
 
 GIT HEAD
 
+- Allegedly fixed for the socketopt(IP_MULTICAST_LOOP) reverse
+  semantics on Windows platforms (as suggested by Paul Davis, 
+  from Ardour ipMIDI implementation, thanks).
+
 - Added application keywords to freedesktop.org's AppData.
 
 
