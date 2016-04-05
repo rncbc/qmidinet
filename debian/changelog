@@ -1,4 +1,10 @@
-qmidinet (0.2.1-8) unstable; urgency=low
+qmidinet (0.4.0-9) unstable; urgency=low
+
+  * Spring'16 release frenzy.
+
+ -- Rui Nuno Capela <rncbc@rncbc.org>  Tue,  5 Sep 2016 18:30:00 +0100
+
+qmidinet (0.3.0-8) unstable; urgency=low
 
   * Summer'15 release frenzy.
 

@@ -4,7 +4,7 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 ChangeLog
 
 
-GIT HEAD
+0.4.0  2016-04-05  Spring'16 release frenzy.
 
 - Allegedly fixed for the socketopt(IP_MULTICAST_LOOP) reverse
   semantics on Windows platforms (as suggested by Paul Davis, 
