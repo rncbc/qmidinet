@@ -4,6 +4,13 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 ChangeLog
 
 
+GIT HEAD
+
+- Dropped the --enable-qt5 from configure as found redundant
+  given that's the build default anyway (suggestion by Guido
+  Scholz, while for Qtractor, thanks).
+
+
 0.4.0  2016-04-05  Spring'16 release frenzy.
 
 - Allegedly fixed for the socketopt(IP_MULTICAST_LOOP) reverse
