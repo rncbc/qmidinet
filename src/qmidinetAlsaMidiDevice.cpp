@@ -1,7 +1,7 @@
 // qmidinetAlsaMidiDevice.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010-2013, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2016, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -312,7 +312,7 @@ void qmidinetAlsaMidiDevice::capture ( snd_seq_event_t *pEv )
 		long n = snd_midi_event_decode(m_pAlsaDecoder, data, sizeof(data), pEv);
 		if (n > 0)
 			recvData(data, n, pEv->dest.port);
-	    else
+		else
 		if (n < 0)
 			fprintf(stderr, "snd_midi_event_decode: %s\n", snd_strerror(n));
 		snd_midi_event_reset_decode(m_pAlsaDecoder);
