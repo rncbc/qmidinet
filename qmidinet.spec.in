@@ -4,6 +4,10 @@
 
 %define _prefix	@ac_prefix@
 
+%if %{defined fedora}
+%define debug_package %{nil}
+%endif
+
 Summary:	A MIDI Network Gateway via UDP/IP Multicast
 Name:		%{name}
 Version:	%{version}
@@ -23,7 +27,11 @@ BuildRequires:	qt5-qtbase-devel >= 5.1, qt5-linguist
 BuildRequires:	libqt5-qtbase-devel >= 5.1, libqt5-linguist
 %endif
 BuildRequires:	libjack-devel >= 0.109.2
+%if %{defined fedora}
+BuildRequires:	alsa-lib-devel
+%else
 BuildRequires:	alsa-devel
+%endif
 
 %description
 QmidiNet is a MIDI network gateway application that sends and receives
