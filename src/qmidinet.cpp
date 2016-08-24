@@ -235,8 +235,7 @@ qmidinetSystemTrayIcon::qmidinetSystemTrayIcon ( qmidinetApplication *pApp )
 // Initializer.
 void qmidinetSystemTrayIcon::show ( bool bSetup )
 {
-	const QIcon icon(":/images/qmidinet.png");
-	QPixmap pm(icon.pixmap(22, 22));
+	QPixmap pm(":/images/qmidinet.png");
 
 	if (!bSetup) {
 		// Merge with the error overlay pixmap...
