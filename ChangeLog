@@ -4,6 +4,14 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 ChangeLog
 
 
+GIT HEAD
+
+- Almost complete overhaul on the configure script command
+  line options, wrt. installation directories specification,
+  eg. --prefix, --bindir, --libdir, --datadir and --mandir.
+  (EXPERIMENTAL)
+
+
 0.4.1  2016-09-14  End of Summer'16 release.
 
 - Dropped the --enable-qt5 from configure as found redundant

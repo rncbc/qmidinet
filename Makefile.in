@@ -28,9 +28,8 @@ resources = \
 	src/qmidinet.qrc
 
 
-export datarootdir = @datarootdir@
-export datadir = @datadir@
-export mandir = @mandir@
+export datadir = @ac_datadir@
+export mandir = @ac_mandir@
 
 
 export QMAKE = @ac_qmake@
