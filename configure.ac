@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(QmidiNet, 0.4.1.2, rncbc@rncbc.org, qmidinet)
+AC_INIT(QmidiNet, 0.4.1.3, rncbc@rncbc.org, qmidinet)
 
 AC_CONFIG_SRCDIR(src/qmidinet.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -120,6 +120,8 @@ AC_PROG_CXXCPP
 # Checks for languages.
 AC_LANG_CPLUSPLUS
 
+# Check for pkg-config.
+PKG_PROG_PKG_CONFIG
 
 # Check for proper flags.
 ac_arch=`uname -m`
@@ -272,25 +274,26 @@ AC_CHECK_LIB(Xext, main)
 
 # Check for ALSA libraries.
 if test "x$ac_alsa_midi" = "xyes"; then
-   AC_CHECK_LIB(asound, main, [ac_alsa_midi="yes"], [ac_alsa_midi="no"])
-   if test "x$ac_alsa_midi" = "xno"; then
-      AC_MSG_WARN([*** ALSA library not found.])
-   else
-      ac_libs="$ac_libs -lasound"
-   fi
+   PKG_CHECK_MODULES([ALSA], [alsa], [ac_alsa_midi="yes"], [ac_alsa_midi="no"])
+fi
+if test "x$ac_alsa_midi" = "xyes"; then
+   AC_DEFINE(CONFIG_ALSA_MIDI, 1, [Define if ALSA library is available.])
+   ac_cflags="$ac_cflags $ALSA_CFLAGS"
+   ac_libs="$ac_libs $ALSA_LIBS"
+else
+   AC_MSG_WARN([*** ALSA library not found.])
 fi
 
 # Check for JACK libraries.
 if test "x$ac_jack_midi" = "xyes"; then
-   AC_CHECK_LIB(jack, main, [ac_jack_midi="yes"], [ac_jack_midi="no"])
-   if test "x$ac_jack_midi" = "xno"; then
-      AC_MSG_WARN([*** JACK library not found.])
-   else
-      ac_libs="$ac_libs -ljack"
-   fi
+   PKG_CHECK_MODULES([JACK], [jack >= 0.80.0], [ac_jack_midi="yes"], [ac_jack_midi="no"])
 fi
-
-AC_SUBST(ac_libs)
+if test "x$ac_jack_midi" = "xyes"; then
+   ac_cflags="$ac_cflags $JACK_CFLAGS"
+   ac_libs="$ac_libs $JACK_LIBS"
+else
+   AC_MSG_WARN([*** JACK library not found.])
+fi
 
 
 # Checks for header files.
@@ -298,29 +301,22 @@ AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS(fcntl.h sys/ioctl.h sys/stat.h unistd.h signal.h)
 
-# Check for ALSA headers.
-if test "x$ac_alsa_midi" = "xyes"; then
-   AC_CHECK_HEADER(alsa/asoundlib.h, [ac_alsa_midi="yes"], [ac_alsa_midi="no"])
-   if test "x$ac_alsa_midi" = "xno"; then
-      AC_MSG_WARN([*** ALSA headers not found.])
-   else
-      AC_DEFINE(CONFIG_ALSA_MIDI, 1, [Define if ALSA MIDI support is enabled.])
-   fi
-fi
-
-# Check for JACK headers.
+# Check for JACK MIDI support headers.
 if test "x$ac_jack_midi" = "xyes"; then
-   AC_CHECK_HEADERS(jack/jack.h jack/midiport.h, [ac_jack_midi="yes"], [ac_jack_midi="no"])
-   if test "x$ac_jack_midi" = "xno"; then
-      AC_MSG_WARN([*** JACK headers not found.])
-   else
+   AC_CHECK_HEADER(jack/midiport.h, [ac_jack_midi="yes"], [ac_jack_midi="no"])
+   if test "x$ac_jack_midi" = "xyes"; then
       AC_DEFINE(CONFIG_JACK_MIDI, 1, [Define if JACK MIDI support is enabled.])
+   else
+      AC_MSG_WARN([*** jack/midiport.h file not found.])
+      AC_MSG_WARN([*** JACK 0.103.0 or later may be required.])
+      AC_MSG_WARN([*** JACK MIDI support will be disabled.])
    fi
 fi
 
-AC_SUBST(ac_incpath)
 AC_SUBST(ac_cflags)
 AC_SUBST(ac_ldflags)
+AC_SUBST(ac_incpath)
+AC_SUBST(ac_libs)
 
 
 # Checks for typedefs, structures, and compiler characteristics.
