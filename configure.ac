@@ -286,7 +286,7 @@ fi
 
 # Check for JACK libraries.
 if test "x$ac_jack_midi" = "xyes"; then
-   PKG_CHECK_MODULES([JACK], [jack >= 0.80.0], [ac_jack_midi="yes"], [ac_jack_midi="no"])
+   PKG_CHECK_MODULES([JACK], [jack >= 0.100.0], [ac_jack_midi="yes"], [ac_jack_midi="no"])
 fi
 if test "x$ac_jack_midi" = "xyes"; then
    ac_cflags="$ac_cflags $JACK_CFLAGS"
