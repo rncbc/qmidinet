@@ -232,8 +232,12 @@ bool qmidinetOptions::parse_args ( const QStringList& args )
 			return false;
 		}
 		else if (sArg == "-v" || sArg == "--version") {
-			out << QObject::tr("Qt: %1\n").arg(qVersion());
-			out << QObject::tr(QMIDINET_TITLE ": %1\n").arg(QMIDINET_VERSION);
+			out << QObject::tr("Qt: %1\n")
+				.arg(qVersion());
+			out << QObject::tr("%1: %2  (%3)\n")
+				.arg(QMIDINET_TITLE)
+				.arg(QMIDINET_VERSION)
+				.arg(CONFIG_BUILD_DATE);
 			return false;
 		}
 	}

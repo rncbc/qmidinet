@@ -1,7 +1,7 @@
 // qmidinet.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2016, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -298,7 +298,7 @@ void qmidinetSystemTrayIcon::about (void)
 	sText += "<b>" QMIDINET_TITLE " - " + tr(QMIDINET_SUBTITLE) + "</b><br />\n";
 	sText += "<br />\n";
 	sText += tr("Version") + ": <b>" QMIDINET_VERSION "</b><br />\n";
-	sText += "<small>" + tr("Build") + ": " __DATE__ " " __TIME__ "</small><br />\n";
+	sText += "<small>" + tr("Build") + ": " CONFIG_BUILD_DATE "</small><br />\n";
 #ifndef CONFIG_ALSA_MIDI
 	sText += "<small><font color=\"red\">";
 	sText += tr("ALSA MIDI support disabled.");
