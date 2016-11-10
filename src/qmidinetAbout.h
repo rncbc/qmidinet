@@ -25,7 +25,6 @@
 #include "config.h"
 
 #define QMIDINET_TITLE        PACKAGE_NAME
-#define QMIDINET_VERSION      PACKAGE_VERSION
 
 #define QMIDINET_SUBTITLE     "A MIDI Network Gateway via UDP/IP Multicast"
 #define QMIDINET_WEBSITE      "http://qmidinet.sourceforge.net"
