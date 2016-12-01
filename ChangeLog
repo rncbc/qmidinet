@@ -4,6 +4,12 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 ChangeLog
 
 
+GIT HEAD
+
+- Make builds reproducible byte for byte, by getting rid of
+  the configure build date and time stamps.
+
+
 0.4.2  2016-11-14  A Fall'16 release.
 
 - Almost complete overhaul on the configure script command

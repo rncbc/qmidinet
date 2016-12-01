@@ -293,22 +293,29 @@ void qmidinetSystemTrayIcon::reset (void)
 // About dialog.
 void qmidinetSystemTrayIcon::about (void)
 {
+	QStringList list;
+#ifdef CONFIG_DEBUG
+	list << tr("Debugging option enabled.");
+#endif
+#ifndef CONFIG_ALSA_MIDI
+	list << tr("ALSA MIDI support disabled.");
+#endif
+#ifndef CONFIG_JACK_MIDI
+	list << tr("JACK MIDI support disabled.");
+#endif
+
 	// Stuff the about box text...
 	QString sText = "<p>\n";
 	sText += "<b>" QMIDINET_TITLE " - " + tr(QMIDINET_SUBTITLE) + "</b><br />\n";
 	sText += "<br />\n";
 	sText += tr("Version") + ": <b>" CONFIG_BUILD_VERSION "</b><br />\n";
-	sText += "<small>" + tr("Build") + ": " CONFIG_BUILD_DATE "</small><br />\n";
-#ifndef CONFIG_ALSA_MIDI
-	sText += "<small><font color=\"red\">";
-	sText += tr("ALSA MIDI support disabled.");
-	sText += "</font></small><br />";
-#endif
-#ifndef CONFIG_JACK_MIDI
-	sText += "<small><font color=\"red\">";
-	sText += tr("JACK MIDI support disabled.");
-	sText += "</font></small><br />";
-#endif
+//	sText += "<small>" + tr("Build") + ": " CONFIG_BUILD_DATE "</small><br />\n";
+	if (!list.isEmpty()) {
+		sText += "<br />\n";
+		sText += "<small><font color=\"red\">";
+		sText += list.join("<br />\n");
+		sText += "</font></small><br />\n";
+	}
 	sText += "<br />\n";
 	sText += tr("Website") + ": <a href=\"" QMIDINET_WEBSITE "\">" QMIDINET_WEBSITE "</a><br />\n";
 	sText += "<br />\n";
