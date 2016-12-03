@@ -55,7 +55,6 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv, bool bGUI )
 		m_pIcon = NULL;
 	}
 
-
 #ifdef CONFIG_ALSA_MIDI
 	QObject::connect(
 		&m_udpd, SIGNAL(received(const QByteArray&, int)),
@@ -211,16 +210,17 @@ void qmidinetApplication::shutdown (void)
 qmidinetSystemTrayIcon::qmidinetSystemTrayIcon ( qmidinetApplication *pApp )
 	: QSystemTrayIcon(pApp), m_pApp(pApp), m_iSending(0), m_iReceiving(0)
 {
-	m_menu.addAction(
-		QIcon(":/images/qmidinet.png"),
+//	m_menu.addAction(QIcon(":/images/qmidinet.png"), QMIDINET_TITLE);
+//	m_menu.addSeparator();
+	m_menu.addAction(QIcon(":/images/menuOptions.png"),
 		tr("Options..."), this, SLOT(options()));
-	m_menu.addAction(tr("Reset"), this, SLOT(reset()));
+	m_menu.addAction(QIcon(":/images/menuReset.png"),
+		tr("Reset"), this, SLOT(reset()));
 	m_menu.addSeparator();
 	m_menu.addAction(tr("About..."), this, SLOT(about()));
 	m_menu.addAction(tr("About Qt..."), m_pApp->app(), SLOT(aboutQt()));
 	m_menu.addSeparator();
-	m_menu.addAction(
-		QIcon(":/images/formReject.png"),
+	m_menu.addAction(QIcon(":/images/menuQuit.png"),
 		tr("Quit"), m_pApp->app(), SLOT(quit()));
 
 	QSystemTrayIcon::setContextMenu(&m_menu);
