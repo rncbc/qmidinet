@@ -181,7 +181,7 @@ void qmidinetApplication::message (
 		m_pIcon->message(sTitle, sText);
 	} else {
 		const QString sMessage = sTitle + ": " + sText.simplified();
-		qCritical(sMessage.toUtf8().constData());
+		qCritical("%s", sMessage.toUtf8().constData());
 	}
 }
 
