@@ -2,7 +2,9 @@
 Name=@PACKAGE_NAME@
 Version=1.0
 GenericName=MIDI Network
+GenericName[fr]=Réseau MIDI
 Comment=QmidiNet is a MIDI Network Gateway via UDP/IP Multicast
+Comment[fr]=QmidiNet est une passerelle de réseau MIDI via UDP/IP Multicast
 Exec=@ac_prefix@/bin/qmidinet
 Icon=qmidinet
 Categories=Audio;AudioVideo;Midi;X-Alsa;X-Jack;Qt;
