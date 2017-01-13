@@ -336,6 +336,9 @@ fi
 if test "x$ac_jack_midi" = "xyes"; then
    ac_cflags="$ac_cflags $JACK_CFLAGS"
    ac_libs="$ac_libs $JACK_LIBS"
+   CFLAGS="$CFLAGS $JACK_CFLAGS"
+   CPPFLAGS="$CPPFLAGS $JACK_CFLAGS"
+   LIBS="$LIBS $JACK_LIBS"
 else
    AC_MSG_WARN([*** JACK library not found.])
 fi
