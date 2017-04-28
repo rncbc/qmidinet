@@ -1,0 +1,47 @@
+.TH QMIDINET "1" "Octobre 2010"
+.SH NOM
+qmidinet \- passerelle de réseau MIDI via UDP/IP Multicast
+.SH SYNOPSIS
+.B qmidinet
+[\fIoptions\fR]
+.SH DESCRIPTION
+Cette page de manuel documente brièvement la commande
+.B qmidinet
+.
+.PP
+\fBQmidiNet\fP est une application de passerelle de réseau MIDI qui envoie et
+reçoit des données MIDI (séquenceur ALSA) à travers le réseau, en utilisant
+UDP/IP multicast.
+.PP
+Il a été inspiré par multimidicast (http://llg.cubic.org/tools) et conçu pour
+être compatible avec ipMIDI pour Windows (http://nerds.de).
+.SH OPTIONS
+.HP
+\fB\-n\fR, \fB\-\-num\-ports\fR=\fI[num\-ports]\fR
+.IP
+Utilise ce nombre de ports (par défaut = 1)
+.HP
+\fB\-i\fR, \fB\-\-interface\fR=\fI[interface]\fR
+.IP
+Utiliser une interface réseau spécifique (par défaut = all)
+.HP
+\fB\-p\fR, \fB\-\-port\fR=\fI[port]\fR
+.IP
+Utilise un port de réseau spécifique (par défaut = 21928)
+.HP
+\fB\-h\fR, \fB\-\-help\fR
+.IP
+Affiche de l'aide à propos des options de ligne de commande
+.HP
+\fB\-v\fR, \fB\-\-version\fR
+.IP
+Affiche une information de version
+.PP
+.SH AUTEUR
+qmidinet a été écrit par Rui Nuno Capela.
+.PP
+Cette page de manuel a été écrite par Alessio Treglia <alessio@debian.org>,
+pour le projet Debian (mais peut être utilisée par d'autres).
+.PP
+La version française a été traduite par Olivier Humbert <trebmuh@tuxfamily.org>,
+pour le projet LibraZiK (mais peut être utilisée par d'autres).
