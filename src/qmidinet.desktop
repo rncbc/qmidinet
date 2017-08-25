@@ -11,4 +11,6 @@ Categories=Audio;AudioVideo;Midi;X-Alsa;X-Jack;Qt;
 Keywords=MIDI;ALSA;JACK;Multicast;Network;UDP;IP;Qt;
 Terminal=false
 Type=Application
+StartupWMClass=qmidinet
+X-Window-Icon=qmidinet
 X-SuSE-translate=true
