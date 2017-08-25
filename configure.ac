@@ -3,7 +3,7 @@ AC_INIT(QmidiNet, 0.4.4, rncbc@rncbc.org, qmidinet)
 
 AC_CONFIG_SRCDIR(src/qmidinet.cpp)
 AC_CONFIG_HEADERS(src/config.h)
-AC_CONFIG_FILES(Makefile qmidinet.spec src/src.pri src/qmidinet.desktop)
+AC_CONFIG_FILES(Makefile qmidinet.spec src/src.pri)
 
 # Build version string.
 AC_CACHE_VAL([ac_cv_build_version], [
