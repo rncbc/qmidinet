@@ -1,7 +1,7 @@
 // qmidinetUdpDevice.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010-2016, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2017, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#if defined(WIN32)
+#if defined(_WIN32)
 static WSADATA g_wsaData;
 typedef int socklen_t;
 #else
@@ -153,7 +153,7 @@ qmidinetUdpDevice::qmidinetUdpDevice ( QObject *pParent )
 	: QObject(pParent), m_nports(0),
 		m_sockin(NULL), m_sockout(NULL), m_addrout(NULL), m_pRecvThread(NULL)
 {
-#if defined(WIN32)
+#if defined(_WIN32)
 	WSAStartup(MAKEWORD(1, 1), &g_wsaData);
 #endif
 
@@ -167,7 +167,7 @@ qmidinetUdpDevice::~qmidinetUdpDevice (void)
 
 	g_pDevice = NULL;
 
-#if defined(WIN32)
+#if defined(_WIN32)
 	WSACleanup();
 #endif
 }
@@ -238,7 +238,7 @@ bool qmidinetUdpDevice::open ( const QString& sInterface,
 		// INADDR_ANY will bind to default interface,
 		// specify alternate interface nameon which to bind...
 		struct in_addr if_addr_in;
-	#if defined(WIN32)
+	#if defined(_WIN32)
 		if_addr_in.s_addr = htonl(INADDR_ANY);
 	#else
 		if (ifname) {
@@ -266,7 +266,7 @@ bool qmidinetUdpDevice::open ( const QString& sInterface,
 			return false;
 		}
 
-	#if defined(WIN32)
+	#if defined(_WIN32)
 		unsigned long mode = 1;
 		if (::ioctlsocket(m_sockin[i], FIONBIO, &mode)) {
 			::perror("ioctlsocket(O_NONBLOCK)");
@@ -295,7 +295,7 @@ bool qmidinetUdpDevice::open ( const QString& sInterface,
 		}
 
 		// Will Hall, Oct 2007
-	#if !defined(WIN32)
+	#if !defined(_WIN32)
 		if (ifname) {
 			struct in_addr if_addr_out;
 			if (!get_address(m_sockout[i], &if_addr_out, ifname)) {
@@ -317,7 +317,7 @@ bool qmidinetUdpDevice::open ( const QString& sInterface,
 
 		// Turn off loopback...
 		int loop = 0;
-	#if defined(WIN32)
+	#if defined(_WIN32)
 		// NOTE: The Winsock version of the IP_MULTICAST_LOOP option
 		// is the semantically reverse than the UNIX version.
 		const int sock = m_sockin[i];
@@ -330,7 +330,7 @@ bool qmidinetUdpDevice::open ( const QString& sInterface,
 			return false;
 		}
 
-	#if defined(WIN32)
+	#if defined(_WIN32)
 		unsigned long mode = 1;
 		if (::ioctlsocket(m_sockout[i], FIONBIO, &mode)) {
 			::perror("ioctlsocket(O_NONBLOCK)");
@@ -434,7 +434,7 @@ void qmidinetUdpDevice::receive ( const QByteArray& data, int port )
 bool qmidinetUdpDevice::get_address (
 	int sock, struct in_addr *inaddr, const char *ifname )
 {
-#if !defined(WIN32)
+#if !defined(_WIN32)
 
 	struct ifreq ifr;
 	::strncpy(ifr.ifr_name, ifname, sizeof(ifr.ifr_name));
@@ -464,7 +464,7 @@ bool qmidinetUdpDevice::get_address (
 
 	return false;
 
-#endif	// !WIN32
+#endif	// !_WIN32
 }
 
 
