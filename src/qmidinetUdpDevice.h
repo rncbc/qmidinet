@@ -24,7 +24,7 @@
 
 #include <stdio.h>
 
-#if defined(_WIN32)
+#if defined(__WIN32__) || defined(_WIN32) || defined(WIN32)
 #include <winsock.h>
 #else
 #include <arpa/inet.h>
