@@ -1,7 +1,7 @@
 // qmidinetAbout.h
 //
 /****************************************************************************
-   Copyright (C) 2010-2017, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2018, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -27,8 +27,8 @@
 #define QMIDINET_TITLE        PACKAGE_NAME
 
 #define QMIDINET_SUBTITLE     "A MIDI Network Gateway via UDP/IP Multicast"
-#define QMIDINET_WEBSITE      "http://qmidinet.sourceforge.net"
-#define QMIDINET_COPYRIGHT    "Copyright (C) 2010-2017, rncbc aka Rui Nuno Capela. All rights reserved."
+#define QMIDINET_WEBSITE      "https://qmidinet.sourceforge.io"
+#define QMIDINET_COPYRIGHT    "Copyright (C) 2010-2018, rncbc aka Rui Nuno Capela. All rights reserved."
 
 #define QMIDINET_DOMAIN       "rncbc.org"
 
