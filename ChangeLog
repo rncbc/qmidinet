@@ -4,7 +4,7 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 ChangeLog
 
 
-GIT HEAD
+0.5.1  2018-05-21  Pre-LAC2018 release frenzy.
 
 - A little hardening on the configure (autoconf) macro side.
 
