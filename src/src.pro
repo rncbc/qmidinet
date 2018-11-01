@@ -67,8 +67,4 @@ unix {
 	appdata.files += appdata/$${TARGET}.appdata.xml
 }
 
-
-# QT5 support
-!lessThan(QT_MAJOR_VERSION, 5) {
-	QT += widgets
-}
+QT += widgets
