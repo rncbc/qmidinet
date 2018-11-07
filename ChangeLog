@@ -6,6 +6,8 @@ ChangeLog
 
 GIT HEAD
 
+- Old deprecated Qt4 build support is no more.
+
 - AppData/AppStream metadata is now settled under an all
   permisssive license (FSFAP); also updated to be the most
   compliant with latest freedesktop.org specification and
