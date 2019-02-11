@@ -55,6 +55,10 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv, bool bGUI )
 		m_pIcon = NULL;
 	}
 
+#if QT_VERSION >= 0x050600
+	if (bGUI) m_pApp->setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
+
 #ifdef CONFIG_ALSA_MIDI
 	QObject::connect(
 		&m_udpd, SIGNAL(received(const QByteArray&, int)),
@@ -404,9 +408,6 @@ int main ( int argc, char* argv[] )
 	}
 
 	qmidinetApplication app(argc, argv, bGUI);
-#if QT_VERSION >= 0x050600
-	if (bGUI) app.setAttribute(Qt::AA_EnableHighDpiScaling);
-#endif
 
 	qmidinetOptions opts;
 	if (!opts.parse_args(app.app()->arguments())) {
