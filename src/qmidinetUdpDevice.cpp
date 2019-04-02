@@ -32,6 +32,7 @@ typedef int socklen_t;
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
+#include <sys/select.h>
 inline void closesocket(int s) { ::close(s); }
 #endif
 
