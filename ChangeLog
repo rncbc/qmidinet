@@ -6,9 +6,19 @@ ChangeLog
 
 GIT HEAD
 
-- HiDPI display screen support (Qt >= 5.6). (EXPERIMENTAL)
+- Fix build on linux with musl (according to POSIX.1-2001,
+  POSIX.1-2008; PR#7 by Andreas Müller aka. schnitzeltony,
+  thanks).
+
+
+0.5.3  2019-03-11  Pre-LAC2019 release frenzy.
+
+- HiDPI display screen support (Qt >= 5.6).
 
 - Old deprecated Qt4 build support is no more.
+
+
+0.5.2  2018-07-22  A Summer'18 release.
 
 - AppData/AppStream metadata is now settled under an all
   permisssive license (FSFAP); also updated to be the most

@@ -1,6 +1,6 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 15
+%define release 16
 
 %define _prefix	@ac_prefix@
 
@@ -69,6 +69,8 @@ designed to be compatible with ipMIDI for Windows (http://nerds.de).
 %{_datadir}/man/man1/%{name}*.1.gz
 
 %changelog
+* Mon Mar 11 2019 Rui Nuno Capela <rncbc@rncbc.org> 0.5.3
+- Pre-LAC2019 release frenzy.
 * Sun Jul 22 2018 Rui Nuno Capela <rncbc@rncbc.org> 0.5.2
 - Summer'18 Release.
 * Mon May 21 2018 Rui Nuno Capela <rncbc@rncbc.org> 0.5.1

@@ -1,6 +1,12 @@
+qmidinet (0.5.3-16) unstable; urgency=low
+
+  * Pre-LAC2019 release frenzy.
+
+ -- Rui Nuno Capela <rncbc@rncbc.org>  Mon, 11 Mar 2019 19:00:00 +0000
+
 qmidinet (0.5.2-15) unstable; urgency=low
 
-  * Summer'15 release.
+  * Summer'18 release.
 
  -- Rui Nuno Capela <rncbc@rncbc.org>  Sun, 22 Jul 2018 20:00:00 +0100
 
