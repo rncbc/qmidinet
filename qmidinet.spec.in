@@ -69,6 +69,8 @@ designed to be compatible with ipMIDI for Windows (http://nerds.de).
 %{_datadir}/man/man1/%{name}*.1.gz
 
 %changelog
+* Thu Apr 11 2019 Rui Nuno Capela <rncbc@rncbc.org> 0.5.4
+- Spring-Break'19 release.
 * Mon Mar 11 2019 Rui Nuno Capela <rncbc@rncbc.org> 0.5.3
 - Pre-LAC2019 release frenzy.
 * Sun Jul 22 2018 Rui Nuno Capela <rncbc@rncbc.org> 0.5.2
