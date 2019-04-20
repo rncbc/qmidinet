@@ -4,6 +4,11 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 ChangeLog
 
 
+GIT HEAD
+
+- Minor update to Debian packaging control file.
+
+
 0.5.4  2019-04-11  A Spring-Break'19 Release.
 
 - Fix build on linux with musl (according to POSIX.1-2001,
