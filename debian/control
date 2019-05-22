@@ -4,12 +4,12 @@ Priority: extra
 Maintainer: Rui Nuno Capela <rncbc@rncbc.org>
 Build-Depends: debhelper (>= 5), automake, pkg-config,
   qtchooser, qtbase5-dev (>= 5.1), qtbase5-dev-tools (>= 5.1),
-  qttools5-dev-tools (>= 5.1), libasound2-dev, libjack-dev
+  qttools5-dev-tools (>= 5.1), libasound2-dev, libjack2-dev
 Standards-Version: 3.7.2
 
 Package: qmidinet
 Architecture: any
-Depends: jackd, ${shlibs:Depends}, ${misc:Depends}
+Depends: libjack2, ${shlibs:Depends}, ${misc:Depends}
 Description: A MIDI Network Gateway via UDP/IP Multicast
  A MIDI network gateway application that sends and receives MIDI data
  (ALSA Sequencer and/or JACK MIDI) over the network, using UDP/IP multicast.
