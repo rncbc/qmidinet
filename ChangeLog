@@ -4,7 +4,7 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 ChangeLog
 
 
-GIT HEAD
+0.5.5  2019-07-12  A Summer'19 Release.
 
 - Configure updated to check for qtchooser availability.
 
