@@ -1,7 +1,7 @@
 // qmidinetOptions.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010-2016, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2019, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@
 //
 
 // Singleton instance pointer.
-qmidinetOptions *qmidinetOptions::g_pOptions = NULL;
+qmidinetOptions *qmidinetOptions::g_pOptions = nullptr;
 
 // Singleton instance accessor (static).
 qmidinetOptions *qmidinetOptions::getInstance (void)
@@ -56,7 +56,7 @@ qmidinetOptions::~qmidinetOptions (void)
 	saveOptions();
 
 	// Pseudo-singleton reference shut-down.
-	g_pOptions = NULL;
+	g_pOptions = nullptr;
 }
 
 

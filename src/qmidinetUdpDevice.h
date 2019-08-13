@@ -45,7 +45,7 @@ class qmidinetUdpDevice : public QObject
 public:
 
 	// Constructor.
-	qmidinetUdpDevice(QObject *pParent = NULL);
+	qmidinetUdpDevice(QObject *pParent = nullptr);
 
 	// Destructor.
 	~qmidinetUdpDevice();

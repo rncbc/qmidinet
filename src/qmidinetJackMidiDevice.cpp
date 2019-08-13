@@ -1,7 +1,7 @@
 // qmidinetJackMidiDevice.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010-2012, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2019, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -132,7 +132,7 @@ protected:
 		pool->u.next = p;
 
 		p->size = pool->size - sizeof(Slot);
-		p->u.next = NULL;
+		p->u.next = nullptr;
 	}
 
 	Slot *pool_create ( unsigned int size )
@@ -160,8 +160,8 @@ protected:
 			p = p->u.next;
 		}
 
-		if (p == NULL)
-			return NULL;
+		if (p == nullptr)
+			return nullptr;
 
 		Slot *pnext = p->u.next;
 		unsigned int psize = p->size - size;
@@ -182,7 +182,7 @@ protected:
 
 	void pool_free ( Slot *pool, char *data )
 	{
-		if (data == NULL)
+		if (data == nullptr)
 			return;
 
 		Slot *p = pool_slot(data);
@@ -201,7 +201,7 @@ protected:
 
 	char *push_item ( jack_nframes_t time, size_t size )
 	{
-		char *item = NULL;
+		char *item = nullptr;
 
 		if (m_count < m_size) {
 			item = pool_alloc(m_pool, time, size);
@@ -216,7 +216,7 @@ protected:
 
 	char *pop_item ( jack_nframes_t *time, size_t *size )
 	{
-		char *item = NULL;
+		char *item = nullptr;
 
 		if (m_count > 0) {
 			if (m_dirty > 0) {
@@ -366,14 +366,14 @@ void qmidinetJackMidiThread::usleep ( unsigned long usecs )
 // qmidinetJackMidiDevice -- MIDI interface device (JACK).
 //
 
-qmidinetJackMidiDevice *qmidinetJackMidiDevice::g_pDevice = NULL;
+qmidinetJackMidiDevice *qmidinetJackMidiDevice::g_pDevice = nullptr;
 
 // Constructor.
 qmidinetJackMidiDevice::qmidinetJackMidiDevice ( QObject *pParent )
-	: QObject(pParent), m_pJackClient(NULL),
-		m_ppJackPortIn(NULL), m_ppJackPortOut(NULL),
-		m_pJackBufferIn(NULL), m_pJackBufferOut(NULL),
-		m_pQueueIn(NULL), m_pRecvThread(NULL)
+	: QObject(pParent), m_pJackClient(nullptr),
+		m_ppJackPortIn(nullptr), m_ppJackPortOut(nullptr),
+		m_pJackBufferIn(nullptr), m_pJackBufferOut(nullptr),
+		m_pQueueIn(nullptr), m_pRecvThread(nullptr)
 {
 	g_pDevice = this;
 }
@@ -384,7 +384,7 @@ qmidinetJackMidiDevice::~qmidinetJackMidiDevice (void)
 {
 	close();
 
-	g_pDevice = NULL;
+	g_pDevice = nullptr;
 }
 
 
@@ -404,8 +404,8 @@ bool qmidinetJackMidiDevice::open ( const QString& sClientName, int iNumPorts )
 	// Open new JACK client...
 	const QByteArray aClientName = sClientName.toLocal8Bit();
 	m_pJackClient = jack_client_open(
-		aClientName.constData(), JackNullOption, NULL);
-	if (m_pJackClient == NULL)
+		aClientName.constData(), JackNullOption, nullptr);
+	if (m_pJackClient == nullptr)
 		return false;
 
 	m_nports = iNumPorts;
@@ -417,8 +417,8 @@ bool qmidinetJackMidiDevice::open ( const QString& sClientName, int iNumPorts )
 	m_ppJackPortOut = new jack_port_t * [m_nports];
 
 	for (i = 0; i < m_nports; ++i) {
-		m_ppJackPortIn[i] = NULL;
-		m_ppJackPortOut[i] = NULL;
+		m_ppJackPortIn[i] = nullptr;
+		m_ppJackPortOut[i] = nullptr;
 	}
 
 	const QString sPortNameIn("in_%1");
@@ -468,7 +468,7 @@ void qmidinetJackMidiDevice::close (void)
 			m_pRecvThread->sync();
 		} while (!m_pRecvThread->wait(100));
 		delete m_pRecvThread;
-		m_pRecvThread = NULL;
+		m_pRecvThread = nullptr;
 	}
 
 	if (m_pJackClient)
@@ -485,28 +485,28 @@ void qmidinetJackMidiDevice::close (void)
 			delete [] m_ppJackPortIn;
 		if (m_ppJackPortOut)
 			delete [] m_ppJackPortOut;
-		m_ppJackPortIn = NULL;
-		m_ppJackPortOut = NULL;
+		m_ppJackPortIn = nullptr;
+		m_ppJackPortOut = nullptr;
 	}
 
 	if (m_pJackClient) {
 		jack_client_close(m_pJackClient);
-		m_pJackClient = NULL;
+		m_pJackClient = nullptr;
 	}
 
 	if (m_pJackBufferIn) {
 		jack_ringbuffer_free(m_pJackBufferIn);
-		m_pJackBufferIn = NULL;
+		m_pJackBufferIn = nullptr;
 	}
 
 	if (m_pJackBufferOut) {
 		jack_ringbuffer_free(m_pJackBufferOut);
-		m_pJackBufferOut = NULL;
+		m_pJackBufferOut = nullptr;
 	}
 
 	if (m_pQueueIn) {
 		delete m_pQueueIn;
-		m_pQueueIn = NULL;
+		m_pQueueIn = nullptr;
 	}
 
 	m_nports = 0;
@@ -516,7 +516,7 @@ void qmidinetJackMidiDevice::close (void)
 // MIDI events capture method.
 void qmidinetJackMidiDevice::capture (void)
 {
-	if (m_pJackBufferIn == NULL)
+	if (m_pJackBufferIn == nullptr)
 		return;
 
 	char *pchBuffer;
@@ -536,7 +536,7 @@ void qmidinetJackMidiDevice::capture (void)
 	jack_nframes_t frame_time = jack_frame_time(m_pJackClient);
 
 	while ((pchBuffer = m_pQueueIn->pop(
-			&ev.port, &ev.event.time, &ev.event.size)) != NULL) {	
+			&ev.port, &ev.event.time, &ev.event.size)) != nullptr) {	
 		ev.event.time += m_last_frame_time;
 		if (ev.event.time > frame_time) {
 			unsigned long sleep_time = ev.event.time - frame_time;
@@ -546,7 +546,7 @@ void qmidinetJackMidiDevice::capture (void)
 				struct timespec ts;
 				ts.tv_sec  = time_t(secs);
 				ts.tv_nsec = long(1E+9f * (secs - ts.tv_sec));
-				::nanosleep(&ts, NULL);
+				::nanosleep(&ts, nullptr);
 			#else
 				m_pRecvThread->usleep(long(1E+6f * secs));
 			#endif
@@ -662,7 +662,7 @@ bool qmidinetJackMidiDevice::sendData (
 	if (port < 0 || port >= m_nports)
 		return false;
 
-	if (m_pJackBufferOut == NULL)
+	if (m_pJackBufferOut == nullptr)
 		return false;
 
 	const unsigned int nlimit

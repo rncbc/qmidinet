@@ -1,7 +1,7 @@
 // qmidinetAlsaMidiDevice.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010-2016, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2019, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -91,7 +91,7 @@ void qmidinetAlsaMidiThread::run (void)
 		// Wait for events...
 		iPoll = poll(pfds, nfds, 1000);
 		while (iPoll > 0) {
-			snd_seq_event_t *pEv = NULL;
+			snd_seq_event_t *pEv = nullptr;
 			snd_seq_event_input(m_pAlsaSeq, &pEv);
 			// Process input event - ...
 			// - enqueue to input track mapping;
@@ -107,12 +107,12 @@ void qmidinetAlsaMidiThread::run (void)
 // qmidinetAlsaMidiDevice -- MIDI interface device (ALSA).
 //
 
-qmidinetAlsaMidiDevice *qmidinetAlsaMidiDevice::g_pDevice = NULL;
+qmidinetAlsaMidiDevice *qmidinetAlsaMidiDevice::g_pDevice = nullptr;
 
 // Constructor.
 qmidinetAlsaMidiDevice::qmidinetAlsaMidiDevice ( QObject *pParent )
-	: QObject(pParent), m_pAlsaSeq(NULL), m_iAlsaClient(-1), m_piAlsaPort(NULL),
-		m_ppAlsaEncoder(NULL), m_pAlsaDecoder(NULL), m_pRecvThread(NULL)
+	: QObject(pParent), m_pAlsaSeq(nullptr), m_iAlsaClient(-1), m_piAlsaPort(nullptr),
+		m_ppAlsaEncoder(nullptr), m_pAlsaDecoder(nullptr), m_pRecvThread(nullptr)
 {
 	g_pDevice = this;
 }
@@ -123,7 +123,7 @@ qmidinetAlsaMidiDevice::~qmidinetAlsaMidiDevice (void)
 {
 	close();
 
-	g_pDevice = NULL;
+	g_pDevice = nullptr;
 }
 
 
@@ -178,7 +178,7 @@ bool qmidinetAlsaMidiDevice::open ( const QString& sClientName, int iNumPorts )
 	m_ppAlsaEncoder = new snd_midi_event_t * [m_nports];
 
 	for (i = 0; i < m_nports; ++i)
-		m_ppAlsaEncoder[i] = NULL;
+		m_ppAlsaEncoder[i] = nullptr;
 
 	for (i = 0; i < m_nports; ++i) {
 		long err = snd_midi_event_new(1024, &m_ppAlsaEncoder[i]);
@@ -213,12 +213,12 @@ void qmidinetAlsaMidiDevice::close (void)
 		//	m_pRecvThread->terminate();
 		} while	(!m_pRecvThread->wait(200));
 		delete m_pRecvThread;
-		m_pRecvThread = NULL;
+		m_pRecvThread = nullptr;
 	}
 
 	if (m_pAlsaDecoder) {
 		snd_midi_event_free(m_pAlsaDecoder);
-		m_pAlsaDecoder = NULL;
+		m_pAlsaDecoder = nullptr;
 	}
 
 	if (m_ppAlsaEncoder) {
@@ -227,7 +227,7 @@ void qmidinetAlsaMidiDevice::close (void)
 				snd_midi_event_free(m_ppAlsaEncoder[i]);
 		}
 		delete [] m_ppAlsaEncoder;
-		m_ppAlsaEncoder = NULL;
+		m_ppAlsaEncoder = nullptr;
 	}
 
 	if (m_piAlsaPort) {
@@ -236,13 +236,13 @@ void qmidinetAlsaMidiDevice::close (void)
 				snd_seq_delete_simple_port(m_pAlsaSeq, m_piAlsaPort[i]);
 		}
 		delete [] m_piAlsaPort;
-		m_piAlsaPort = NULL;
+		m_piAlsaPort = nullptr;
 	}
 
 	if (m_pAlsaSeq) {
 		snd_seq_close(m_pAlsaSeq);
 		m_iAlsaClient = -1;
-		m_pAlsaSeq = NULL;
+		m_pAlsaSeq = nullptr;
 	}
 
 	m_nports = 0;
@@ -252,7 +252,7 @@ void qmidinetAlsaMidiDevice::close (void)
 // MIDI event capture method.
 void qmidinetAlsaMidiDevice::capture ( snd_seq_event_t *pEv )
 {
-	if (pEv == NULL)
+	if (pEv == nullptr)
 		return;
 
 	// Ignore some events -- these are all ALSA internal

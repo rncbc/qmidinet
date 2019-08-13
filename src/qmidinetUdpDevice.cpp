@@ -113,7 +113,7 @@ void qmidinetUdpDeviceThread::run (void)
 		tv.tv_sec  = 1;
 		tv.tv_usec = 0;
 
-		int s = ::select(fdmax + 1, &fds, NULL, NULL, &tv);
+		int s = ::select(fdmax + 1, &fds, nullptr, nullptr, &tv);
 		if (s < 0) {
 			::perror("select");
 			break;
@@ -147,12 +147,12 @@ void qmidinetUdpDeviceThread::run (void)
 // qmidinetUdpDevice -- Network interface device (UDP/IP).
 //
 
-qmidinetUdpDevice *qmidinetUdpDevice::g_pDevice = NULL;
+qmidinetUdpDevice *qmidinetUdpDevice::g_pDevice = nullptr;
 
 // Constructor.
 qmidinetUdpDevice::qmidinetUdpDevice ( QObject *pParent )
 	: QObject(pParent), m_nports(0),
-		m_sockin(NULL), m_sockout(NULL), m_addrout(NULL), m_pRecvThread(NULL)
+		m_sockin(nullptr), m_sockout(nullptr), m_addrout(nullptr), m_pRecvThread(nullptr)
 {
 #if defined(__WIN32__) || defined(_WIN32) || defined(WIN32)
 	WSAStartup(MAKEWORD(1, 1), &g_wsaData);
@@ -166,7 +166,7 @@ qmidinetUdpDevice::~qmidinetUdpDevice (void)
 {
 	close();
 
-	g_pDevice = NULL;
+	g_pDevice = nullptr;
 
 #if defined(__WIN32__) || defined(_WIN32) || defined(WIN32)
 	WSACleanup();
@@ -197,12 +197,12 @@ bool qmidinetUdpDevice::open ( const QString& sInterface,
 #endif
 
 	// Stable interface name...
-	const char *ifname = NULL;
+	const char *ifname = nullptr;
 	const QByteArray aInterface = sInterface.toLocal8Bit();
 	if (!aInterface.isEmpty())
 		ifname = aInterface.constData();
 
-	const char *udp_addr = NULL;
+	const char *udp_addr = nullptr;
 	const QByteArray aUdpAddr = sUdpAddr.toLocal8Bit();
 	if (!aUdpAddr.isEmpty())
 		udp_addr = aUdpAddr.constData();
@@ -363,7 +363,7 @@ void qmidinetUdpDevice::close (void)
 				::closesocket(m_sockin[i]);
 		}
 		delete [] m_sockin;
-		m_sockin = NULL;
+		m_sockin = nullptr;
 	}
 
 	if (m_sockout) {
@@ -372,12 +372,12 @@ void qmidinetUdpDevice::close (void)
 				::closesocket(m_sockout[i]);
 		}
 		delete [] m_sockout;
-		m_sockout = NULL;
+		m_sockout = nullptr;
 	}
 
 	if (m_addrout) {
 		delete [] m_addrout;
-		m_addrout = NULL;
+		m_addrout = nullptr;
 	}
 
 	if (m_pRecvThread) {
@@ -387,7 +387,7 @@ void qmidinetUdpDevice::close (void)
 			m_pRecvThread->wait(1200); // Timeout>1sec.
 		}
 		delete m_pRecvThread;
-		m_pRecvThread = NULL;
+		m_pRecvThread = nullptr;
 	}
 
 	m_nports = 0;
@@ -401,7 +401,7 @@ bool qmidinetUdpDevice::sendData (
 	if (port < 0 || port >= m_nports)
 		return false;
 
-	if (m_sockout == NULL)
+	if (m_sockout == nullptr)
 		return false;
 	if (m_sockout[port] < 0)
 		return false;

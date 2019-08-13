@@ -36,7 +36,7 @@
 
 // Constructor.
 qmidinetApplication::qmidinetApplication ( int& argc, char **argv, bool bGUI )
-	: QObject(NULL), m_pApp(NULL), m_pIcon(NULL)
+	: QObject(nullptr), m_pApp(nullptr), m_pIcon(nullptr)
 	#ifdef CONFIG_ALSA_MIDI	
 		, m_alsa(this)
 	#endif
@@ -52,7 +52,7 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv, bool bGUI )
 		m_pIcon = new qmidinetSystemTrayIcon(this);
 	} else {
 		m_pApp  = new QCoreApplication(argc, argv);
-		m_pIcon = NULL;
+		m_pIcon = nullptr;
 	}
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
@@ -110,7 +110,7 @@ qmidinetApplication::~qmidinetApplication (void)
 bool qmidinetApplication::setup (void)
 {
 	qmidinetOptions *pOptions = qmidinetOptions::getInstance();
-	if (pOptions == NULL)
+	if (pOptions == nullptr)
 		return false;
 
 	m_udpd.close();
@@ -282,7 +282,7 @@ void qmidinetSystemTrayIcon::show ( bool bSetup )
 // Options dialog.
 void qmidinetSystemTrayIcon::options (void)
 {
-	if (qmidinetOptionsForm(NULL).exec())
+	if (qmidinetOptionsForm(nullptr).exec())
 		reset();
 }
 
@@ -346,7 +346,7 @@ void qmidinetSystemTrayIcon::message (
 	if (QSystemTrayIcon::supportsMessages()) {
 		QSystemTrayIcon::showMessage(sTitle, sText, QSystemTrayIcon::Critical);
 	} else {
-		QMessageBox::critical(NULL, sTitle, sText);
+		QMessageBox::critical(nullptr, sTitle, sText);
 	}
 }
 
