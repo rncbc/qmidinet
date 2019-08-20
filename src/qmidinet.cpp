@@ -46,7 +46,14 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv, bool bGUI )
 		, m_udpd(this)
 {
 	if (bGUI) {
+	#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+		QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+	#endif
 		QApplication *pApp = new QApplication(argc, argv);
+	#if QT_VERSION >= QT_VERSION_CHECK(5, 1, 0)
+		pApp->setApplicationDisplayName(
+			QMIDINET_TITLE " - " + QObject::tr(QMIDINET_SUBTITLE));
+	#endif
 		pApp->setQuitOnLastWindowClosed(false);
 		m_pApp  = pApp;
 		m_pIcon = new qmidinetSystemTrayIcon(this);
@@ -55,8 +62,8 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv, bool bGUI )
 		m_pIcon = nullptr;
 	}
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
-	if (bGUI) m_pApp->setAttribute(Qt::AA_EnableHighDpiScaling);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 1, 0)
+	m_pApp->setApplicationName(QMIDINET_TITLE);
 #endif
 
 #ifdef CONFIG_ALSA_MIDI

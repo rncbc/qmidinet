@@ -6,6 +6,8 @@ ChangeLog
 
 GIT HEAD
 
+- Fix HiDPI display screen effective support (Qt >= 5.6).
+
 - Make sure compiler flags comply to c++11 as standard.
 
 
