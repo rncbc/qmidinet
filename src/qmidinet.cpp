@@ -131,7 +131,7 @@ bool qmidinetApplication::setup (void)
 #ifdef CONFIG_ALSA_MIDI
 	if (pOptions->bAlsaMidi
 		&& !m_alsa.open(QMIDINET_TITLE, pOptions->iNumPorts)) {
-		message(tr("ALSA MIDI Inferface Error - %1").arg(QMIDINET_TITLE),
+		message(tr("ALSA MIDI Inferface Error"),
 			tr("The ALSA MIDI interface could not be established.\n\n"
 			"Please, make sure you have a ALSA MIDI sub-system working "
 			"correctly and try again."));
@@ -145,7 +145,7 @@ bool qmidinetApplication::setup (void)
 	#ifdef CONFIG_ALSA_MIDI
 		m_alsa.close();
 	#endif
-		message(tr("JACK MIDI Inferface Error - %1").arg(QMIDINET_TITLE),
+		message(tr("JACK MIDI Inferface Error"),
 			tr("The JACK MIDI interface could not be established.\n\n"
 			"Please, make sure you have a JACK MIDI sub-system working "
 			"correctly and try again."));
@@ -164,7 +164,7 @@ bool qmidinetApplication::setup (void)
 	#ifdef CONFIG_JACK_MIDI
 		m_jack.close();
 	#endif
-		message(tr("Network Inferface Error - %1").arg(QMIDINET_TITLE),
+		message(tr("Network Inferface Error"),
 			tr("The network interface could not be established.\n\n"
 			"Please, make sure you have an on-line network connection "
 			"and try again."));
@@ -202,7 +202,7 @@ void qmidinetApplication::shutdown (void)
 {
 	m_jack.close();
 
-	message(tr("JACK MIDI Inferface Error - %1").arg(QMIDINET_TITLE),
+	message(tr("JACK MIDI Inferface Error"),
 		tr("The JACK MIDI interface has been shutdown.\n\n"
 		"Please, make sure you reactivate the JACK MIDI sub-system "
 		"and try again."));
@@ -339,7 +339,7 @@ void qmidinetSystemTrayIcon::about (void)
 
 	QMessageBox abox;
 	abox.setWindowIcon(QSystemTrayIcon::icon());
-	abox.setWindowTitle(tr("About %1").arg(QMIDINET_TITLE));
+	abox.setWindowTitle(tr("About"));
 	abox.setIconPixmap(QPixmap(":/images/qmidinet.png"));
 	abox.setText(sText);
 	abox.exec();
