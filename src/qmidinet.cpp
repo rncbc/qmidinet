@@ -51,8 +51,8 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv, bool bGUI )
 	#endif
 		QApplication *pApp = new QApplication(argc, argv);
 	#if QT_VERSION >= QT_VERSION_CHECK(5, 1, 0)
-		pApp->setApplicationDisplayName(
-			QMIDINET_TITLE " - " + QObject::tr(QMIDINET_SUBTITLE));
+		pApp->setApplicationDisplayName(QMIDINET_TITLE);
+		//	QMIDINET_TITLE " - " + QObject::tr(QMIDINET_SUBTITLE));
 	#endif
 		pApp->setQuitOnLastWindowClosed(false);
 		m_pApp  = pApp;
