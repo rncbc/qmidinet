@@ -81,8 +81,6 @@ qt5_use_modules (qmidinet Core Gui Widgets Network)
 if (UNIX AND NOT APPLE)
   install (TARGETS qmidinet
      RUNTIME DESTINATION bin)
-  install (FILES ${QM_FILES}
-     DESTINATION share/qmidinet/translations)
   install (FILES ${CMAKE_CURRENT_BINARY_DIR}/qmidinet.desktop
      DESTINATION share/applications)
   install (FILES images/qmidinet.png
