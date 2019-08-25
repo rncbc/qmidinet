@@ -69,12 +69,12 @@ endif ()
 qt5_use_modules (qmidinet Core Gui Widgets Network)
 
 if (UNIX AND NOT APPLE)
-  install (TARGETS qmidinet
-     RUNTIME DESTINATION bin)
+  install (TARGETS qmidinet RUNTIME
+     DESTINATION ${CMAKE_INSTALL_BINDIR})
   install (FILES ${CMAKE_CURRENT_BINARY_DIR}/qmidinet.desktop
-     DESTINATION share/applications)
+     DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
   install (FILES images/qmidinet.png
-     DESTINATION share/icons/hicolor/32x32/apps)
+     DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/32x32/apps)
   install (FILES appdata/qmidinet.appdata.xml
-     DESTINATION share/metainfo)
+     DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo)
 endif ()
