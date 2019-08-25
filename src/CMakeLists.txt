@@ -10,16 +10,6 @@ link_directories (
   ${QT_LIBRARY_DIR}
 )
 
-if (CONFIG_ALSA_MIDI)
-  include_directories (${ALSA_INCLUDE_DIRS})
-  link_directories (${ALSA_LIBRARY_DIRS})
-endif ()
-
-if (CONFIG_JACK_MIDI)
-  include_directories (${JACK_INCLUDE_DIRS})
-  link_directories (${JACK_LIBRARY_DIRS})
-endif ()
-
 configure_file (cmake_config.h ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 set (ac_prefix ${CMAKE_INSTALL_PREFIX})
@@ -84,7 +74,7 @@ if (UNIX AND NOT APPLE)
   install (FILES ${CMAKE_CURRENT_BINARY_DIR}/qmidinet.desktop
      DESTINATION share/applications)
   install (FILES images/qmidinet.png
-     DESTINATION share/pixmaps)
+     DESTINATION share/icons/hicolor/32x32/apps)
   install (FILES appdata/qmidinet.appdata.xml
      DESTINATION share/metainfo)
 endif ()
