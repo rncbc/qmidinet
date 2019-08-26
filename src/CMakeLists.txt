@@ -12,8 +12,6 @@ link_directories (
 
 configure_file (cmake_config.h ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
-set (ac_prefix ${CMAKE_INSTALL_PREFIX})
-
 configure_file (qmidinet.desktop ${CMAKE_CURRENT_BINARY_DIR}/qmidinet.desktop)
 
 set (HEADERS
@@ -54,19 +52,20 @@ add_executable (qmidinet
   ${SOURCES}
 )
 
-target_link_libraries (qmidinet
-  ${QT_LIBRARIES}
-)
+target_link_libraries (qmidinet PRIVATE Qt5::Widgets)
+
+if (CONFIG_XUNIQUE)
+  target_link_libraries (qmidinet PRIVATE Qt5::Network)
+endif ()
 
 if (CONFIG_ALSA_MIDI)
-  target_link_libraries (qmidinet ${ALSA_LIBRARIES})
+  target_link_libraries (qmidinet PRIVATE ${ALSA_LIBRARIES})
 endif ()
 
 if (CONFIG_JACK_MIDI)
-  target_link_libraries (qmidinet ${JACK_LIBRARIES})
+  target_link_libraries (qmidinet PRIVATE ${JACK_LIBRARIES})
 endif ()
 
-qt5_use_modules (qmidinet Core Gui Widgets Network)
 
 if (UNIX AND NOT APPLE)
   install (TARGETS qmidinet RUNTIME
