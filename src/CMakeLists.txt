@@ -1,3 +1,4 @@
+set(NAME qmidinet)
 
 include_directories (
   ${CMAKE_CURRENT_BINARY_DIR}
@@ -12,7 +13,7 @@ link_directories (
 
 configure_file (cmake_config.h ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
-configure_file (qmidinet.desktop ${CMAKE_CURRENT_BINARY_DIR}/qmidinet.desktop)
+configure_file (${NAME}.desktop ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.desktop)
 
 set (HEADERS
   qmidinet.h
@@ -45,35 +46,52 @@ qt5_wrap_ui (UI_SOURCES ${FORMS})
 qt5_wrap_cpp (MOC_SOURCES ${HEADERS})
 qt5_add_resources (QRC_SOURCES ${RESOURCES})
 
-add_executable (qmidinet
+add_executable (${NAME}
   ${UI_SOURCES}
   ${MOC_SOURCES}
   ${QRC_SOURCES}
   ${SOURCES}
 )
 
-target_link_libraries (qmidinet PRIVATE Qt5::Widgets)
+if (WIN32)
+  set_target_properties ($[NAME} PROPERTIES WIN32_EXECUTABLE true)
+endif ()
+
+if (APPLE)
+  set_target_properties ($[NAME} PROPERTIES MACOSX_BUNDLE true)
+endif ()
+
+target_compile_options(${NAME} PRIVATE -std=c++11)
+
+target_link_libraries (${NAME} PRIVATE Qt5::Widgets)
 
 if (CONFIG_XUNIQUE)
-  target_link_libraries (qmidinet PRIVATE Qt5::Network)
+  target_link_libraries (${NAME} PRIVATE Qt5::Network)
 endif ()
 
 if (CONFIG_ALSA_MIDI)
-  target_link_libraries (qmidinet PRIVATE ${ALSA_LIBRARIES})
+  target_link_libraries (${NAME} PRIVATE ${ALSA_LIBRARIES})
 endif ()
 
 if (CONFIG_JACK_MIDI)
-  target_link_libraries (qmidinet PRIVATE ${JACK_LIBRARIES})
+  target_link_libraries (${NAME} PRIVATE ${JACK_LIBRARIES})
 endif ()
 
 
 if (UNIX AND NOT APPLE)
-  install (TARGETS qmidinet RUNTIME
+  install (TARGETS ${NAME} RUNTIME
      DESTINATION ${CMAKE_INSTALL_BINDIR})
-  install (FILES ${CMAKE_CURRENT_BINARY_DIR}/qmidinet.desktop
+  install (FILES ${CMAKE_CURRENT_BINARY_DIR}/${NAME}.desktop
      DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
-  install (FILES images/qmidinet.png
+  install (FILES images/${NAME}.png
      DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/32x32/apps)
-  install (FILES appdata/qmidinet.appdata.xml
+  install (FILES appdata/${NAME}.appdata.xml
      DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo)
+endif ()
+
+if (WIN32)
+   install (TARGETS ${NAME} RUNTIME
+     DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+   install (FILES ${QM_FILES}
+     DESTINATION ${CMAKE_INSTALL_DATADIR}/${NAME}/translations)
 endif ()
