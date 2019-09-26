@@ -15,3 +15,9 @@ LIBS += @ac_libs@
 # Extra optimization flags
 QMAKE_CXXFLAGS += @ac_cflags@
 QMAKE_LFLAGS += @ac_ldflags@
+
+# Network support
+QNETWORK = @ac_qnetwork@
+!isEmpty(QNETWORK) {
+	QT += network
+}

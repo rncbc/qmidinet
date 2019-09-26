@@ -57,7 +57,7 @@ endif ()
 
 target_link_libraries (${NAME} PRIVATE Qt5::Widgets)
 
-if (CONFIG_XUNIQUE)
+if (CONFIG_IPV6)
   target_link_libraries (${NAME} PRIVATE Qt5::Network)
 endif ()
 

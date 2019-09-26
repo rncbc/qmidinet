@@ -60,6 +60,9 @@ option (CONFIG_ALSA_MIDI "Enable ALSA MIDI support (default=yes)" 1)
 # Enable JACK MIDI support option.
 option (CONFIG_JACK_MIDI "Enable JACK MIDI support (default=yes)" 1)
 
+# Enable Network IPv6 support option.
+option (CONFIG_IPV6 "Enable Network IPv6 support (EXPERIMENTAL) (default=no)" 0)
+
 
 # Fix for new CMAKE_REQUIRED_LIBRARIES policy.
 if (POLICY CMP0075)
@@ -68,6 +71,10 @@ endif ()
 
 # Check for Qt
 find_package (Qt5 REQUIRED COMPONENTS Core Gui Widgets Network)
+
+if (CONFIG_IPV6)
+  find_package (Qt5 REQUIRED COMPONENTS Network)
+endif ()
 
 #find_package (Qt5LinguistTools)
 
@@ -132,5 +139,7 @@ message   ("\n  ${PACKAGE_NAME} ${PACKAGE_VERSION}")
 message   ("\n  Build target . . . . . . . . . . . . . . . . . . .: ${CONFIG_BUILD_TYPE}\n")
 show_option ("  ALSA MIDI support  . . . . . . . . . . . . . . . ." CONFIG_ALSA_MIDI)
 show_option ("  JACK MIDI support  . . . . . . . . . . . . . . . ." CONFIG_JACK_MIDI)
+message     ("")
+show_option ("  Network IPv6 support (EXPERIMENTAL)  . . . . . . ." CONFIG_IPV6)
 message   ("\n  Install prefix . . . . . . . . . . . . . . . . . .: ${CMAKE_INSTALL_PREFIX}")
 message   ("\nNow type 'make', followed by 'make install' as root.\n")

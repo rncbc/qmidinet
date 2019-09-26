@@ -79,6 +79,13 @@ AC_ARG_ENABLE(jack_midi,
   [ac_jack_midi="$enableval"],
   [ac_jack_midi="yes"])
 
+# Enable Network IPv6 support option.
+AC_ARG_ENABLE(ipv6,
+  AS_HELP_STRING([--enable-ipv6], [enable Network IPv6 support (EXPERIMENTAL) (default=no)]),
+  [ac_ipv6="$enableval"],
+  [ac_ipv6="no"])
+
+
 if test "x$ac_debug" = "xyes"; then
    AC_DEFINE(CONFIG_DEBUG, 1, [Define if debugging is enabled.])
    ac_debug="debug"
@@ -327,6 +334,17 @@ else
 fi
 
 
+# Check for new IPv6 support.
+if test "x$ac_ipv6" = "xyes"; then
+   PKG_CHECK_MODULES([QT5NETWORK], [Qt5Network], [ac_qt5network="yes"], [ac_qt5network="no"])
+   if test "x$ac_qt5network" = "xyes"; then
+      AC_DEFINE(CONFIG_IPV6, 1, [Define if IPv6 support is enabled.])
+      ac_qnetwork="network"
+   fi
+fi
+AC_SUBST(ac_qnetwork)
+
+
 # Checks for header files.
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
@@ -367,6 +385,8 @@ echo "  Build target . . . . . . . . . . . . . . . . . . .: $ac_debug"
 echo
 echo "  ALSA MIDI support  . . . . . . . . . . . . . . . .: $ac_alsa_midi"
 echo "  JACK MIDI support  . . . . . . . . . . . . . . . .: $ac_jack_midi"
+echo
+echo "  Network IPv6 support (EXPERIMENTAL)  . . . . . . .: $ac_ipv6"
 echo
 echo "  Install prefix . . . . . . . . . . . . . . . . . .: $ac_prefix"
 echo

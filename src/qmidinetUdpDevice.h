@@ -22,17 +22,26 @@
 #ifndef __qmidinetUdpDevice_h
 #define __qmidinetUdpDevice_h
 
+#include "qmidinetAbout.h"
+
 #include <stdio.h>
 
+#if !defined(CONFIG_IPV6)
 #if defined(__WIN32__) || defined(_WIN32) || defined(WIN32)
 #include <winsock.h>
 #else
 #include <arpa/inet.h>
 #include <net/if.h>
 #endif
+#endif	// !CONFIG_IPV6
 
 #include <QObject>
 #include <QString>
+
+#if defined(CONFIG_IPV6)
+#include <QUdpSocket>
+#include <QHostAddress>
+#endif
 
 
 //----------------------------------------------------------------------------
@@ -74,15 +83,35 @@ public slots:
 	// Receive data slot.
 	void receive(const QByteArray& data, int port);
 
+#if defined(CONFIG_IPV6)
+protected slots:
+
+	// Process incoming datagrams.
+	void readPendingDatagrams();
+
+#else
 protected:
 
 	// Get interface address from supplied name.
 	static bool get_address(int sock, struct in_addr *iaddr, const char *ifname);
 
+#endif	// !CONFIG_IPV6
+
 private:
 
 	// Instance variables,
 	int  m_nports;
+
+#if defined(CONFIG_IPV6)
+
+	QUdpSocket **m_sockin;
+	QUdpSocket **m_sockout;
+
+	QHostAddress m_udpaddr;
+
+	int *m_udpport;
+
+#else
 
 	int *m_sockin;
 	int *m_sockout;
@@ -91,6 +120,8 @@ private:
 
 	// Network receiver thread.
 	class qmidinetUdpDeviceThread *m_pRecvThread;
+
+#endif	// !CONFIG_IPV6
 
 	// Kind-of singleton reference.
 	static qmidinetUdpDevice *g_pDevice;

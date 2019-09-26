@@ -6,6 +6,10 @@ ChangeLog
 
 GIT HEAD
 
+- Complete rewrite of all the basic network interface code,
+  while using the Qt5 framework as far as needed to support
+  IPv4 and IPv6 seamless and interchangeably. (EXPERIMENTAL)
+
 - Added alternate yet non-official CMake build option.
   (EXPERIMENTAL)
 
