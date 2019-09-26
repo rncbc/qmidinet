@@ -46,5 +46,7 @@
 /* Define if JACK MIDI support is available. */
 #cmakedefine CONFIG_JACK_MIDI @CONFIG_JACK_MIDI@
 
+/* Define if IPv6 is supported */
+#cmakedefine CONFIG_IPV6 @CONFIG_IPV6@
 
 #endif /* CONFIG_H */
