@@ -213,7 +213,7 @@ bool qmidinetUdpDevice::open ( const QString& sInterface,
 
 	// Check whether is real for udp multicast...
 	if (!m_udpaddr.isMulticast()) {
-		qWarning() << "open(hostaddr):" << sUdpAddr
+		qWarning() << "open(udpaddr):" << sUdpAddr
 			<< "not an udp multicast address";
 		return false;
 	}
@@ -252,8 +252,8 @@ bool qmidinetUdpDevice::open ( const QString& sInterface,
 				? QHostAddress::AnyIPv6
 				: QHostAddress::AnyIPv4,
 				iUdpPort + i, QUdpSocket::ShareAddress)) {
-			qWarning() << "open(sockin)" << i
-				<< "udp socket error "
+			qWarning() << "open(sockin):" << i
+				<< "udp socket error"
 				<< m_sockin[i]->error()
 				<< m_sockin[i]->errorString();
 			return false;
@@ -262,10 +262,17 @@ bool qmidinetUdpDevice::open ( const QString& sInterface,
 		m_sockin[i]->setSocketOption(
 			QAbstractSocket::MulticastLoopbackOption, 0);
 	#endif
+		bool joined = false;
 		if (iface.isValid())
-			m_sockin[i]->joinMulticastGroup(m_udpaddr, iface);
+			joined = m_sockin[i]->joinMulticastGroup(m_udpaddr, iface);
 		else
-			m_sockin[i]->joinMulticastGroup(m_udpaddr);
+			joined = m_sockin[i]->joinMulticastGroup(m_udpaddr);
+		if (!joined) {
+			qWarning() << "open(sockin):" << i
+				<< "udp socket error"
+				<< m_sockin[i]->error()
+				<< m_sockin[i]->errorString();
+		}
 		QObject::connect(m_sockin[i],
 			SIGNAL(readyRead()),
 			SLOT(readPendingDatagrams()));
@@ -547,7 +554,7 @@ bool qmidinetUdpDevice::sendData (
 
 	if (!m_sockout[port]->isValid()
 		|| m_sockout[port]->state() != QAbstractSocket::BoundState) {
-		qWarning() << "sendData:" << port
+		qWarning() << "sendData(sockout):" << port
 			<< "udp socket has invalid state"
 			<< m_sockout[port]->state();
 		return false;
@@ -555,7 +562,7 @@ bool qmidinetUdpDevice::sendData (
 
 	QByteArray datagram((const char *) data, len);
 	if (m_sockout[port]->writeDatagram(datagram, m_udpaddr, m_udpport[port]) < len) {
-		qWarning() << "sendData:" << port
+		qWarning() << "sendData(sockout):" << port
 			<< "udp socket error"
 			<< m_sockout[port]->error() << " "
 			<< m_sockout[port]->errorString();

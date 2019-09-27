@@ -81,9 +81,9 @@ AC_ARG_ENABLE(jack_midi,
 
 # Enable Network IPv6 support option.
 AC_ARG_ENABLE(ipv6,
-  AS_HELP_STRING([--enable-ipv6], [enable Network IPv6 support (EXPERIMENTAL) (default=no)]),
+  AS_HELP_STRING([--enable-ipv6], [enable Network IPv6 support (EXPERIMENTAL) (default=yes)]),
   [ac_ipv6="$enableval"],
-  [ac_ipv6="no"])
+  [ac_ipv6="yes"])
 
 
 if test "x$ac_debug" = "xyes"; then

@@ -61,7 +61,7 @@ option (CONFIG_ALSA_MIDI "Enable ALSA MIDI support (default=yes)" 1)
 option (CONFIG_JACK_MIDI "Enable JACK MIDI support (default=yes)" 1)
 
 # Enable Network IPv6 support option.
-option (CONFIG_IPV6 "Enable Network IPv6 support (EXPERIMENTAL) (default=no)" 0)
+option (CONFIG_IPV6 "Enable Network IPv6 support (EXPERIMENTAL) (default=yes)" 1)
 
 
 # Fix for new CMAKE_REQUIRED_LIBRARIES policy.
