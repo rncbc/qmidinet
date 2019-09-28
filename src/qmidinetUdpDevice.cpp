@@ -210,14 +210,14 @@ bool qmidinetUdpDevice::open ( const QString& sInterface,
 
 	// Setup host address for udp multicast...
 	m_udpaddr.setAddress(sUdpAddr);
-
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
 	// Check whether is real for udp multicast...
 	if (!m_udpaddr.isMulticast()) {
 		qWarning() << "open(udpaddr):" << sUdpAddr
 			<< "not an udp multicast address";
 		return false;
 	}
-
+#endif
 	// Check whether protocol is IPv4 or IPv6...
 	const bool ipv6_protocol
 		= (m_udpaddr.protocol() != QAbstractSocket::IPv4Protocol);
