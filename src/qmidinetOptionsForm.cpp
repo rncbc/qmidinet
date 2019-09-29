@@ -25,7 +25,7 @@
 #include "qmidinetOptions.h"
 
 #include <QMessageBox>
-
+#include <QNetworkInterface>
 
 //----------------------------------------------------------------------------
 // qmidinetOptionsForm -- UI wrapper form.
@@ -38,12 +38,20 @@ qmidinetOptionsForm::qmidinetOptionsForm (
 	// Setup UI struct...
 	m_ui.setupUi(this);
 
-	// Initialize the dialog widgets with deafult settings...
+	// Initialize the dialog widgets with default settings...
 	m_sDefInterface = tr("(Any)");
 	m_ui.InterfaceComboBox->clear();
 	m_ui.InterfaceComboBox->addItem(m_sDefInterface);
-	m_ui.InterfaceComboBox->addItem("wlan0");
-	m_ui.InterfaceComboBox->addItem("eth0");
+	for( const QNetworkInterface& iface : QNetworkInterface::allInterfaces() ) {
+		if ( iface.isValid() &&
+			 iface.flags().testFlag(QNetworkInterface::CanMulticast) &&
+			 iface.flags().testFlag(QNetworkInterface::IsUp) &&
+			 iface.flags().testFlag(QNetworkInterface::IsRunning) &&
+			 !iface.flags().testFlag(QNetworkInterface::IsLoopBack) ) {
+			qDebug() << iface.name() << "->" << iface.humanReadableName();
+			m_ui.InterfaceComboBox->addItem(iface.name());
+		}
+	}
 
 	m_ui.UdpAddrComboBox->clear();
 	m_ui.UdpAddrComboBox->addItem(QMIDINET_UDP_ADDR);
