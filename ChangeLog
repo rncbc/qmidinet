@@ -6,6 +6,10 @@ ChangeLog
 
 GIT HEAD
 
+- Populate automatically the network interface combo-box
+  with detected interface names (after merge request by
+  plcl aka. Pedro López-Cabanillas, thanks). (EXPERIMENTAL)
+
 - Complete rewrite of all the basic network interface code,
   while using the Qt5 framework as far as needed to support
   IPv4 and IPv6 seamless and interchangeably. (EXPERIMENTAL)

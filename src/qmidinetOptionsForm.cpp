@@ -25,7 +25,11 @@
 #include "qmidinetOptions.h"
 
 #include <QMessageBox>
+
+#if defined(CONFIG_IPV6)
 #include <QNetworkInterface>
+#endif
+
 
 //----------------------------------------------------------------------------
 // qmidinetOptionsForm -- UI wrapper form.
@@ -42,16 +46,20 @@ qmidinetOptionsForm::qmidinetOptionsForm (
 	m_sDefInterface = tr("(Any)");
 	m_ui.InterfaceComboBox->clear();
 	m_ui.InterfaceComboBox->addItem(m_sDefInterface);
-	for( const QNetworkInterface& iface : QNetworkInterface::allInterfaces() ) {
-		if ( iface.isValid() &&
-			 iface.flags().testFlag(QNetworkInterface::CanMulticast) &&
-			 iface.flags().testFlag(QNetworkInterface::IsUp) &&
-			 iface.flags().testFlag(QNetworkInterface::IsRunning) &&
-			 !iface.flags().testFlag(QNetworkInterface::IsLoopBack) ) {
-			qDebug() << iface.name() << "->" << iface.humanReadableName();
+#if defined(CONFIG_IPV6)
+	foreach (const QNetworkInterface& iface, QNetworkInterface::allInterfaces()) {
+		if (iface.isValid() &&
+			iface.flags().testFlag(QNetworkInterface::CanMulticast) &&
+			iface.flags().testFlag(QNetworkInterface::IsUp) &&
+			iface.flags().testFlag(QNetworkInterface::IsRunning) &&
+			!iface.flags().testFlag(QNetworkInterface::IsLoopBack)) {
 			m_ui.InterfaceComboBox->addItem(iface.name());
 		}
 	}
+#else
+	m_ui.InterfaceComboBox->addItem("wlan0");
+	m_ui.InterfaceComboBox->addItem("eth0");
+#endif
 
 	m_ui.UdpAddrComboBox->clear();
 	m_ui.UdpAddrComboBox->addItem(QMIDINET_UDP_ADDR);
