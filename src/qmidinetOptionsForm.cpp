@@ -62,8 +62,10 @@ qmidinetOptionsForm::qmidinetOptionsForm (
 #endif
 
 	m_ui.UdpAddrComboBox->clear();
-	m_ui.UdpAddrComboBox->addItem(QMIDINET_UDP_ADDR);
-
+	m_ui.UdpAddrComboBox->addItem(QMIDINET_UDP_IPV4_ADDR);
+#if defined(CONFIG_IPV6)
+	m_ui.UdpAddrComboBox->addItem(QMIDINET_UDP_IPV6_ADDR);
+#endif
 	m_ui.UdpPortSpinBox->setValue(QMIDINET_UDP_PORT);
 
 	// Populate dialog widgets with current settings...
@@ -77,6 +79,7 @@ qmidinetOptionsForm::qmidinetOptionsForm (
 			m_ui.UdpAddrComboBox->setCurrentIndex(0);
 		else
 			m_ui.UdpAddrComboBox->setEditText(pOptions->sUdpAddr);
+		comboAddressTextChanged(m_ui.UdpAddrComboBox->currentText());
 		m_ui.UdpPortSpinBox->setValue(pOptions->iUdpPort);
 		m_ui.NumPortsSpinBox->setValue(pOptions->iNumPorts);
 		m_ui.AlsaMidiCheckBox->setChecked(pOptions->bAlsaMidi);
@@ -124,6 +127,9 @@ qmidinetOptionsForm::qmidinetOptionsForm (
 	QObject::connect(m_ui.DialogButtonBox,
 		SIGNAL(clicked(QAbstractButton *)),
 		SLOT(buttonClick(QAbstractButton *)));
+	QObject::connect(m_ui.UdpAddrComboBox,
+		SIGNAL(editTextChanged(const QString&)),
+		SLOT(comboAddressTextChanged(const QString&)));
 }
 
 
@@ -201,5 +207,28 @@ void qmidinetOptionsForm::buttonClick ( QAbstractButton *pButton )
 	}
 }
 
+void qmidinetOptionsForm::comboAddressTextChanged(const QString &text)
+{
+#if defined(CONFIG_IPV6)
+	QHostAddress addr;
+	if(addr.setAddress(text) && addr.isMulticast()) {
+		switch(addr.protocol()) {
+		case QAbstractSocket::IPv4Protocol:
+			m_ui.ProtocolLineEdit->setText("IPv4");
+			break;
+		case QAbstractSocket::IPv6Protocol:
+			m_ui.ProtocolLineEdit->setText("IPv6");
+			break;
+		default:
+			m_ui.ProtocolLineEdit->setText(tr("Invalid address"));
+			break;
+		}
+	} else {
+		m_ui.ProtocolLineEdit->setText(tr("Invalid address"));
+	}
+#else
+	m_ui.ProtocolLineEdit->setText("IPv4");
+#endif
+}
 
 // end of qmidinetOptionsForm.cpp

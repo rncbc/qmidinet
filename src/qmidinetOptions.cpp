@@ -76,7 +76,7 @@ void qmidinetOptions::loadOptions (void)
 	// Network specific options...
 	m_settings.beginGroup("/Network");
 	sInterface = m_settings.value("/Interface").toString();
-	sUdpAddr = m_settings.value("/UdpAddr", QMIDINET_UDP_ADDR).toString();
+	sUdpAddr = m_settings.value("/UdpAddr", QMIDINET_UDP_IPV4_ADDR).toString();
 	iUdpPort = m_settings.value("/UdpPort", QMIDINET_UDP_PORT).toInt();
 	m_settings.endGroup();
 

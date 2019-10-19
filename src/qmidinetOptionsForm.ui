@@ -183,48 +183,6 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
-         <widget class="QComboBox" name="InterfaceComboBox">
-          <property name="font">
-           <font>
-            <weight>50</weight>
-            <bold>false</bold>
-           </font>
-          </property>
-          <property name="editable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <spacer>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>8</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="UdpAddrTextLabel">
-          <property name="font">
-           <font>
-            <weight>50</weight>
-            <bold>false</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>&amp;UDP Address:</string>
-          </property>
-          <property name="buddy">
-           <cstring>UdpAddrComboBox</cstring>
-          </property>
-         </widget>
-        </item>
         <item row="1" column="1" colspan="2">
          <widget class="QComboBox" name="UdpAddrComboBox">
           <property name="font">
@@ -235,22 +193,6 @@
           </property>
           <property name="editable">
            <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="UdpPortTextLabel">
-          <property name="font">
-           <font>
-            <weight>50</weight>
-            <bold>false</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>UDP &amp;Port:</string>
-          </property>
-          <property name="buddy">
-           <cstring>UdpPortSpinBox</cstring>
           </property>
          </widget>
         </item>
@@ -270,6 +212,51 @@
           </property>
          </widget>
         </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="UdpAddrTextLabel">
+          <property name="font">
+           <font>
+            <weight>50</weight>
+            <bold>false</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>&amp;UDP Address:</string>
+          </property>
+          <property name="buddy">
+           <cstring>UdpAddrComboBox</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <spacer>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>8</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="UdpPortTextLabel">
+          <property name="font">
+           <font>
+            <weight>50</weight>
+            <bold>false</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>UDP &amp;Port:</string>
+          </property>
+          <property name="buddy">
+           <cstring>UdpPortSpinBox</cstring>
+          </property>
+         </widget>
+        </item>
         <item row="2" column="2">
          <spacer>
           <property name="orientation">
@@ -282,6 +269,48 @@
            </size>
           </property>
          </spacer>
+        </item>
+        <item row="0" column="1">
+         <widget class="QComboBox" name="InterfaceComboBox">
+          <property name="font">
+           <font>
+            <weight>50</weight>
+            <bold>false</bold>
+           </font>
+          </property>
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="ProtocolTextLabel">
+          <property name="font">
+           <font>
+            <weight>50</weight>
+            <bold>false</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Protocol:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1" colspan="2">
+         <widget class="QLineEdit" name="ProtocolLineEdit">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="font">
+           <font>
+            <weight>50</weight>
+            <bold>false</bold>
+           </font>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
