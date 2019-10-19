@@ -107,6 +107,7 @@ AC_ARG_WITH(qt,
 
 if test "x$ac_qt_path" != "xno"; then
    ac_path="$ac_qt_path/bin:$ac_path"
+   PKG_CONFIG_PATH="$ac_qt_path/lib/pkgconfig:${PKG_CONFIG_PATH}"
 fi
 
 # Set for alternate ALSA installation dir.
