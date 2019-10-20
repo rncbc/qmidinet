@@ -24,13 +24,11 @@
 
 #include <QSettings>
 #include <QStringList>
-#include "config.h"
 
 // Some hard-coded default options....
 #define QMIDINET_UDP_IPV4_ADDR "225.0.0.37"
-#if defined(CONFIG_IPV6)
 #define QMIDINET_UDP_IPV6_ADDR "ff12::37"
-#endif
+
 #define QMIDINET_UDP_PORT  21928
 
 

@@ -46,8 +46,6 @@ protected slots:
 
 	void buttonClick(QAbstractButton *);
 
-	void comboAddressTextChanged(const QString &text);
-
 private:
 
 	// The Qt-designer UI struct...
