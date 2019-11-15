@@ -6,6 +6,9 @@ ChangeLog
 
 GIT HEAD
 
+- Second attempt to fix the yet non-official though
+  CMake build configuration. (EXPERIMENTAL)
+
 - Provide a default IPv6 address, and feedback to the user
   in the options dialog (after a merge request by plcl aka.
   Pedro López-Cabanillas, thanks). (EXPERIMENTAL)
