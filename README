@@ -3,21 +3,21 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 
 QmidiNet is a MIDI network gateway application that sends and receives
 MIDI data (ALSA Sequencer [2] and/or JACK MIDI [3]) over the network, using
-UDP/IP multicast. Inspired by multimidicast (http://llg.cubic.org/tools)
-and designed to be compatible with ipMIDI for Windows (http://nerds.de).
+UDP/IP multicast. Inspired by multimidicast (https://llg.cubic.org/tools)
+and designed to be compatible with ipMIDI for Windows (https://nerds.de).
 
 Website:
 
-  http://qmidinet.sourceforge.net
   https://qmidinet.sourceforge.io
+  http://qmidinet.sourceforge.net
 
 Project page:
 
-  http://sourceforge.net/projects/qmidinet
+  https://sourceforge.net/projects/qmidinet
 
 Weblog:
 
-  http://www.rncbc.org
+  https://www.rncbc.org
 
 QmidiNet is free, open-source software, distributed under the terms of
 the GNU General Public License (GPL) [4] version 2 or later.
@@ -32,15 +32,15 @@ The software requirements for build and runtime are listed as follows:
 
   [1] Qt framework, C++ class library and tools for
         cross-platform application and UI development
-        http://qt.io/
+        https://qt.io/
 
   [2] ALSA, Advanced Linux Sound Architecture
-        http://www.alsa-project.org/
+        https://www.alsa-project.org/
 
   Optional (opted-in at build time):
 
   [3] JACK Audio Connection Kit
-        http://jackaudio.org/
+        https://jackaudio.org/
 
   
 Installation
@@ -93,10 +93,10 @@ Support
 QmidiNet is open source free software. For bug reports, feature requests,
 discussion forums, mailling lists, or any other matter related to the
 development of this piece of software, please use the Sourceforge
-project page (http://sourceforge.net/projects/qmidinet).
+project page (https://sourceforge.net/projects/qmidinet).
 
 You can also find timely and closer contact information on my personal
-web site (http://www.rncbc.org).
+web site (https://www.rncbc.org).
 
 
 References
@@ -104,20 +104,20 @@ References
 
 [1] Qt framework, C++ class library and tools for
      cross-platform application and UI development
-     http://qt.io/
+     https://qt.io/
 
 [2] ALSA, Advanced Linux Sound Architecture
-     http://www.alsa-project.org/
+     https://www.alsa-project.org/
 
 [3] JACK Audio Connection Kit
-     http://jackaudio.org/
+     https://jackaudio.org/
 
 [4] GNU General Public License
-     http://www.gnu.org/copyleft/gpl.html
+     https://www.gnu.org/copyleft/gpl.html
 
 
 Enjoy.
 
 rncbc aka Rui Nuno Capela
 rncbc at rncbc dot org
-http://www.rncbc.org
+https://www.rncbc.org
