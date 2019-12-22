@@ -4,18 +4,18 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 ChangeLog
 
 
-GIT HEAD
+0.6.1  2019-12-22  The Winter'19 Release.
 
 - Second attempt to fix the yet non-official though
-  CMake build configuration. (EXPERIMENTAL)
+  CMake build configuration.
 
 - Provide a default IPv6 address, and feedback to the user
   in the options dialog (after a merge request by plcl aka.
-  Pedro López-Cabanillas, thanks). (EXPERIMENTAL)
+  Pedro López-Cabanillas, thanks).
 
 - When using ./configure --with-qt=... it is also necessary
   to adjust the PKG_CONFIG_PATH environment variable (also
-  by plcl aka. Pedro López-Cabanillas). (EXPERIMENTAL)
+  by plcl aka. Pedro López-Cabanillas).
 
 
 0.6.0  2019-10-17  An Autumn'19 Release.
