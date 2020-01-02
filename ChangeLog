@@ -4,6 +4,11 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 ChangeLog
 
 
+GIT HEAD
+
+- Bumped copyright headers into the New Year (2020).
+
+
 0.6.1  2019-12-22  The Winter'19 Release.
 
 - Second attempt to fix the yet non-official though
