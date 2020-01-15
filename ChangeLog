@@ -6,6 +6,9 @@ ChangeLog
 
 GIT HEAD
 
+- Make man page compression reproducible (after request
+  by Jelle van der Waa, while on the Vee-Ones, thanks).
+
 - Bumped copyright headers into the New Year (2020).
 
 
