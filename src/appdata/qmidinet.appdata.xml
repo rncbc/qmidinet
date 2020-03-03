@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2010-2015 Rui Nuno Capela <rncbc@rncbc.org> -->
+<!-- Copyright 2010-2020 Rui Nuno Capela <rncbc@rncbc.org> -->
 <component type="desktop">
  <id>org.rncbc.qmidinet</id>
  <metadata_license>FSFAP</metadata_license>
@@ -18,7 +18,7 @@
 ​ </provides>
  <screenshots>
   <screenshot type="default">
-   <image>http://qmidinet.sourceforge.net/image/qmidinet.png</image>
+   <image>https://qmidinet.sourceforge.io/image/qmidinet.png</image>
    <caption>The system tray icon showing the application in action</caption>
   </screenshot>
  </screenshots>
