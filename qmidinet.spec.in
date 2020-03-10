@@ -1,7 +1,7 @@
 #
 # spec file for package qmidinet
 #
-# Copyright (C) 2010-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+# Copyright (C) 2010-2020, rncbc aka Rui Nuno Capela. All rights reserved.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -75,12 +75,15 @@ designed to be compatible with ipMIDI for Windows (http://nerds.de).
 %dir %{_datadir}/icons/hicolor
 %dir %{_datadir}/icons/hicolor/32x32
 %dir %{_datadir}/icons/hicolor/32x32/apps
+%dir %{_datadir}/icons/hicolor/scalable
+%dir %{_datadir}/icons/hicolor/scalable/apps
 %dir %{_datadir}/metainfo
 #dir %{_datadir}/man
 #dir %{_datadir}/man/man1
 %{_bindir}/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/32x32/apps/%{name}.png
+%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 %{_datadir}/metainfo/%{name}.appdata.xml
 %{_datadir}/man/man1/%{name}*.1.gz
 

@@ -53,7 +53,7 @@ unix {
 	#DEFINES += DATADIR=\"$${DATADIR}\"
 
 	# make install
-	INSTALLS += target desktop icon appdata
+	INSTALLS += target desktop icon icon_scalable appdata
 
 	target.path = $${BINDIR}
 
@@ -61,7 +61,10 @@ unix {
 	desktop.files += $${TARGET}.desktop
 
 	icon.path = $${DATADIR}/icons/hicolor/32x32/apps
-	icon.files += images/$${TARGET}.png 
+	icon.files += images/$${TARGET}.png
+
+	icon_scalable.path = $${DATADIR}/icons/hicolor/scalable/apps
+	icon_scalable.files += images/$${TARGET}.svg
 
 	appdata.path = $${DATADIR}/metainfo
 	appdata.files += appdata/$${TARGET}.appdata.xml
