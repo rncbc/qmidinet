@@ -4,6 +4,11 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 ChangeLog
 
 
+GIT HEAD
+
+- Early fixing to build for Qt >= 5.15.0.
+
+
 0.6.2  2020-03-24  A Spring'20 Release.
 
 - A scalable (.svg) icon version has been added.

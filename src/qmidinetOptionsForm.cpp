@@ -1,7 +1,7 @@
 // qmidinetOptionsForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2020, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -35,9 +35,8 @@
 // qmidinetOptionsForm -- UI wrapper form.
 
 // Constructor.
-qmidinetOptionsForm::qmidinetOptionsForm (
-	QWidget *pParent, Qt::WindowFlags wflags )
-	: QDialog(pParent, wflags)
+qmidinetOptionsForm::qmidinetOptionsForm ( QWidget *pParent )
+	: QDialog(pParent)
 {
 	// Setup UI struct...
 	m_ui.setupUi(this);
