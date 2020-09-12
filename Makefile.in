@@ -50,12 +50,16 @@ $(name).mak:	$(name).pro
 install:	$(target) $(name).1
 	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name).mak install
 	@install -d -v -m 0755 $(DESTDIR)$(mandir)/man1
-	@install -v -m 0644 $(name)*.1 $(DESTDIR)$(mandir)/man1
-	@gzip -nvf $(DESTDIR)$(mandir)/man1/$(name)*.1
+	@install -v -m 0644 $(name).1 $(DESTDIR)$(mandir)/man1/$(name).1
+	@gzip -nvf $(DESTDIR)$(mandir)/man1/$(name).1
+	@install -d -v -m 0755 $(DESTDIR)$(mandir)/fr/man1
+	@install -v -m 0644 $(name).fr.1 $(DESTDIR)$(mandir)/fr/man1/$(name).1
+	@gzip -nvf $(DESTDIR)$(mandir)/fr/man1/$(name).1
 
 uninstall:	$(DESTDIR)$(prefix)/bin/$(name)
 	@$(MAKE) INSTALL_ROOT=$(DESTDIR) -f $(name).mak uninstall
-	@rm -vf $(DESTDIR)$(mandir)/man1/$(name)*.1.gz
+	@rm -vf $(DESTDIR)$(mandir)/man1/$(name).1.gz
+	@rm -vf $(DESTDIR)$(mandir)/fr/man1/$(name).1.gz
 
 
 clean:	$(name).mak
