@@ -14,8 +14,8 @@
  </description>
  <launchable type="desktop-id">qmidinet.desktop</launchable>
  <provides>
-​  <binary>qmidinet</binary>
-​ </provides>
+  <binary>qmidinet</binary>
+ </provides>
  <screenshots>
   <screenshot type="default">
    <image>https://qmidinet.sourceforge.io/image/qmidinet.png</image>
