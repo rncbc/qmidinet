@@ -1,4 +1,4 @@
-project(QMIDINET)
+project(qmidinet)
 
 cmake_minimum_required(VERSION 3.1)
 
