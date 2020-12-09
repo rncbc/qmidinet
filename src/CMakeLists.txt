@@ -34,9 +34,9 @@ set (RESOURCES
   qmidinet.qrc
 )
 
-qt5_wrap_ui (UI_SOURCES ${FORMS})
-qt5_wrap_cpp (MOC_SOURCES ${HEADERS})
-qt5_add_resources (QRC_SOURCES ${RESOURCES})
+qt_wrap_ui (UI_SOURCES ${FORMS})
+qt_wrap_cpp (MOC_SOURCES ${HEADERS})
+qt_add_resources (QRC_SOURCES ${RESOURCES})
 
 add_executable (${PROJECT_NAME}
   ${UI_SOURCES}
@@ -55,10 +55,10 @@ if (APPLE)
   set_target_properties (${PROJECT_NAME} PROPERTIES MACOSX_BUNDLE true)
 endif ()
 
-target_link_libraries (${PROJECT_NAME} PRIVATE Qt5::Widgets)
+target_link_libraries (${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
 if (CONFIG_IPV6)
-  target_link_libraries (${PROJECT_NAME} PRIVATE Qt5::Network)
+  target_link_libraries (${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Network)
 endif ()
 
 if (CONFIG_ALSA_MIDI)
