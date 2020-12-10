@@ -70,20 +70,20 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv, bool bGUI )
 
 #ifdef CONFIG_ALSA_MIDI
 	QObject::connect(
-		&m_udpd, SIGNAL(received(const QByteArray&, int)),
-		&m_alsa, SLOT(receive(const QByteArray&, int)));
+		&m_udpd, SIGNAL(received(QByteArray, int)),
+		&m_alsa, SLOT(receive(QByteArray, int)));
 	QObject::connect(
-		&m_alsa, SIGNAL(received(const QByteArray&, int)),
-		&m_udpd, SLOT(receive(const QByteArray&, int)));
+		&m_alsa, SIGNAL(received(QByteArray, int)),
+		&m_udpd, SLOT(receive(QByteArray, int)));
 #endif
 
 #ifdef CONFIG_JACK_MIDI
 	QObject::connect(
-		&m_udpd, SIGNAL(received(const QByteArray&, int)),
-		&m_jack, SLOT(receive(const QByteArray&, int)));
+		&m_udpd, SIGNAL(received(QByteArray, int)),
+		&m_jack, SLOT(receive(QByteArray, int)));
 	QObject::connect(
-		&m_jack, SIGNAL(received(const QByteArray&, int)),
-		&m_udpd, SLOT(receive(const QByteArray&, int)));
+		&m_jack, SIGNAL(received(QByteArray, int)),
+		&m_udpd, SLOT(receive(QByteArray, int)));
 	QObject::connect(&m_jack,
 		SIGNAL(shutdown()),
 		SLOT(shutdown()));
@@ -91,16 +91,16 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv, bool bGUI )
 
 	if (m_pIcon) {
 		QObject::connect(
-			&m_udpd, SIGNAL(received(const QByteArray&, int)),
+			&m_udpd, SIGNAL(received(QByteArray, int)),
 			m_pIcon, SLOT(receiving()));
 	#ifdef CONFIG_ALSA_MIDI
 		QObject::connect(
-			&m_alsa, SIGNAL(received(const QByteArray&, int)),
+			&m_alsa, SIGNAL(received(QByteArray, int)),
 			m_pIcon, SLOT(sending()));
 	#endif
 	#ifdef CONFIG_JACK_MIDI
 		QObject::connect(
-			&m_jack, SIGNAL(received(const QByteArray&, int)),
+			&m_jack, SIGNAL(received(QByteArray, int)),
 			m_pIcon, SLOT(sending()));
 	#endif
 	}

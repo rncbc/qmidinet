@@ -378,7 +378,7 @@ void qmidinetAlsaMidiDevice::recvData (
 
 
 // Receive data slot.
-void qmidinetAlsaMidiDevice::receive ( const QByteArray& data, int port )
+void qmidinetAlsaMidiDevice::receive ( QByteArray data, int port )
 {
 	sendData((unsigned char *) data.constData(), data.length(), port);
 }

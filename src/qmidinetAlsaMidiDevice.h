@@ -69,12 +69,12 @@ public:
 signals:
 
 	// Received data signal.
-	void received(const QByteArray& data, int port);
+	void received(QByteArray data, int port);
 
 public slots:
 
 	// Receive data slot.
-	void receive(const QByteArray& data, int port);
+	void receive(QByteArray data, int port);
 
 private:
 

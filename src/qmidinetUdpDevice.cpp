@@ -598,7 +598,7 @@ void qmidinetUdpDevice::recvData (
 
 
 // Receive data slot.
-void qmidinetUdpDevice::receive ( const QByteArray& data, int port )
+void qmidinetUdpDevice::receive ( QByteArray data, int port )
 {
 	sendData((unsigned char *) data.constData(), data.length(), port);
 }

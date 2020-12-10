@@ -701,7 +701,7 @@ void qmidinetJackMidiDevice::recvData (
 
 
 // Receive data slot.
-void qmidinetJackMidiDevice::receive ( const QByteArray& data, int port )
+void qmidinetJackMidiDevice::receive ( QByteArray data, int port )
 {
 	sendData((unsigned char *) data.constData(), data.length(), port);
 }
