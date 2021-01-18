@@ -1,6 +1,6 @@
-project(qmidinet)
+cmake_minimum_required(VERSION 3.10)
 
-cmake_minimum_required(VERSION 3.1)
+project(qmidinet)
 
 set (VERSION "0.9.1")
 
@@ -95,7 +95,7 @@ find_package (PkgConfig REQUIRED)
 
 # Check for ALSA libraries.
 if (CONFIG_ALSA_MIDI)
-  pkg_check_modules (ALSA alsa)
+  pkg_check_modules (ALSA IMPORTED_TARGET alsa)
   if (ALSA_FOUND)
     include_directories (${ALSA_INCLUDE_DIRS})
     link_directories (${ALSA_LIBRARY_DIRS})
@@ -109,7 +109,7 @@ endif ()
 
 # Check for JACK libraries.
 if (CONFIG_JACK_MIDI)
-  pkg_check_modules (JACK jack>=0.100.0)
+  pkg_check_modules (JACK IMPORTED_TARGET jack>=0.100.0)
   if (JACK_FOUND)
     include_directories (${JACK_INCLUDE_DIRS})
     link_directories (${JACK_LIBRARY_DIRS})

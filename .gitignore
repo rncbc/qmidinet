@@ -10,10 +10,10 @@ configure
 *.o
 *.so
 *.pro.user
-*.txt.user
 *.qmake.stash
 qrc_*.cpp
 .moc
 .obj
 .ui
 qmidinet
+build/
