@@ -17,7 +17,7 @@
 
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 24
+%define release 25
 
 %define _prefix	@ac_prefix@
 
@@ -91,6 +91,8 @@ designed to be compatible with ipMIDI for Windows (http://nerds.de).
 %{_datadir}/man/fr/man1/%{name}.1.gz
 
 %changelog
+* Sat Feb  7 2021 Rui Nuno Capela <rncbc@rncbc.org> 0.9.1
+- Winter'21 release.
 * Thu Dec 17 2020 Rui Nuno Capela <rncbc@rncbc.org> 0.9.0
 - Winter'20 release.
 * Fri Jul 31 2020 Rui Nuno Capela <rncbc@rncbc.org> 0.6.3
