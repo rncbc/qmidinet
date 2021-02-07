@@ -155,8 +155,8 @@ ChangeLog
 
 - Added application description as freedesktop.org's AppData.
 
-- Previously hard-coded UDP/IP multicast address (225.0.0.37) is
-  now an user configurable option.
+- Previously hard-coded UDP/IP multicast address (225.0.0.37)
+  is now an user configurable option.
 
 
 0.2.0  2014-06-19  Headless finally.
