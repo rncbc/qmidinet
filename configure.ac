@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(QmidiNet, 0.9.2, rncbc@rncbc.org, qmidinet)
+AC_INIT(QmidiNet, 0.9.3, rncbc@rncbc.org, qmidinet)
 
 AC_CONFIG_SRCDIR(src/qmidinet.cpp)
 AC_CONFIG_HEADERS(src/config.h)
