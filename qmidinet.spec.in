@@ -60,11 +60,10 @@ multicast. Inspired by multimidicast (http://llg.cubic.org/tools) and
 designed to be compatible with ipMIDI for Windows (http://nerds.de).
 
 %prep
-%setup
-[ -x ./autogen.sh ] && ./autogen.sh
+%setup -q
 
 %build
-%configure
+cmake -DCMAKE_INSTALL_PREFIX=%{_prefix}
 %__make %{?_smp_mflags}
 
 %install
