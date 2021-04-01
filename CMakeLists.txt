@@ -69,14 +69,24 @@ option (CONFIG_JACK_MIDI "Enable JACK MIDI support (default=yes)" 1)
 option (CONFIG_IPV6 "Enable Network IPv6 support (EXPERIMENTAL) (default=yes)" 1)
 
 
+# Enable Qt6 build preference.
+option (CONFIG_QT6 "Enable Qt6 build (default=no)" 0)
+
+
 # Fix for new CMAKE_REQUIRED_LIBRARIES policy.
 if (POLICY CMP0075)
   cmake_policy (SET CMP0075 NEW)
 endif ()
 
 # Check for Qt...
-find_package (Qt6 QUIET)
-if (Qt6_FOUND)
+if (CONFIG_QT6)
+  find_package (Qt6 QUIET)
+  if (NOT Qt6_FOUND)
+    set (CONFIG_QT6 0)
+  endif ()
+endif ()
+
+if (CONFIG_QT6)
   find_package (QT QUIET NAMES Qt6)
 else ()
   find_package (QT QUIET NAMES Qt5)
