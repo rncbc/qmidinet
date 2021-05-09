@@ -4,9 +4,9 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 ChangeLog
 
 
-GIT HEAD
+0.9.3  2021-05-11  A Spring'21 Release.
 
-- All packaging builds switching to CMake. (EXPERIMENTAL)
+- All packaging builds switching to CMake.
 
 
 0.9.2  2021-03-14  An End-of-Winter'21 Release.
