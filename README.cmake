@@ -22,7 +22,7 @@ Linux and other systems at:
 How to use it?
 ==============
 
-1. You need CMake 3.10 or newer to build QmidiNet
+1. You need CMake 3.13 or newer to build QmidiNet
 
 2. Unpack the QmidiNet sources somewhere, or checkout the repository, 
    and create a build directory. For instance, using a command line shell:

@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.13)
 
 project(qmidinet
-  VERSION 0.9.3
+  VERSION 0.9.4
   DESCRIPTION "A MIDI Network Gateway via UDP/IP Multicast"
   LANGUAGES C CXX)
 
@@ -43,15 +43,16 @@ set (ac_prefix "${CMAKE_INSTALL_PREFIX}")
 
 set (CONFIG_BUILD_VERSION "${PACKAGE_VERSION}")
 
-if (CMAKE_BUILD_TYPE)
-  set (CONFIG_BUILD_TYPE ${CMAKE_BUILD_TYPE})
+if (CONFIG_DEBUG)
+  set (CMAKE_BUILD_TYPE "Debug")
+endif ()
+if (CMAKE_BUILD_TYPE MATCHES "Debug")
+  set (CONFIG_DEBUG 1)
+endif ()
+if (CONFIG_DEBUG)
+  set (CONFIG_BUILD_TYPE "debug")
 else ()
   set (CONFIG_BUILD_TYPE "release")
-endif ()
-
-set (CONFIG_DEBUG 0)
-if (CONFIG_BUILD_TYPE MATCHES "debug")
-  set (CONFIG_DEBUG 1)
 endif ()
 
 set (CONFIG_PREFIX "${CMAKE_INSTALL_PREFIX}")
@@ -74,7 +75,7 @@ option (CONFIG_IPV6 "Enable Network IPv6 support (EXPERIMENTAL) (default=yes)" 1
 
 
 # Enable Qt6 build preference.
-option (CONFIG_QT6 "Enable Qt6 build (default=no)" 0)
+option (CONFIG_QT6 "Enable Qt6 build (default=yes)" 1)
 
 
 # Fix for new CMAKE_REQUIRED_LIBRARIES policy.
@@ -173,5 +174,5 @@ show_option ("  ALSA MIDI support  . . . . . . . . . . . . . . . ." CONFIG_ALSA_
 show_option ("  JACK MIDI support  . . . . . . . . . . . . . . . ." CONFIG_JACK_MIDI)
 message     ("")
 show_option ("  Network IPv6 support (EXPERIMENTAL)  . . . . . . ." CONFIG_IPV6)
-message   ("\n  Install prefix . . . . . . . . . . . . . . . . . .: ${CMAKE_INSTALL_PREFIX}")
+message   ("\n  Install prefix . . . . . . . . . . . . . . . . . .: ${CONFIG_PREFIX}")
 message   ("\nNow type 'make', followed by 'make install' as root.\n")
