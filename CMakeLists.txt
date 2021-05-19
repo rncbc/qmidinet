@@ -150,6 +150,11 @@ if (CONFIG_JACK_MIDI)
   endif ()
 endif ()
 
+# Add some debug flags.
+if (CONFIG_DEBUG)
+  add_compile_options (-g -fsanitize=address -fno-omit-frame-pointer)
+  link_libraries (asan)
+endif ()
 
 add_subdirectory (src)
 
