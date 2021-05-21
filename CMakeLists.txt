@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required (VERSION 3.13)
 
-project(qmidinet
+project (qmidinet
   VERSION 0.9.4
   DESCRIPTION "A MIDI Network Gateway via UDP/IP Multicast"
   LANGUAGES C CXX)
@@ -150,11 +150,6 @@ if (CONFIG_JACK_MIDI)
   endif ()
 endif ()
 
-# Add some debug flags.
-if (CONFIG_DEBUG)
-  add_compile_options (-g -fsanitize=address -fno-omit-frame-pointer)
-  link_libraries (asan)
-endif ()
 
 add_subdirectory (src)
 
