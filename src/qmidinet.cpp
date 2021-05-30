@@ -46,7 +46,9 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv, bool bGUI )
 		, m_udpd(this)
 {
 	if (bGUI) {
+	#if defined(Q_OS_LINUX)
 		::setenv("QT_QPA_PLATFORM", "xcb", 0);
+	#endif
 	#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
 	#if QT_VERSION <  QT_VERSION_CHECK(6, 0, 0)
 		QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
