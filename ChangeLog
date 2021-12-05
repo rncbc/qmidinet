@@ -4,6 +4,11 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 ChangeLog
 
 
+GIT HEAD
+
+- Dropped autotools (autoconf, automake, etc.) build system.
+
+
 0.9.4  2021-07-04  An Early-Summer'21 Release.
 
 - All builds default to Qt6 (Qt >= 6.1) where available.

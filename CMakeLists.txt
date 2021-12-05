@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.15)
 
 project (qmidinet
-  VERSION 0.9.4
+  VERSION 0.9.5
   DESCRIPTION "A MIDI Network Gateway via UDP/IP Multicast"
   LANGUAGES C CXX)
 
@@ -174,5 +174,4 @@ show_option ("  ALSA MIDI support  . . . . . . . . . . . . . . . ." CONFIG_ALSA_
 show_option ("  JACK MIDI support  . . . . . . . . . . . . . . . ." CONFIG_JACK_MIDI)
 message     ("")
 show_option ("  Network IPv6 support (EXPERIMENTAL)  . . . . . . ." CONFIG_IPV6)
-message   ("\n  Install prefix . . . . . . . . . . . . . . . . . .: ${CONFIG_PREFIX}")
-message   ("\nNow type 'make', followed by 'make install' as root.\n")
+message   ("\n  Install prefix . . . . . . . . . . . . . . . . . .: ${CONFIG_PREFIX}\n")
