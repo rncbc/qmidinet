@@ -4,7 +4,7 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 ChangeLog
 
 
-GIT HEAD
+0.9.5  2022-01-09  A Winter'22 Release.
 
 - Dropped autotools (autoconf, automake, etc.) build system.
 
