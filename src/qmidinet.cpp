@@ -64,7 +64,7 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv, bool bGUI )
 	#if defined(QT_STATIC)
 		sVersion += "-static";
 	#endif
-		QApplication::setApplicationVersion(sVersion);
+		pApp->setApplicationVersion(sVersion);
 	#endif
 		pApp->setQuitOnLastWindowClosed(false);
 		m_pApp  = pApp;
