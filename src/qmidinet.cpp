@@ -1,7 +1,7 @@
 // qmidinet.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010-2021, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2022, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -58,6 +58,13 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv, bool bGUI )
 	#if QT_VERSION >= QT_VERSION_CHECK(5, 1, 0)
 		pApp->setApplicationDisplayName(QMIDINET_TITLE);
 		//	QMIDINET_TITLE " - " + QObject::tr(QMIDINET_SUBTITLE));
+		QString sVersion(CONFIG_BUILD_VERSION);
+		sVersion += '\n';
+		sVersion += QString("Qt: %1").arg(qVersion());
+	#if defined(QT_STATIC)
+		sVersion += "-static";
+	#endif
+		QApplication::setApplicationVersion(sVersion);
 	#endif
 		pApp->setQuitOnLastWindowClosed(false);
 		m_pApp  = pApp;

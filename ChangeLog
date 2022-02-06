@@ -6,7 +6,8 @@ ChangeLog
 
 GIT HEAD
 
-- Prepping bump to next v0.9.6...
+- Migrated command line parsing to QCommandLineParser/Option
+  (Qt >= 5.2) (EXPERIMENTAL)
 
 
 0.9.5  2022-01-09  A Winter'22 Release.

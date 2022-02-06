@@ -1,7 +1,7 @@
 // qmidinetOptions.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010-2020, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2022, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -23,6 +23,16 @@
 #include "qmidinetOptions.h"
 
 #include <QTextStream>
+
+#include <QApplication>
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 2, 0)
+#include <QCommandLineParser>
+#include <QCommandLineOption>
+#if defined(Q_OS_WINDOWS)
+#include <QMessageBox>
+#endif
+#endif
 
 
 //-------------------------------------------------------------------------
@@ -118,6 +128,20 @@ QSettings& qmidinetOptions::settings (void)
 }
 
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 2, 0)
+
+void qmidinetOptions::show_error( const QString& msg )
+{
+#if defined(Q_OS_WINDOWS)
+	QMessageBox::information(nullptr, QApplication::applicationName(), msg);
+#else
+	const QByteArray tmp = msg.toUtf8() + '\n';
+	::fputs(tmp.constData(), stderr);
+#endif
+}
+
+#else
+
 // Help about command line options.
 void qmidinetOptions::print_usage ( const QString& arg0 )
 {
@@ -125,8 +149,8 @@ void qmidinetOptions::print_usage ( const QString& arg0 )
 	const QString sEot = "\n\t";
 	const QString sEol = "\n\n";
 
-	out << QMIDINET_TITLE " - " << QObject::tr(QMIDINET_SUBTITLE) + sEol;
 	out << QObject::tr("Usage: %1 [options]").arg(arg0) + sEol;
+	out << QMIDINET_TITLE " - " << QObject::tr(QMIDINET_SUBTITLE) + sEol;
 	out << QObject::tr("Options:") + sEol;
 	out << "  -n, --num-ports=[num-ports]" + sEot +
 		QObject::tr("Use this number of ports (default = %1)")
@@ -134,10 +158,10 @@ void qmidinetOptions::print_usage ( const QString& arg0 )
 	out << "  -i, --interface=[interface]" + sEot +
 		QObject::tr("Use specific network interface (default = %1)")
 			.arg(sInterface.isEmpty() ? "all" : sInterface) + sEol;
-	out << "  -u, --address, --udp-addr=[address]" + sEot +
+	out << "  -u, --udp-addr=[addr]" + sEot +
 		QObject::tr("Use specific network address (default = %1)")
 			.arg(sUdpAddr) + sEol;
-	out << "  -p, --port, --udp-port=[port]" + sEot +
+	out << "  -p, --udp-port=[port]" + sEot +
 		QObject::tr("Use specific network port (default = %1)")
 			.arg(iUdpPort) + sEol;
 	out << "  -a, --alsa-midi[=flag]" + sEot +
@@ -149,15 +173,104 @@ void qmidinetOptions::print_usage ( const QString& arg0 )
 	out << "  -g, --no-gui" + sEot +
 		QObject::tr("Disable the graphical user interface (GUI)") + sEol;
 	out << "  -h, --help" + sEot +
-		QObject::tr("Show help about command line options") + sEol;
+		QObject::tr("Show help about command line options.") + sEol;
 	out << "  -v, --version" + sEot +
-		QObject::tr("Show version information") + sEol;
+		QObject::tr("Show version information.") + sEol;
 }
+
+#endif
 
 
 // Parse command line arguments into m_settings.
 bool qmidinetOptions::parse_args ( const QStringList& args )
 {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 2, 0)
+
+	QCommandLineParser parser;
+	parser.setApplicationDescription(
+		QMIDINET_TITLE " - " + QObject::tr(QMIDINET_SUBTITLE));
+
+	parser.addOption({{"n", "num-ports"},
+		QObject::tr("Use this number of ports (default = %1)")
+			.arg(iNumPorts), "num"});
+	parser.addOption({{"i", "interface"},
+		QObject::tr("Use specific network interface (default = %1)")
+			.arg(sInterface.isEmpty() ? "all" : sInterface), "name"});
+	parser.addOption({{"u", "udp-addr"},
+		QObject::tr("Use specific network address (default = %1)")
+			.arg(sUdpAddr), "addr"});
+	parser.addOption({{"p", "udp-port"},
+		QObject::tr("Use specific network port (default = %1)")
+			.arg(iUdpPort), "port"});
+	parser.addOption({{"a", "alsa-midi"},
+		QObject::tr("Enable ALSA MIDI (0|1|yes|no|on|off, default = %1)")
+			.arg(int(bAlsaMidi)), "flag"});
+	parser.addOption({{"j", "jack-midi"},
+		QObject::tr("Enable JACK MIDI (0|1|yes|no|on|off, default = %1)")
+			.arg(int(bJackMidi)), "flag"});
+	parser.addOption({{"g", "no-gui"},
+		QObject::tr("Disable the graphical user interface (GUI)")});
+	parser.addHelpOption();
+	parser.addVersionOption();
+	parser.process(args);
+
+	if (parser.isSet("num-ports")) {
+		bool bOK = false;
+		const int iVal = parser.value("num-ports").toInt(&bOK);
+		if (!bOK) {
+			show_error(QObject::tr("Option -n requires an argument (num)."));
+			return false;
+		}
+		iNumPorts = iVal;
+	}
+
+	if (parser.isSet("interface")) {
+		sInterface = parser.value("interface"); // Maybe empty!
+	}
+
+	if (parser.isSet("udp-addr")) {
+		const QString& sVal = parser.value("udp-addr");
+		if (sVal.isEmpty()) {
+			show_error(QObject::tr("Option -u requires an argument (addr)."));
+			return false;
+		}
+		sUdpAddr = sVal;
+	}
+
+	if (parser.isSet("udp-port")) {
+		bool bOK = false;
+		const int iVal = parser.value("udp-port").toInt(&bOK);
+		if (!bOK) {
+			show_error(QObject::tr("Option -p requires an argument (port)."));
+			return false;
+		}
+		iUdpPort = iVal;
+	}
+
+	if (parser.isSet("alsa-midi")) {
+		const QString& sVal = parser.value("alsa-midi");
+		if (sVal.isEmpty()) {
+			bAlsaMidi = true;
+		} else {
+			bAlsaMidi = !(sVal == "0" || sVal == "no" || sVal == "off");
+		}
+	}
+
+	if (parser.isSet("jack-midi")) {
+		const QString& sVal = parser.value("jack-midi");
+		if (sVal.isEmpty()) {
+			bJackMidi = true;
+		} else {
+			bJackMidi = !(sVal == "0" || sVal == "no" || sVal == "off");
+		}
+	}
+
+	if (parser.isSet("no-gui")) {
+		// Ignored: parsed on startup...
+	}
+
+#else
+
 	QTextStream out(stderr);
 	const QString sEot = "\n\t";
 	const QString sEol = "\n\n";
@@ -191,7 +304,7 @@ bool qmidinetOptions::parse_args ( const QStringList& args )
 			if (iEqual < 0) ++i;
 		}
 		else
-		if (sArg == "-u" || sArg == "--address" || sArg == "--udp-addr") {
+		if (sArg == "-u" || sArg == "--udp-addr") {
 			if (sVal.isEmpty()) {
 				out << QObject::tr("Option -d requires an argument (address).") + sEol;
 				return false;
@@ -200,7 +313,7 @@ bool qmidinetOptions::parse_args ( const QStringList& args )
 			if (iEqual < 0) ++i;
 		}
 		else
-		if (sArg == "-p" || sArg == "--port" || sArg == "--udp-port") {
+		if (sArg == "-p" ||  sArg == "--udp-port") {
 			if (sVal.isEmpty()) {
 				out << QObject::tr("Option -p requires an argument (port).") + sEol;
 				return false;
@@ -243,6 +356,8 @@ bool qmidinetOptions::parse_args ( const QStringList& args )
 			return false;
 		}
 	}
+
+#endif
 
 	// Alright with argument parsing.
 	return true;
