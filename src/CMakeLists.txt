@@ -82,8 +82,10 @@ if (UNIX AND NOT APPLE)
   install (TARGETS ${PROJECT_NAME} RUNTIME
     DESTINATION ${CMAKE_INSTALL_BINDIR})
   install (FILES images/${PROJECT_NAME}.png
+    RENAME org.rncbc.${PROJECT_NAME}.png
     DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/32x32/apps)
   install (FILES images/${PROJECT_NAME}.svg
+    RENAME org.rncbc.${PROJECT_NAME}.svg
     DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps)
   install (FILES appdata/org.rncbc.${PROJECT_NAME}.desktop
     DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
