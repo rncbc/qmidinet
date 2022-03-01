@@ -73,6 +73,8 @@ option (CONFIG_JACK_MIDI "Enable JACK MIDI support (default=yes)" 1)
 # Enable Network IPv6 support option.
 option (CONFIG_IPV6 "Enable Network IPv6 support (EXPERIMENTAL) (default=yes)" 1)
 
+# Enable Wayland support option.
+option (CONFIG_WAYLAND "Enable Wayland support (EXPERIMENTAL) (default=no)" 0)
 
 # Enable Qt6 build preference.
 option (CONFIG_QT6 "Enable Qt6 build (default=yes)" 1)
