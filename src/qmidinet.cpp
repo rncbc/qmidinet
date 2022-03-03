@@ -58,6 +58,10 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv, bool bGUI )
 	#if QT_VERSION >= QT_VERSION_CHECK(5, 1, 0)
 		pApp->setApplicationDisplayName(QMIDINET_TITLE);
 		//	QMIDINET_TITLE " - " + QObject::tr(QMIDINET_SUBTITLE));
+	#if QT_VERSION >= QT_VERSION_CHECK(5, 7, 0)
+		pApp->setDesktopFileName(
+			QString("org.rncbc.%1").arg(PACKAGE_TARNAME));
+	#endif
 		QString sVersion(CONFIG_BUILD_VERSION);
 		sVersion += '\n';
 		sVersion += QString("Qt: %1").arg(qVersion());
