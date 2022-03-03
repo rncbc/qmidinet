@@ -233,7 +233,7 @@ void qmidinetApplication::shutdown (void)
 qmidinetSystemTrayIcon::qmidinetSystemTrayIcon ( qmidinetApplication *pApp )
 	: QSystemTrayIcon(pApp), m_pApp(pApp), m_iSending(0), m_iReceiving(0)
 {
-//	m_menu.addAction(QIcon(":/images/qmidinet.png"), QMIDINET_TITLE);
+//	m_menu.addAction(QIcon(":/images/qmidinet.svg"), QMIDINET_TITLE);
 //	m_menu.addSeparator();
 	m_menu.addAction(QIcon(":/images/menuOptions.png"),
 		tr("Options..."), this, SLOT(options()));
@@ -258,7 +258,7 @@ qmidinetSystemTrayIcon::qmidinetSystemTrayIcon ( qmidinetApplication *pApp )
 // Initializer.
 void qmidinetSystemTrayIcon::show ( bool bSetup )
 {
-	QPixmap pm(":/images/qmidinet.png");
+	QPixmap pm(":/images/qmidinet.svg");
 
 	if (!bSetup) {
 		// Merge with the error overlay pixmap...
@@ -358,7 +358,8 @@ void qmidinetSystemTrayIcon::about (void)
 	QMessageBox abox;
 	abox.setWindowIcon(QSystemTrayIcon::icon());
 	abox.setWindowTitle(tr("About"));
-	abox.setIconPixmap(QPixmap(":/images/qmidinet.png"));
+	abox.setIconPixmap(QPixmap(":/images/qmidinet.svg")
+		.scaledToWidth(48, Qt::SmoothTransformation));
 	abox.setText(sText);
 	abox.exec();
 }

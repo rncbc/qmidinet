@@ -1,6 +1,7 @@
 <RCC version="1.0">
 	<qresource>
 		<file>images/qmidinet.png</file>
+		<file>images/qmidinet.svg</file>
 		<file>images/iconError.png</file>
 		<file>images/iconSend.png</file>
 		<file>images/iconReceive.png</file>
