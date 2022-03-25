@@ -176,5 +176,5 @@ message   ("\n  Build target . . . . . . . . . . . . . . . . . . .: ${CONFIG_BUI
 show_option ("  ALSA MIDI support  . . . . . . . . . . . . . . . ." CONFIG_ALSA_MIDI)
 show_option ("  JACK MIDI support  . . . . . . . . . . . . . . . ." CONFIG_JACK_MIDI)
 message     ("")
-show_option ("  Network IPv6 support (EXPERIMENTAL)  . . . . . . ." CONFIG_IPV6)
+show_option ("  Network IPv6 support . . . . . . . . . . . . . . ." CONFIG_IPV6)
 message   ("\n  Install prefix . . . . . . . . . . . . . . . . . .: ${CONFIG_PREFIX}\n")
