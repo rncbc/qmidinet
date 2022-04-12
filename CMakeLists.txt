@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.15)
 
 project (qmidinet
-  VERSION 0.9.6
+  VERSION 0.9.7
   DESCRIPTION "A MIDI Network Gateway via UDP/IP Multicast"
   LANGUAGES C CXX)
 
@@ -99,7 +99,7 @@ else ()
   find_package (QT QUIET NAMES Qt5)
 endif ()
 
-find_package (Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets)
+find_package (Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets Svg)
 
 if (CONFIG_IPV6)
   find_package (Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Network)
