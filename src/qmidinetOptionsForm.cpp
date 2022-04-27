@@ -40,7 +40,9 @@ qmidinetOptionsForm::qmidinetOptionsForm ( QWidget *pParent )
 {
 	// Setup UI struct...
 	m_ui.setupUi(this);
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 1, 0)
+	QDialog::setWindowIcon(QIcon(":/images/qmidinet.png"));
+#endif
 	// Initialize the dialog widgets with default settings...
 	m_sDefInterface = tr("(Any)");
 	m_ui.InterfaceComboBox->clear();
