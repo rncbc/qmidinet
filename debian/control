@@ -16,9 +16,9 @@ Standards-Version: 3.9.7
 
 Package: qmidinet
 Architecture: any
-Depends: libjack0 | libjack-jackd2-0,
-  ${shlibs:Depends},
-  ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends},
+  qt6-qpa-plugins | libqt5opengl5,
+  libjack0 | libjack-jackd2-0
 Description: A MIDI Network Gateway via UDP/IP Multicast
   A MIDI network gateway application that sends and receives MIDI data
   (ALSA Sequencer and/or JACK MIDI) over the network, using UDP/IP multicast.
