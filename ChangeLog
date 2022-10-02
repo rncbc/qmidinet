@@ -4,6 +4,11 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 ChangeLog
 
 
+0.9.7  2022-10-03  An Early-Autumn'22 release.
+
+- Bumped version number into the next release season.
+
+
 0.9.6  2022-04-02  A Spring'22 Release.
 
 - Main application icon is now presented in scalable format (SVG).

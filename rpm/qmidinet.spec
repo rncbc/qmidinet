@@ -16,8 +16,8 @@
 #
 
 %define name    qmidinet
-%define version 0.9.6
-%define release 50.1
+%define version 0.9.7
+%define release 51.1
 
 %define _prefix	@ac_prefix@
 
@@ -140,6 +140,8 @@ cmake --install build
 %{_datadir}/man/fr/man1/%{name}.1.gz
 
 %changelog
+* Mon Oct  3 2022 Rui Nuno Capela <rncbc@rncbc.org> 0.9.7
+- An Early-Autumn'22 Release.
 * Sat Apr  2 2022 Rui Nuno Capela <rncbc@rncbc.org> 0.9.6
 - A Spring'22 Release.
 * Sun Jan  9 2022 Rui Nuno Capela <rncbc@rncbc.org> 0.9.5
