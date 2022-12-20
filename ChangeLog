@@ -4,12 +4,12 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 ChangeLog
 
 
-GIT HEAD
+0.9.8  2022-12-28  An End-of-Year'22 Release.
 
-- Bumping into the next develop cycle/season...
+- Just bumping into the next develop cycle/season.
 
 
-0.9.7  2022-10-03  An Early-Autumn'22 release.
+0.9.7  2022-10-03  An Early-Autumn'22 Release.
 
 - Bumped version number into the next release season.
 
