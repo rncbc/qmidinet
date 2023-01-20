@@ -115,7 +115,8 @@ cmake --install build
 
 %files
 %defattr(-,root,root)
-%doc README LICENSE ChangeLog
+%license LICENSE
+%doc README ChangeLog
 #dir {_datadir}/applications
 %dir %{_datadir}/icons/hicolor
 %dir %{_datadir}/icons/hicolor/32x32
