@@ -1,7 +1,7 @@
 // qmidinet.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010-2022, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2023, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -332,15 +332,15 @@ void qmidinetSystemTrayIcon::about (void)
 #endif
 
 	// Stuff the about box text...
-	QString sText = "<p>\n";
-	sText += "<b>" QMIDINET_TITLE " - " + tr(QMIDINET_SUBTITLE) + "</b><br />\n";
+	QString sText = "<h1>" QMIDINET_TITLE "</h1>\n";
+	sText += "<p>" + tr(QMIDINET_SUBTITLE) + "<br />\n";
 	sText += "<br />\n";
 	sText += tr("Version") + ": <b>" CONFIG_BUILD_VERSION "</b><br />\n";
 //	sText += "<small>" + tr("Build") + ": " CONFIG_BUILD_DATE "</small><br />\n";
 	if (!list.isEmpty()) {
 		sText += "<small><font color=\"red\">";
 		sText += list.join("<br />\n");
-		sText += "</font></small><br />\n";
+		sText += "</font></small>\n";
 	}
 	sText += "<br />\n";
 	sText += tr("Using: Qt %1").arg(qVersion());
