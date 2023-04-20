@@ -6,6 +6,9 @@ ChangeLog
 
 GIT HEAD
 
+- Fixed lost or out of order messages on JACK-MIDI client.
+  (SF.net ticket #4 by Walt, /u/riban).
+
 - Prepping into the next development cycle (with Qt >= 6.5).
 
 

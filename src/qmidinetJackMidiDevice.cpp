@@ -1,7 +1,7 @@
 // qmidinetJackMidiDevice.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2023, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -570,7 +570,7 @@ int qmidinetJackMidiDevice::process ( jack_nframes_t nframes )
 {
 	jack_nframes_t buffer_size = jack_get_buffer_size(m_pJackClient);
 
-	m_last_frame_time  = jack_last_frame_time(m_pJackClient);
+	m_last_frame_time = jack_last_frame_time(m_pJackClient);
 
 	// Enqueue/dequeue events
 	// to/from ring-buffers...
@@ -621,7 +621,7 @@ int qmidinetJackMidiDevice::process ( jack_nframes_t nframes )
 					&& nread < nlimit) {
 				if (ev.port != i)
 					break;
-				if (ev.event.time > m_last_frame_time)
+				if (ev.event.time >= m_last_frame_time)
 					break;
 				jack_nframes_t offset = m_last_frame_time - ev.event.time;
 				if (offset > buffer_size)
