@@ -196,7 +196,7 @@ void qmidinetApplication::reset (void)
 	if (m_pIcon)
 		m_pIcon->reset();
 	else if (!setup())
-		QTimer::singleShot(180000, this, SLOT(reset()));
+		QTimer::singleShot(60000, this, SLOT(reset()));
 }
 
 
