@@ -4,6 +4,11 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 ChangeLog
 
 
+GIT HEAD
+
+- Preppings to next development cycle (Qt >= 6.6)
+
+
 0.9.10  2023-06-01  A Spring'23 Release.
 
 - Fixed lost or out of order messages on JACK-MIDI client.
