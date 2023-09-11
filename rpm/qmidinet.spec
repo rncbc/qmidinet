@@ -83,11 +83,10 @@ BuildRequires:	pkgconfig(Qt5Network)
 %endif
 %if %{defined fedora}
 BuildRequires:	jack-audio-connection-kit-devel
-BuildRequires:	alsa-lib-devel
 %else
-BuildRequires:	libjack-devel
-BuildRequires:	alsa-devel
+BuildRequires:	pkgconfig(jack)
 %endif
+BuildRequires:	pkgconfig(alsa)
 
 %description
 QmidiNet is a MIDI network gateway application that sends and receives
