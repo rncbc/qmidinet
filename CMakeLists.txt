@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.15)
 
 project (qmidinet
-  VERSION 0.9.11
+  VERSION 0.9.12
   DESCRIPTION "A MIDI Network Gateway via UDP/IP Multicast"
   LANGUAGES C CXX)
 
