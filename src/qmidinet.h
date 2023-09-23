@@ -36,6 +36,11 @@
 // Forward decls.
 class qmidinetSystemTrayIcon;
 
+#ifdef CONFIG_XUNIQUE
+class QSharedMemory;
+class QLocalServer;
+#endif	// CONFIG_XUNIQUE
+
 
 //-------------------------------------------------------------------------
 // qmidinetApplication -- Singleton application instance.
@@ -62,6 +67,11 @@ public:
 	// Simple accessor.
 	QCoreApplication *app() const { return m_pApp; }
 
+#ifdef CONFIG_XUNIQUE
+	// Initialize instance!
+	bool init();
+#endif
+
 public slots:
 
 	// Action slots...
@@ -69,6 +79,13 @@ public slots:
 
 #ifdef CONFIG_JACK_MIDI
 	void shutdown();
+#endif
+
+#ifdef CONFIG_XUNIQUE
+protected slots:
+	// Local server slots.
+	void newConnectionSlot();
+	void readyReadSlot();
 #endif
 
 private:
@@ -85,6 +102,12 @@ private:
 	qmidinetJackMidiDevice m_jack;
 #endif
 	qmidinetUdpDevice m_udpd;
+
+#ifdef CONFIG_XUNIQUE
+	QString        m_unique;
+	QSharedMemory *m_memory;
+	QLocalServer  *m_server;
+#endif	// CONFIG_XUNIQUE
 };
 
 

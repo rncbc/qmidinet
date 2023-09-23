@@ -29,6 +29,16 @@
 #include <QPainter>
 #include <QTimer>
 
+#ifdef CONFIG_XUNIQUE
+#include <QSharedMemory>
+#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
+#include <QNativeIpcKey>
+#endif
+#include <QLocalServer>
+#include <QLocalSocket>
+#include <QHostInfo>
+#endif	// CONFIG_XUNIQUE
+
 
 //-------------------------------------------------------------------------
 // qmidinetApplication -- Singleton application instance.
@@ -44,6 +54,10 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv, bool bGUI )
 		, m_jack(this)
 	#endif
 		, m_udpd(this)
+	#ifdef CONFIG_XUNIQUE
+		, m_memory(nullptr)
+		, m_server(nullptr)
+	#endif
 {
 	if (bGUI) {
 	#if defined(Q_OS_LINUX) && !defined(CONFIG_WAYLAND)
@@ -124,12 +138,123 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv, bool bGUI )
 // Destructor.
 qmidinetApplication::~qmidinetApplication (void)
 {
+#ifdef CONFIG_XUNIQUE
+	if (m_server) {
+		m_server->close();
+		delete m_server;
+		m_server = nullptr;
+	}
+	if (m_memory) {
+		delete m_memory;
+		m_memory = nullptr;
+	}
+#endif	// CONFIG_XUNIQUE
+
 	if (m_pIcon) delete m_pIcon;
 	if (m_pApp)  delete m_pApp;
 }
 
 
-// Initializer.
+#ifdef CONFIG_XUNIQUE
+
+// Initializer (instance).
+bool qmidinetApplication::init (void)
+{
+	m_unique = m_pApp->applicationName();
+	QString uname = QString::fromUtf8(::getenv("USER"));
+	if (uname.isEmpty())
+		uname = QString::fromUtf8(::getenv("USERNAME"));
+	if (!uname.isEmpty()) {
+		m_unique += ':';
+		m_unique += uname;
+	}
+	m_unique += '@';
+	m_unique += QHostInfo::localHostName();
+#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
+	const QNativeIpcKey native_key
+		= QSharedMemory::legacyNativeKey(m_unique);
+	m_memory = new QSharedMemory(native_key);
+#else
+#if defined(Q_OS_UNIX)
+	m_memory = new QSharedMemory(m_unique);
+	m_memory->attach();
+	delete m_memory;
+#endif
+	m_memory = new QSharedMemory(m_unique);
+#endif
+	bool is_server = false;
+	const qint64 pid = m_pApp->applicationPid();
+	struct Data { qint64 pid; };
+	if (m_memory->create(sizeof(Data))) {
+		m_memory->lock();
+		Data *data = static_cast<Data *> (m_memory->data());
+		if (data) {
+			data->pid = pid;
+			is_server = true;
+		}
+		m_memory->unlock();
+	}
+	else
+	if (m_memory->attach()) {
+		m_memory->lock(); // maybe not necessary?
+		Data *data = static_cast<Data *> (m_memory->data());
+		if (data)
+			is_server = (data->pid == pid);
+		m_memory->unlock();
+	}
+	if (is_server) {
+		QLocalServer::removeServer(m_unique);
+		m_server = new QLocalServer();
+		m_server->setSocketOptions(QLocalServer::UserAccessOption);
+		m_server->listen(m_unique);
+		QObject::connect(m_server,
+			SIGNAL(newConnection()),
+			SLOT(newConnectionSlot()));
+	} else {
+		QLocalSocket socket;
+		socket.connectToServer(m_unique);
+		if (socket.state() == QLocalSocket::ConnectingState)
+			socket.waitForConnected(200);
+		if (socket.state() == QLocalSocket::ConnectedState) {
+			socket.write(QCoreApplication::arguments().join(' ').toUtf8());
+			socket.flush();
+			socket.waitForBytesWritten(200);
+		}
+	}
+
+	return is_server;
+}
+
+
+// Local server connection slot.
+void qmidinetApplication::newConnectionSlot (void)
+{
+	QLocalSocket *socket = m_server->nextPendingConnection();
+	QObject::connect(socket,
+		SIGNAL(readyRead()),
+		SLOT(readyReadSlot()));
+}
+
+
+// Local server data-ready slot.
+void qmidinetApplication::readyReadSlot (void)
+{
+	QLocalSocket *socket = qobject_cast<QLocalSocket *> (sender());
+	if (socket) {
+		const qint64 nread = socket->bytesAvailable();
+		if (nread > 0) {
+			const QByteArray data = socket->read(nread);
+			qmidinetOptions *pOptions = qmidinetOptions::getInstance();
+			if (pOptions && pOptions->parse_args(QString(data).split(' ')))
+				reset();
+		}
+	}
+}
+
+#endif	// CONFIG_XUNIQUE
+
+
+// Initializer (secondary).
 bool qmidinetApplication::setup (void)
 {
 	qmidinetOptions *pOptions = qmidinetOptions::getInstance();
@@ -444,6 +569,13 @@ int main ( int argc, char* argv[] )
 		app.app()->quit();
 		return 1;
 	}
+
+#ifdef CONFIG_XUNIQUE
+	if (!app.init()) {
+		app.app()->quit();
+		return 2;
+	}
+#endif
 
 	app.reset();
 

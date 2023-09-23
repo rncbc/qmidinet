@@ -49,6 +49,12 @@
 /* Define if IPv6 is supported */
 #cmakedefine CONFIG_IPV6 @CONFIG_IPV6@
 
+/* Define if IPv6 is supported */
+#cmakedefine CONFIG_IPV6 @CONFIG_IPV6@
+
+/* Define if Unique/Single instance is enabled. */
+#cmakedefine CONFIG_XUNIQUE @CONFIG_XUNIQUE@
+
 /* Define if Wayland is supported */
 #cmakedefine CONFIG_WAYLAND @CONFIG_WAYLAND@
 

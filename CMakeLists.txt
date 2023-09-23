@@ -65,7 +65,10 @@ option (CONFIG_ALSA_MIDI "Enable ALSA MIDI support (default=yes)" 1)
 option (CONFIG_JACK_MIDI "Enable JACK MIDI support (default=yes)" 1)
 
 # Enable Network IPv6 support option.
-option (CONFIG_IPV6 "Enable Network IPv6 support (EXPERIMENTAL) (default=yes)" 1)
+option (CONFIG_IPV6 "Enable Network IPv6 support (default=yes)" 1)
+
+# Enable unique/single instance.
+option (CONFIG_XUNIQUE "Enable unique/single instance (default=yes)" 1)
 
 # Enable Wayland support option.
 option (CONFIG_WAYLAND "Enable Wayland support (EXPERIMENTAL) (default=no)" 0)
@@ -95,7 +98,7 @@ endif ()
 
 find_package (Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets Svg)
 
-if (CONFIG_IPV6)
+if (CONFIG_IPV6 OR CONFIG_XUNIQUE)
   find_package (Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Network)
 endif ()
 
@@ -166,4 +169,6 @@ show_option ("  ALSA MIDI support  . . . . . . . . . . . . . . . ." CONFIG_ALSA_
 show_option ("  JACK MIDI support  . . . . . . . . . . . . . . . ." CONFIG_JACK_MIDI)
 message     ("")
 show_option ("  Network IPv6 support . . . . . . . . . . . . . . ." CONFIG_IPV6)
+message     ("")
+show_option ("  Unique/Single instance support . . . . . . . . . ." CONFIG_XUNIQUE)
 message   ("\n  Install prefix . . . . . . . . . . . . . . . . . .: ${CONFIG_PREFIX}\n")

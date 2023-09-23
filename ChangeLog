@@ -6,7 +6,7 @@ ChangeLog
 
 GIT HEAD
 
-- Bumping into next development cycle (Qt >= 6.6)
+- Add Unique/Single instance support. (EXPERIMENTAL)
 
 
 0.9.11  2023-09-09  An End-of-Summer'23 Release.
