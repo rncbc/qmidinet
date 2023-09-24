@@ -1,7 +1,7 @@
 // qmidinetAlsaMidiDevice.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2023, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -77,11 +77,9 @@ bool qmidinetAlsaMidiThread::runState (void) const
 // The main thread executive.
 void qmidinetAlsaMidiThread::run (void)
 {
-	int nfds;
-	struct pollfd *pfds;
-
-	nfds = snd_seq_poll_descriptors_count(m_pAlsaSeq, POLLIN);
-	pfds = (struct pollfd *) alloca(nfds * sizeof(struct pollfd));
+	const int nfds
+		= snd_seq_poll_descriptors_count(m_pAlsaSeq, POLLIN);
+	struct pollfd pfds[nfds];
 	snd_seq_poll_descriptors(m_pAlsaSeq, pfds, nfds, POLLIN);
 
 	m_bRunState = true;
@@ -111,8 +109,10 @@ qmidinetAlsaMidiDevice *qmidinetAlsaMidiDevice::g_pDevice = nullptr;
 
 // Constructor.
 qmidinetAlsaMidiDevice::qmidinetAlsaMidiDevice ( QObject *pParent )
-	: QObject(pParent), m_pAlsaSeq(nullptr), m_iAlsaClient(-1), m_piAlsaPort(nullptr),
-		m_ppAlsaEncoder(nullptr), m_pAlsaDecoder(nullptr), m_pRecvThread(nullptr)
+	: QObject(pParent), m_nports(0), m_pAlsaSeq(nullptr),
+		m_iAlsaClient(-1), m_piAlsaPort(nullptr),
+		m_ppAlsaEncoder(nullptr), m_pAlsaDecoder(nullptr),
+		m_pRecvThread(nullptr)
 {
 	g_pDevice = this;
 }

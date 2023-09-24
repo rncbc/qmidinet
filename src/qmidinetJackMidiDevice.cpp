@@ -370,7 +370,7 @@ qmidinetJackMidiDevice *qmidinetJackMidiDevice::g_pDevice = nullptr;
 
 // Constructor.
 qmidinetJackMidiDevice::qmidinetJackMidiDevice ( QObject *pParent )
-	: QObject(pParent), m_pJackClient(nullptr),
+	: QObject(pParent), m_nports(0), m_pJackClient(nullptr),
 		m_ppJackPortIn(nullptr), m_ppJackPortOut(nullptr),
 		m_pJackBufferIn(nullptr), m_pJackBufferOut(nullptr),
 		m_pQueueIn(nullptr), m_pRecvThread(nullptr)
