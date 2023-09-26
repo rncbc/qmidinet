@@ -86,6 +86,10 @@ protected slots:
 	// Local server slots.
 	void newConnectionSlot();
 	void readyReadSlot();
+protected:
+	// Local server/shmem setup/cleanup.
+	bool setupServer();
+	void clearServer();
 #endif
 
 private:
@@ -104,9 +108,9 @@ private:
 	qmidinetUdpDevice m_udpd;
 
 #ifdef CONFIG_XUNIQUE
-	QString        m_unique;
-	QSharedMemory *m_memory;
-	QLocalServer  *m_server;
+	QString        m_sUnique;
+	QSharedMemory *m_pMemory;
+	QLocalServer  *m_pServer;
 #endif	// CONFIG_XUNIQUE
 };
 

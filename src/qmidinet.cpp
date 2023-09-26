@@ -55,8 +55,8 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv, bool bGUI )
 	#endif
 		, m_udpd(this)
 	#ifdef CONFIG_XUNIQUE
-		, m_memory(nullptr)
-		, m_server(nullptr)
+		, m_pMemory(nullptr)
+		, m_pServer(nullptr)
 	#endif
 {
 	if (bGUI) {
@@ -139,15 +139,7 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv, bool bGUI )
 qmidinetApplication::~qmidinetApplication (void)
 {
 #ifdef CONFIG_XUNIQUE
-	if (m_server) {
-		m_server->close();
-		delete m_server;
-		m_server = nullptr;
-	}
-	if (m_memory) {
-		delete m_memory;
-		m_memory = nullptr;
-	}
+	clearServer();
 #endif	// CONFIG_XUNIQUE
 
 	if (m_pIcon) delete m_pIcon;
@@ -160,59 +152,75 @@ qmidinetApplication::~qmidinetApplication (void)
 // Initializer (instance).
 bool qmidinetApplication::init (void)
 {
-	m_unique = m_pApp->applicationName();
-	QString uname = QString::fromUtf8(::getenv("USER"));
-	if (uname.isEmpty())
-		uname = QString::fromUtf8(::getenv("USERNAME"));
-	if (!uname.isEmpty()) {
-		m_unique += ':';
-		m_unique += uname;
+	return setupServer();
+}
+
+
+// Local server/shmem setup.
+bool qmidinetApplication::setupServer (void)
+{
+	clearServer();
+
+	m_sUnique = m_pApp->applicationName();
+	QString sUserName = QString::fromUtf8(::getenv("USER"));
+	if (sUserName.isEmpty())
+		sUserName = QString::fromUtf8(::getenv("USERNAME"));
+	if (!sUserName.isEmpty()) {
+		m_sUnique += ':';
+		m_sUnique += sUserName;
 	}
-	m_unique += '@';
-	m_unique += QHostInfo::localHostName();
+	m_sUnique += '@';
+	m_sUnique += QHostInfo::localHostName();
 #if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
-	const QNativeIpcKey native_key
-		= QSharedMemory::legacyNativeKey(m_unique);
-	m_memory = new QSharedMemory(native_key);
+	const QNativeIpcKey nativeKey
+		= QSharedMemory::legacyNativeKey(m_sUnique);
+#if defined(Q_OS_UNIX)
+	m_pMemory = new QSharedMemory(nativeKey);
+	m_pMemory->attach();
+	delete m_pMemory;
+#endif
+	m_pMemory = new QSharedMemory(nativeKey);
 #else
 #if defined(Q_OS_UNIX)
-	m_memory = new QSharedMemory(m_unique);
-	m_memory->attach();
-	delete m_memory;
+	m_pMemory = new QSharedMemory(m_sUnique);
+	m_pMemory->attach();
+	delete m_pMemory;
 #endif
-	m_memory = new QSharedMemory(m_unique);
+	m_pMemory = new QSharedMemory(m_sUnique);
 #endif
-	bool is_server = false;
-	const qint64 pid = m_pApp->applicationPid();
+
+	bool bServer = false;
+	const qint64 pid = QCoreApplication::applicationPid();
 	struct Data { qint64 pid; };
-	if (m_memory->create(sizeof(Data))) {
-		m_memory->lock();
-		Data *data = static_cast<Data *> (m_memory->data());
-		if (data) {
-			data->pid = pid;
-			is_server = true;
+	if (m_pMemory->create(sizeof(Data))) {
+		m_pMemory->lock();
+		Data *pData = static_cast<Data *> (m_pMemory->data());
+		if (pData) {
+			pData->pid = pid;
+			bServer = true;
 		}
-		m_memory->unlock();
+		m_pMemory->unlock();
 	}
 	else
-	if (m_memory->attach()) {
-		m_memory->lock(); // maybe not necessary?
-		Data *data = static_cast<Data *> (m_memory->data());
-		if (data)
-			is_server = (data->pid == pid);
-		m_memory->unlock();
+	if (m_pMemory->attach()) {
+		m_pMemory->lock(); // maybe not necessary?
+		Data *pData = static_cast<Data *> (m_pMemory->data());
+		if (pData)
+			bServer = (pData->pid == pid);
+		m_pMemory->unlock();
 	}
-	if (is_server) {
-		QLocalServer::removeServer(m_unique);
-		m_server = new QLocalServer();
-		m_server->setSocketOptions(QLocalServer::UserAccessOption);
-		m_server->listen(m_unique);
-		QObject::connect(m_server,
-			SIGNAL(newConnection()),
-			SLOT(newConnectionSlot()));
+
+	if (bServer) {
+		QLocalServer::removeServer(m_sUnique);
+		m_pServer = new QLocalServer();
+		m_pServer->setSocketOptions(QLocalServer::UserAccessOption);
+		m_pServer->listen(m_sUnique);
+		QObject::connect(m_pServer,
+			 SIGNAL(newConnection()),
+			 SLOT(newConnectionSlot()));
 	} else {
 		QLocalSocket socket;
-		socket.connectToServer(m_unique);
+		socket.connectToServer(m_sUnique);
 		if (socket.state() == QLocalSocket::ConnectingState)
 			socket.waitForConnected(200);
 		if (socket.state() == QLocalSocket::ConnectedState) {
@@ -222,14 +230,32 @@ bool qmidinetApplication::init (void)
 		}
 	}
 
-	return is_server;
+	return bServer;
+}
+
+
+// Local server/shmem cleanup.
+void qmidinetApplication::clearServer (void)
+{
+	if (m_pServer) {
+		m_pServer->close();
+		delete m_pServer;
+		m_pServer = nullptr;
+	}
+
+	if (m_pMemory) {
+		delete m_pMemory;
+		m_pMemory = nullptr;
+	}
+
+	m_sUnique.clear();
 }
 
 
 // Local server connection slot.
 void qmidinetApplication::newConnectionSlot (void)
 {
-	QLocalSocket *socket = m_server->nextPendingConnection();
+	QLocalSocket *socket = m_pServer->nextPendingConnection();
 	QObject::connect(socket,
 		SIGNAL(readyRead()),
 		SLOT(readyReadSlot()));
@@ -247,6 +273,8 @@ void qmidinetApplication::readyReadSlot (void)
 			qmidinetOptions *pOptions = qmidinetOptions::getInstance();
 			if (pOptions && pOptions->parse_args(QString(data).split(' ')))
 				reset();
+			// Reset the server...
+			setupServer();
 		}
 	}
 }
