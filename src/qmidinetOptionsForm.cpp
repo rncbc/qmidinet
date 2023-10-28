@@ -1,7 +1,7 @@
 // qmidinetOptionsForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010-2022, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2023, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -48,7 +48,7 @@ qmidinetOptionsForm::qmidinetOptionsForm ( QWidget *pParent )
 	m_ui.InterfaceComboBox->clear();
 	m_ui.InterfaceComboBox->addItem(m_sDefInterface);
 #if defined(CONFIG_IPV6)
-	foreach (const QNetworkInterface& iface, QNetworkInterface::allInterfaces()) {
+	for (const QNetworkInterface& iface : QNetworkInterface::allInterfaces()) {
 		if (iface.isValid() &&
 			iface.flags().testFlag(QNetworkInterface::CanMulticast) &&
 			iface.flags().testFlag(QNetworkInterface::IsUp) &&
