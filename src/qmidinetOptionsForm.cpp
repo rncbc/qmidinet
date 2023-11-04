@@ -48,7 +48,7 @@ qmidinetOptionsForm::qmidinetOptionsForm ( QWidget *pParent )
 	m_ui.InterfaceComboBox->clear();
 	m_ui.InterfaceComboBox->addItem(m_sDefInterface);
 #if defined(CONFIG_IPV6)
-	for (const QNetworkInterface& iface : QNetworkInterface::allInterfaces()) {
+	foreach (const QNetworkInterface& iface, QNetworkInterface::allInterfaces()) {
 		if (iface.isValid() &&
 			iface.flags().testFlag(QNetworkInterface::CanMulticast) &&
 			iface.flags().testFlag(QNetworkInterface::IsUp) &&
