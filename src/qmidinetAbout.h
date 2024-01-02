@@ -24,7 +24,7 @@
 
 #include "config.h"
 
-#define QMIDINET_TITLE      "QmidiNet"
+#define QMIDINET_TITLE      PROJECT_TITLE
 
 #define QMIDINET_SUBTITLE   PROJECT_DESCRIPTION
 #define QMIDINET_WEBSITE    PROJECT_HOMEPAGE_URL

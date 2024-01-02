@@ -1,7 +1,7 @@
 // qmidinetOptions.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010-2022, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2024, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -352,7 +352,7 @@ bool qmidinetOptions::parse_args ( const QStringList& args )
 			out << '\n';
 			out << QString("%1: %2\n")
 				.arg(QMIDINET_TITLE)
-				.arg(CONFIG_BUILD_VERSION);
+				.arg(PROJECT_VERSION);
 			return false;
 		}
 	}
