@@ -29,8 +29,8 @@
 #define QMIDINET_SUBTITLE   PROJECT_DESCRIPTION
 #define QMIDINET_WEBSITE    PROJECT_HOMEPAGE_URL
 
-#define QMIDINET_COPYRIGHT  "Copyright (C) 2010-2024, rncbc aka Rui Nuno Capela. All rights reserved."
-#define QMIDINET_DOMAIN     "rncbc.org"
+#define QMIDINET_COPYRIGHT  PROJECT_COPYRIGHT
+#define QMIDINET_DOMAIN     PROJECT_DOMAIN
 
 #endif  // __qmidinetAbout_h
 
