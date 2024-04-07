@@ -4,9 +4,9 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 ChangeLog
 
 
-GIT HEAD
+0.9.90  2024-04-10  A Spring'24 Release Candidate.
 
-- Prepping for the unthinkable...
+- Prepping the unthinkable (aka. v1.0.0-rc1)
 
 
 0.9.12  2024-01-24  A Winter'24 Release.
