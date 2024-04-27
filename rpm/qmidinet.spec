@@ -11,37 +11,25 @@
 # case the license is the MIT License). An "Open Source License" is a
 # license that conforms to the Open Source Definition (Version 1.9)
 # published by the Open Source Initiative.
-#
+
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-%define name    qmidinet
-%define version	0.9.90
-%define release	1.1
-
-%define _prefix	/usr
-
-%if %{defined fedora}
-%define debug_package %{nil}
-%endif
+Summary:	A MIDI Network Gateway via UDP/IP Multicast
+Name:		qmidinet
+Version:	0.9.90
+Release:	1.1
+License:	GPL-2.0-or-later
+Group:		Productivity/Multimedia/Sound/Midi
+Source0:	%{name}-%{version}.tar.gz
+URL:		http://qmidinet.sourceforge.net/
+#Packager:	rncbc.org
 
 %if 0%{?fedora_version} >= 34 || 0%{?suse_version} > 1500 || ( 0%{?sle_version} == 150200 && 0%{?is_opensuse} )
 %define qt_major_version  6
 %else
 %define qt_major_version  5
 %endif
-
-Summary:	A MIDI Network Gateway via UDP/IP Multicast
-Name:		%{name}
-Version:	%{version}
-Release:	%{release}
-License:	GPL-2.0+
-Group:		Productivity/Multimedia/Sound/Midi
-Source0:	%{name}-%{version}.tar.gz
-URL:		http://qmidinet.sourceforge.net/
-Packager:	rncbc.org
-
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 BuildRequires:	coreutils
 BuildRequires:	pkgconfig
@@ -93,6 +81,7 @@ MIDI data (ALSA Sequencer and/or JACK MIDI) over the network, using UDP/IP
 multicast. Inspired by multimidicast (http://llg.cubic.org/tools) and
 designed to be compatible with ipMIDI for Windows (http://nerds.de).
 
+
 %prep
 %setup -q
 
@@ -108,11 +97,8 @@ cmake --build build %{?_smp_mflags}
 DESTDIR="%{buildroot}" \
 cmake --install build
 
-%clean
-[ -d "%{buildroot}" -a "%{buildroot}" != "/" ] && %__rm -rf "%{buildroot}"
 
 %files
-%defattr(-,root,root)
 %license LICENSE
 %doc README ChangeLog
 #dir {_datadir}/applications
@@ -133,6 +119,7 @@ cmake --install build
 %{_datadir}/metainfo/org.rncbc.%{name}.metainfo.xml
 %{_datadir}/man/man1/%{name}.1.gz
 %{_datadir}/man/fr/man1/%{name}.1.gz
+
 
 %changelog
 * Wed Apr 10 2024 Rui Nuno Capela <rncbc@rncbc.org> 0.9.90
