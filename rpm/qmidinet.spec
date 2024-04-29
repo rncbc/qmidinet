@@ -17,7 +17,7 @@
 
 Summary:	A MIDI Network Gateway via UDP/IP Multicast
 Name:		qmidinet
-Version:	0.9.90
+Version:	0.9.91
 Release:	1.1
 License:	GPL-2.0-or-later
 Group:		Productivity/Multimedia/Sound/Midi
@@ -122,6 +122,8 @@ cmake --install build
 
 
 %changelog
+* Wed May  1 2024 Rui Nuno Capela <rncbc@rncbc.org> 0.9.91
+- A Spring'24 Release Candidate 2.
 * Wed Apr 10 2024 Rui Nuno Capela <rncbc@rncbc.org> 0.9.90
 - A Spring'24 Release Candidate.
 * Wed Jan 24 2024 Rui Nuno Capela <rncbc@rncbc.org> 0.9.12
