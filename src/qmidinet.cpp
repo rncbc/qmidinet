@@ -76,13 +76,7 @@ qmidinetApplication::qmidinetApplication ( int& argc, char **argv, bool bGUI )
 		pApp->setDesktopFileName(
 			QString("org.rncbc.%1").arg(PROJECT_NAME));
 	#endif
-		QString sVersion(PROJECT_VERSION);
-		sVersion += '\n';
-		sVersion += QString("Qt: %1").arg(qVersion());
-	#if defined(QT_STATIC)
-		sVersion += "-static";
-	#endif
-		pApp->setApplicationVersion(sVersion);
+		pApp->setApplicationVersion(PROJECT_VERSION);
 	#endif
 		pApp->setQuitOnLastWindowClosed(false);
 		m_pApp  = pApp;

@@ -1,7 +1,7 @@
 // qmidinetOptions.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010-2024, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2025, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -210,9 +210,31 @@ bool qmidinetOptions::parse_args ( const QStringList& args )
 			.arg(int(bJackMidi)), "flag"});
 	parser.addOption({{"g", "no-gui"},
 		QObject::tr("Disable the graphical user interface (GUI)")});
-	parser.addHelpOption();
-	parser.addVersionOption();
-	parser.process(args);
+	const QCommandLineOption& helpOption = parser.addHelpOption();
+	const QCommandLineOption& versionOption = parser.addVersionOption();
+
+	if (!parser.parse(args)) {
+		show_error(parser.errorText());
+		return false;
+	}
+
+	if (parser.isSet(helpOption)) {
+		show_error(parser.helpText());
+		return false;
+	}
+
+	if (parser.isSet(versionOption)) {
+		QString sVersion = QString("%1 %2\n")
+			.arg(QMIDINET_TITLE)
+			.arg(QCoreApplication::applicationVersion());
+		sVersion += QString("Qt: %1").arg(qVersion());
+	#if defined(QT_STATIC)
+		sVersion += "-static";
+	#endif
+		sVersion += '\n';
+		show_error(sVersion);
+		return false;
+	}
 
 	if (parser.isSet("num-ports")) {
 		bool bOK = false;
@@ -345,14 +367,14 @@ bool qmidinetOptions::parse_args ( const QStringList& args )
 			return false;
 		}
 		else if (sArg == "-v" || sArg == "--version") {
+			out << QString("%1: %2\n")
+				.arg(QMIDINET_TITLE)
+				.arg(PROJECT_VERSION);
 			out << QString("Qt: %1").arg(qVersion());
 		#if defined(QT_STATIC)
 			out << "-static";
 		#endif
 			out << '\n';
-			out << QString("%1: %2\n")
-				.arg(QMIDINET_TITLE)
-				.arg(PROJECT_VERSION);
 			return false;
 		}
 	}
