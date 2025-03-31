@@ -4,7 +4,7 @@ QmidiNet - A MIDI Network Gateway via UDP/IP Multicast
 ChangeLog
 
 
-GIT HEAD
+1.0.1  2025-03-31  An Early Spring'25 Release.
 
 - Fixed command line parsing (QCommandLineParser/Option) to not
   exiting the application with a segfault when showing help and
