@@ -56,8 +56,5 @@
 /* Define if Unique/Single instance is enabled. */
 #cmakedefine CONFIG_XUNIQUE @CONFIG_XUNIQUE@
 
-/* Define if Wayland is supported */
-#cmakedefine CONFIG_WAYLAND @CONFIG_WAYLAND@
-
 
 #endif /* CONFIG_H */

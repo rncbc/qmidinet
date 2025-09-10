@@ -66,8 +66,6 @@ option (CONFIG_IPV6 "Enable Network IPv6 support (default=yes)" 1)
 # Enable unique/single instance.
 option (CONFIG_XUNIQUE "Enable unique/single instance (default=yes)" 1)
 
-# Enable Wayland support option.
-option (CONFIG_WAYLAND "Enable Wayland support (EXPERIMENTAL) (default=no)" 0)
 
 # Enable Qt6 build preference.
 option (CONFIG_QT6 "Enable Qt6 build (default=yes)" 1)
