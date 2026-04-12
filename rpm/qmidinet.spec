@@ -25,6 +25,8 @@ Source0:	%{name}-%{version}.tar.gz
 URL:		http://qmidinet.sourceforge.net/
 #Packager:	rncbc.org
 
+%global debug_package %{nil}
+
 BuildRequires:	coreutils
 BuildRequires:	pkgconfig
 BuildRequires:	glibc-devel
