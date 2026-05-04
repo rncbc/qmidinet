@@ -9,6 +9,8 @@ GIT HEAD
 - Get rid of CONFIG_WAYLAND build config option; add underlying
   platform name (eg. xcb, wayland) to Qt version string.
 
+- Bumping into next development cycle (Qt >= 6.11)
+
 
 1.0.1  2025-03-31  An Early Spring'25 Release.
 
