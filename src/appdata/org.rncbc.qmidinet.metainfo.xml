@@ -40,6 +40,7 @@
  </developer>
  <update_contact>rncbc@rncbc.org</update_contact>
  <releases>
+  <release version="1.0.2" date="2026-06-03" urgency="low" />
   <release version="1.0.1" date="2025-03-31" urgency="low" />
   <release version="1.0.0" date="2024-06-19" urgency="low" />
  </releases>
